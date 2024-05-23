@@ -1,0 +1,79 @@
+name: 'Raksha CI'
+on:
+  push:
+    branches-ignore:
+      - 'main'
+  pull_request:
+    types: [closed]
+
+jobs:
+  create-release:
+    if: github.ref == 'refs/heads/main'
+    name: 'Create release'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
+      - name: print last tag
+        uses: actions-ecosystem/action-get-latest-tag@v1
+        id: get-latest-tag
+      - name: new Tag
+        id: calculate_tag
+        run: |
+          last_tag=${{ steps.get-latest-tag.outputs.tag }}
+          version=$(echo $last_tag | sed 's/v//g')
+          major=$(echo $version | cut -d'.' -f1)
+          minor=$(echo $version | cut -d'.' -f2)
+          patch=$(echo $version | cut -d'.' -f3)
+          
+          if [[ ${{github.head_ref}} == feature* ]]; then
+            new_major=$((major + 1))
+            new_minor=0
+            new_patch=0
+          elif [[ ${{github.head_ref}} == task* ]]; then
+            new_major=$major
+            new_minor=$((minor + 1))
+            new_patch=0
+          elif [[ ${{github.head_ref}} == bugfix* || ${{github.head_ref}} == hotfix* ]]; then
+            new_major=$major
+            new_minor=$minor
+            new_patch=$((patch + 1))
+          else
+            new_major=$major
+            new_minor=$minor
+            new_patch=$patch
+          fi
+          
+          new_tag="v$new_major.$new_minor.$new_patch"
+          echo "Nuevo Tag: $new_tag"
+          echo "new_tag=$new_tag" >> "$GITHUB_OUTPUT"
+      - name: Check if new Tag is different from last Tag
+        id: check_tag
+        run: |
+          if [[ "${{ steps.calculate_tag.outputs.new_tag }}" == "${{ steps.get-latest-tag.outputs.tag }}" ]]; then
+            echo "tag_exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag_exists=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Add new Tag
+        if: steps.check_tag.outputs.tag_exists == 'false'
+        run: |
+          git config --global --add safe.directory $GITHUB_WORKSPACE
+          git tag ${{ steps.calculate_tag.outputs.new_tag }}
+          git push origin ${{ steps.calculate_tag.outputs.new_tag }}
+      - name: Create Release
+        if: steps.check_tag.outputs.tag_exists == 'false'
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.calculate_tag.outputs.new_tag  }}
+          release_name: Release ${{ steps.calculate_tag.outputs.new_tag  }}
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: false
+          prerelease: false
