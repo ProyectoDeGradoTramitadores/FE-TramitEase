@@ -83,6 +83,31 @@ Para configurar el proyecto localmente, sigue estos pasos:
     npm run dev
     ```
 
+## Linting y Formateo de Código
+Este proyecto utiliza ESLint y Prettier para mantener un código limpio y consistente. Husky se utiliza para ejecutar estas herramientas automáticamente antes de confirmar los cambios.
+
+Para ejecutar ESLint y Prettier manualmente, puedes usar los siguientes comandos:
+
+Verificar y corregir problemas con ESLint:
+    ```bash
+    npm run lint
+    ```
+o 
+
+    ```bash
+    npx eslint .
+    ```
+    
+Formatear el código con Prettier:
+    ```bash
+    npm run format
+    ```
+
+Recuerda que Husky ya está configurado para ejecutar estas verificaciones automáticamente antes de cada confirmación, asegurando que el código cumpla con las reglas establecidas. Sin embargo puedes ejecutarlo usando:
+    ```bash
+     npx husky init
+    ```
+
 ## Contribución
 
 Si deseas contribuir a este proyecto, por favor sigue los siguientes pasos:
