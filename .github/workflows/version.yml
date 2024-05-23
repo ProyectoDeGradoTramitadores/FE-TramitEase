@@ -1,4 +1,4 @@
-name: 'Raksha CI'
+name: 'TramitEase CI'
 on:
   push:
     branches-ignore:
