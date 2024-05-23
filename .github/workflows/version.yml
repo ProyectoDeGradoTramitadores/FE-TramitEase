@@ -10,7 +10,6 @@ jobs:
   create-release:
     if: github.ref == 'refs/heads/main'
     name: 'Create release'
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout repository'
