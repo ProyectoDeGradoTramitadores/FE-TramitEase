@@ -26,11 +26,11 @@ jobs:
           minor=$(echo $version | cut -d'.' -f2)
           patch=$(echo $version | cut -d'.' -f3)
           
-          if [[ ${{github.head_ref}} == feature* ]]; then
+          if [[ ${{github.head_ref}} == release* ]]; then
             new_major=$((major + 1))
             new_minor=0
             new_patch=0
-          elif [[ ${{github.head_ref}} == task* ]]; then
+          elif [[ ${{github.head_ref}} == feature* ]]; then
             new_major=$major
             new_minor=$((minor + 1))
             new_patch=0
