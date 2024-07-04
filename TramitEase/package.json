@@ -32,7 +32,8 @@
     "styled-components": "^6.1.12",
     "supertokens-auth-react": "^0.44.0",
     "supertokens-node": "^20.0.0",
-    "supertokens-web-js": "^0.13.0"
+    "supertokens-web-js": "^0.13.0",
+    "react-single-calendar-events": "^2.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.3.0",
