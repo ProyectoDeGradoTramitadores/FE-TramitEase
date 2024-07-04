@@ -6,7 +6,7 @@ import CustomButton from "../../shared/components/buttons/CustomButton.tsx";
 
 const HeaderContainer = styled.header`
     background-color: ${theme.colors.primary.default};
-    padding: 20px 100px;
+    padding: 25px 100px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -35,11 +35,11 @@ const ButtonContainer = styled.div`
 const LandingHeader: React.FC = () => {
     return (
         <HeaderContainer>
-            <LogoBlack size={'m'} color={'primary'} onClick={() => alert("landing page")} />
+            <LogoBlack size={'l'} color={'primary'} onClick={() => alert("landing page")} />
             <ButtonContainer>
-                <CustomButton size={'s'} color={'primary'} $text={"ABOUT"} $textStyle={'bold'} />
-                <CustomButton size={'s'} color={'primary'} $text={"CARACTERISTICAS"} $textStyle={'bold'} />
-                <CustomButton size={'s'} color={'ternary'} $text={"INICIAR SESION"} $textStyle={'bold'} />
+                <CustomButton size={'m'} color={'primary'} $text={"ABOUT"} $textStyle={'bold'} />
+                <CustomButton size={'m'} color={'primary'} $text={"CARACTERISTICAS"} $textStyle={'bold'} />
+                <CustomButton size={'m'} color={'ternary'} $text={"INICIAR SESION"} $textStyle={'bold'} />
             </ButtonContainer>
         </HeaderContainer>
     );

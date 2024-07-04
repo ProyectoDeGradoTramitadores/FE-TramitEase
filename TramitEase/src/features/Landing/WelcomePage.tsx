@@ -4,10 +4,10 @@ import theme from "../../shared/theme/theme.ts";
 
 const WelcomePage: React.FC = () => {
     return (
-        <div style={{ display: 'flex', height: '100vh', background: theme.colors.primary.default, gap: 136, padding: '0px 86px' }}>
+        <div style={{ display: 'flex', height: '85vh', background: theme.colors.primary.default, gap: 340, padding: '0px 235px' }}>
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center',
                 alignItems: 'flex-start' }}>
-                <h1 style={{ fontSize: 120, textAlign: 'left' }}>Welcome!</h1>
+                <h1 style={{ fontSize: 150, textAlign: 'left' }}>Welcome!</h1>
                 <CustomButton $text="Get Started" $textStyle="bold" size="m" color="secondary"
                               onClick={() => alert("Get Started")} />
             </div>
