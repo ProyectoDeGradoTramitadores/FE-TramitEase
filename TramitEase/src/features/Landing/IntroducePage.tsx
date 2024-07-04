@@ -14,7 +14,7 @@ const IntroducePage: React.FC = () => {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-top: 150px;
+        margin-top: 50px;
     `;
 
     const StyledImageWrapper = styled.div`
