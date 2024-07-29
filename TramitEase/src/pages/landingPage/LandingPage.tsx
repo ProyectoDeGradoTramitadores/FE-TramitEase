@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import WelcomePage from "../../features/Landing/WelcomePage.tsx";
 import IntroducePage from "../../features/Landing/IntroducePage.tsx";
 import LandingHeader from "../../features/Landing/LandingHeader.tsx";
@@ -7,13 +7,11 @@ import InfoAppPage from "../../features/Landing/InfoAppPage.tsx";
 const LandingPage: React.FC = () => {
     const [currentPage, setCurrentPage] = useState('welcome');
     const introduceRef = useRef<HTMLDivElement>(null);
+    const infoRef = useRef<HTMLDivElement>(null);
+    const welcomeRef = useRef<HTMLDivElement>(null);
 
     const handleAboutClick = () => {
         setCurrentPage('introduce');
-
-        if (introduceRef.current) {
-            introduceRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
 
         if (introduceRef.current) {
             introduceRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -22,7 +20,18 @@ const LandingPage: React.FC = () => {
 
     const handleFeaturesClick = () => {
         setCurrentPage('info');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        if (infoRef.current) {
+            infoRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+    };
+
+    const handleHomeClick = () => {
+        setCurrentPage('welcome');
+
+        if (welcomeRef.current) {
+            welcomeRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     };
 
     const headerStyle = {
@@ -47,14 +56,22 @@ const LandingPage: React.FC = () => {
     return (
         <div style={containerStyle}>
             <div style={headerStyle}>
-                <LandingHeader onAboutClick={handleAboutClick} onFeaturesClick={handleFeaturesClick}/>
+                <LandingHeader
+                    onAboutClick={handleAboutClick}
+                    onFeaturesClick={handleFeaturesClick}
+                    onHomeClick={handleHomeClick}
+                />
             </div>
             <main style={mainStyle}>
-                <WelcomePage/>
+                <div ref={welcomeRef}>
+                    <WelcomePage/>
+                </div>
                 <div ref={introduceRef}>
                     <IntroducePage/>
                 </div>
-                <InfoAppPage/>
+                <div ref={infoRef}>
+                    <InfoAppPage/>
+                </div>
             </main>
         </div>
     );

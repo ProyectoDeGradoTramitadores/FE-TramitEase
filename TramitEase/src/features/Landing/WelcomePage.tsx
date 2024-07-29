@@ -4,7 +4,7 @@ import theme from "../../shared/theme/theme.ts";
 
 const WelcomePage: React.FC = () => {
     return (
-        <div style={{ display: 'flex', height: '85vh', background: theme.colors.primary.default, gap: 340, padding: '0px 235px' }}>
+        <div style={{ display: 'flex', height: '86vh', background: theme.colors.primary.default, gap: 340, padding: '0px 235px' }}>
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center',
                 alignItems: 'flex-start' }}>
                 <h1 style={{ fontSize: 150, textAlign: 'left' }}>Welcome!</h1>

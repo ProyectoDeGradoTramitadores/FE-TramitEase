@@ -32,19 +32,17 @@ const ButtonContainer = styled.div`
     justify-content: center;
 `;
 
-const LandingHeader: React.FC<{ onAboutClick: () => void; onFeaturesClick: () => void }> = ({ onAboutClick, onFeaturesClick }) => {
-    const handleAboutClick = () => {
-        onAboutClick();
-    };
-    const handleFeaturesClick = () => {
-        onFeaturesClick();
-    };
+const LandingHeader: React.FC<{
+    onAboutClick: () => void;
+    onFeaturesClick: () => void;
+    onHomeClick: () => void;
+}> = ({ onAboutClick, onFeaturesClick, onHomeClick }) => {
     return (
         <HeaderContainer>
-            <LogoBlack size={'l'} color={'primary'} onClick={() => alert("landing page")} />
+            <LogoBlack size={'l'} color={'primary'} onClick={onHomeClick} /> {/* Botón de inicio */}
             <ButtonContainer>
-                <CustomButton size={'m'} color={'primary'} $text={"ABOUT"} $textStyle={'bold'}  onClick={handleAboutClick}/>
-                <CustomButton size={'m'} color={'primary'} $text={"CARACTERISTICAS"} $textStyle={'bold'} onClick={handleFeaturesClick}/>
+                <CustomButton size={'m'} color={'primary'} $text={"ABOUT"} $textStyle={'bold'} onClick={onAboutClick}/>
+                <CustomButton size={'m'} color={'primary'} $text={"CARACTERISTICAS"} $textStyle={'bold'} onClick={onFeaturesClick}/>
                 <CustomButton size={'m'} color={'ternary'} $text={"INICIAR SESION"} $textStyle={'bold'} />
             </ButtonContainer>
         </HeaderContainer>
