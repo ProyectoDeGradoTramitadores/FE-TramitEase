@@ -11,7 +11,6 @@ const HeaderContainer = styled.header`
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 716px;
 
     @media (max-width: 768px) {
         gap: 100px;

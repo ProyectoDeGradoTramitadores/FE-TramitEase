@@ -3,7 +3,7 @@ import theme from "../../shared/theme/theme.ts";
 import styled from 'styled-components';
 
 const StyledDiv = styled.div`
-    height: 100vh;
+    height: 77vh;
     background: linear-gradient(to right, ${theme.colors.secondary.default} 50%, ${theme.colors.primary.default} 50%);
     display: flex;
     justify-content: space-between;

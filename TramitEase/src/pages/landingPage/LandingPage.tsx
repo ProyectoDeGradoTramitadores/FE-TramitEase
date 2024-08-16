@@ -14,6 +14,7 @@ const LandingPage: React.FC = () => {
         setCurrentPage('introduce');
 
         if (introduceRef.current) {
+            console.log(currentPage);
             introduceRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     };
@@ -64,13 +65,13 @@ const LandingPage: React.FC = () => {
             </div>
             <main style={mainStyle}>
                 <div ref={welcomeRef}>
-                    <WelcomePage/>
+                    <WelcomePage />
                 </div>
                 <div ref={introduceRef}>
-                    <IntroducePage/>
+                    <IntroducePage />
                 </div>
                 <div ref={infoRef}>
-                    <InfoAppPage/>
+                    <InfoAppPage />
                 </div>
             </main>
         </div>

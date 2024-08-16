@@ -39,6 +39,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
                                                        $textStyle,
                                                        onClick,
                                                        $text,
+                                                       disabled
                                                    }) => {
     return (
         <Button
@@ -47,7 +48,8 @@ const CustomButton: React.FC<CustomButtonProps> = ({
             color={color}
             $textStyle={$textStyle}
             onClick={onClick}
-            $text={$text}>
+            $text={$text}
+            disabled={disabled}>
             {$text}
         </Button>
     );

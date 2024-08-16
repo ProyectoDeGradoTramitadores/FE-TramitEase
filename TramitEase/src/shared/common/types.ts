@@ -7,4 +7,5 @@ export interface CommonProps {
 export interface CustomButtonProps extends CommonProps {
     $textStyle: 'normal' | 'bold';
     $text: string;
+    disabled?: boolean;
 }
