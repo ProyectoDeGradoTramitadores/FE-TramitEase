@@ -14,7 +14,6 @@ const IntroducePage: React.FC = () => {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-top: 150px;
     `;
 
     const StyledImageWrapper = styled.div`
@@ -24,7 +23,7 @@ const IntroducePage: React.FC = () => {
     `;
 
     const StyledImage = styled.img`
-        width: 100%;
+        width: 80%;
         height: auto;
         object-fit: cover;
     `;
@@ -32,7 +31,7 @@ const IntroducePage: React.FC = () => {
     const StyledTextOverlay = styled.div`
         position: absolute;
         top: 20%;
-        left: 115%;
+        left: 95%;
         transform: translate(-50%, -50%);
         color: white;
         text-align: left;
@@ -50,21 +49,21 @@ const IntroducePage: React.FC = () => {
 
     const StyledContainerText = styled.div`
         max-width: 556px;
-        margin-top: 230px;
-        margin-left: 50px;
+        margin-top: 200px;
+        margin-left: -110px;
         padding: 20px;
         text-align: left;
     `;
 
     const StyledTextApp = styled.p`
-        font-size: 21px;
+        font-size: 20px;
         font-weight: bold;
         color: ${theme.colors.shades.black};
         line-height: 1.5;
     `;
 
     const StyledTextDescriptionApp = styled.p`
-        font-size: 21px;
+        font-size: 19px;
         font-weight: lighter;
         color: ${theme.colors.shades.black};
         line-height: 1.5;
@@ -80,15 +79,14 @@ const IntroducePage: React.FC = () => {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 5px;
-        margin-top: 20px;
+        margin-top: -32px;
     `;
 
     const StyledOfferItemsContainer = styled.div`
         display: flex;
         gap: 340px;
         align-items: center;
-        margin-left: -165px;
+        margin-left: -265px;
     `;
 
     const StyledOfferItem = styled.div`
@@ -100,7 +98,8 @@ const IntroducePage: React.FC = () => {
     `;
 
     const StyledOfferNumber = styled.div<{ color: string }>`
-        font-size: 200px;
+        margin-top: -34px;
+        font-size: 150px;
         font-weight: bold;
         color: ${props => props.color};
         position: relative;
@@ -109,20 +108,20 @@ const IntroducePage: React.FC = () => {
 
     const StyledOfferText = styled.div`
         color: #1a1a1a;
-        font-size: 24px;
+        font-size: 20px;
         width: 320px;
         position: absolute;
         font-weight: bold;
         text-align: left;
-        top: 53%;
-        left: 146%; 
+        top: 43%;
+        left: 156%; 
         transform: translate(-50%, -50%);
         z-index: 2;
     `;
 
     const StyledOfferHeader = styled.h1`
         color: #1a1a1a;
-        font-size: 36px;
+        font-size: 30px;
         font-weight: bold;
     `;
 

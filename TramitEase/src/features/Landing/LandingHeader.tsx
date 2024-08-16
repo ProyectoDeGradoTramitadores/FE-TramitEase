@@ -11,7 +11,6 @@ const HeaderContainer = styled.header`
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 716px;
 
     @media (max-width: 768px) {
         gap: 100px;
@@ -32,13 +31,17 @@ const ButtonContainer = styled.div`
     justify-content: center;
 `;
 
-const LandingHeader: React.FC = () => {
+const LandingHeader: React.FC<{
+    onAboutClick: () => void;
+    onFeaturesClick: () => void;
+    onHomeClick: () => void;
+}> = ({ onAboutClick, onFeaturesClick, onHomeClick }) => {
     return (
         <HeaderContainer>
-            <LogoBlack size={'l'} color={'primary'} onClick={() => alert("landing page")} />
+            <LogoBlack size={'l'} color={'primary'} onClick={onHomeClick} /> {/* Botón de inicio */}
             <ButtonContainer>
-                <CustomButton size={'m'} color={'primary'} $text={"ABOUT"} $textStyle={'bold'} />
-                <CustomButton size={'m'} color={'primary'} $text={"CARACTERISTICAS"} $textStyle={'bold'} />
+                <CustomButton size={'m'} color={'primary'} $text={"ABOUT"} $textStyle={'bold'} onClick={onAboutClick}/>
+                <CustomButton size={'m'} color={'primary'} $text={"CARACTERISTICAS"} $textStyle={'bold'} onClick={onFeaturesClick}/>
                 <CustomButton size={'m'} color={'ternary'} $text={"INICIAR SESION"} $textStyle={'bold'} />
             </ButtonContainer>
         </HeaderContainer>
