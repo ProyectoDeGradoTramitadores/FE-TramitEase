@@ -1,0 +1,61 @@
+h2 {
+    margin: 0;
+    font-size: 16px;
+}
+
+ul {
+    margin: 0;
+    padding: 0 0 0 1.5em;
+}
+
+li {
+    margin: 1.5em 0;
+    padding: 0;
+}
+
+b {
+    margin-right: 3px;
+}
+
+.demo-app {
+    min-height: 100%;
+    margin-top: 190px;
+    display: flex;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 14px;
+    color: #DC5F00;
+    margin-right: 13px;
+    background: #fff;
+}
+
+.demo-app-sidebar {
+    width: 700px;
+    line-height: 1.5;
+    background: #4d4d4d;
+    color: #f1f1f1;
+}
+
+.demo-app-sidebar-section {
+    padding: 2em;
+    width: 400px;
+}
+
+.demo-app-main {
+    flex-grow: 1;
+    padding: 3em;
+    width: 100%;
+    max-width: 1600px;
+}
+
+.fc .fc-view-harness {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.fc-daygrid-day, .fc-daygrid-day-number, .fc-daygrid-month, .fc-daygrid-day-top {
+    color: #201d1d;
+}
+
+.fc-event {
+    background-color: #5e5e5e;
+}

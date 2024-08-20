@@ -8,16 +8,18 @@ const Menu: React.FC = () => {
     const navigate = useNavigate();
 
     const handleMenuClick = (path: string) => {
-        navigate(`/TramitEase/Tramitador/${id}${path}`);
+        navigate(`/TramitEase/Tramitador/${id}/${path}`);
     };
 
     return (
         <MenuContainer>
             <MenuSection>
-                <MenuItem title="CARPETAS" onClick={() => handleMenuClick('/ClientsFolder')} />
+                <MenuItem title="CARPETAS" onClick={() => handleMenuClick('ClientsFolder')} />
                 <MenuItem title="PERSONALIZACION" onClick={() => handleMenuClick('/personalizacion')} />
                 <MenuItem title="LLENADO DE CASILLAS" onClick={() => handleMenuClick('/llenado-de-casillas')} />
-                <MenuItem title="CALENDARIO" onClick={() => handleMenuClick('/calendario')} />
+                <MenuItem title="CALENDARIO" onClick={() => handleMenuClick('Calendar')} />
+                <MenuItem title="REPORTES" onClick={() => handleMenuClick('/reports')} />
+
             </MenuSection>
             <MenuSection>
                 <MenuItem title="PERFIL" onClick={() => handleMenuClick('/perfil')} />

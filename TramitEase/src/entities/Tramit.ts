@@ -3,6 +3,5 @@ export interface Tramit {
     idTypeTramit: number;
     idTramitador: number;
     name?: string;
-    creationDate?: Date;
-    endDate?: Date;
+    days_during?: number;
 }
