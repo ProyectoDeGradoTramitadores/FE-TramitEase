@@ -10,6 +10,7 @@ import Header from '../../shared/components/header/Header.tsx';
 import FormularyCreateClientFolderPage
     from '../../pages/formularyCreateClientFolderPage/FormularyCreateClientFolderPage.tsx';
 import FormularyCreateFolderPage from '../../pages/formularyCreateClientFolderPage/FormularyCreateFolderPage.tsx';
+import CalendarPage from '../../pages/calendarPage/CalendarPage.tsx';
 
 const Layout: React.FC = () => (
     <>
@@ -29,6 +30,7 @@ const AppRoutes = () => (
                 <Route path="Tramitador" element={<Layout />}>
                     <Route path=":id">
                         <Route path="ClientsFolder" element={<ClientsFolderPage />} />
+                        <Route path="Calendar" element={<CalendarPage />} />
                         <Route path="CreateClientFolder">
                             <Route path={"CreateClient"} element={<FormularyCreateClientFolderPage/>}/>
                             <Route path={":idClient/CreateFolder"} element={<FormularyCreateFolderPage/>}/>

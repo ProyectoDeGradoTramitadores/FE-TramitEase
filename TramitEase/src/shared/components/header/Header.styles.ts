@@ -9,7 +9,10 @@ export const HeaderContainer = styled.div`
     background-color: ${theme.colors.primary.default};
     position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     gap: 1502px;
+    z-index: 1000;
 `;
 
 export const LogoContainer = styled.div`
@@ -28,5 +31,5 @@ export const DropdownMenu = styled.div`
     top: 90%;
     right: 60px;
     padding: 20px;
-    z-index: 1000;
+    z-index: 1001;
 `;

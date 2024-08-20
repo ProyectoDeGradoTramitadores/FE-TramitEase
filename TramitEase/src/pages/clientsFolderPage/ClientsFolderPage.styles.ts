@@ -25,7 +25,7 @@ export const TitleTypography = styled(Typography)({
 export const PageContainerClientFolder = styled(Box)({
     display: 'flex',
     flexDirection: 'column',
-    padding: '205px 127px',
+    padding: '205px 120px',
     backgroundColor: 'white',
     width: '1665px',
     height: '540px',
