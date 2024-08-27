@@ -16,8 +16,9 @@
     "**/*": "npm run format"
   },
   "dependencies": {
-    "@emotion/react": "^11.13.0",
+    "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@fontsource/inter": "^5.0.20",
     "@fontsource/roboto": "^5.0.13",
     "@fullcalendar/bootstrap5": "^6.1.15",
     "@fullcalendar/core": "^6.1.15",
@@ -27,6 +28,7 @@
     "@fullcalendar/react": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
     "@mui/icons-material": "^5.16.6",
+    "@mui/joy": "^5.0.0-beta.48",
     "@mui/material": "^5.16.6",
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@mui/x-date-pickers": "^7.11.1",
@@ -41,11 +43,11 @@
     "react-bootstrap": "^2.10.4",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
+    "react-single-calendar-events": "^2.2.0",
     "styled-components": "^6.1.12",
     "supertokens-auth-react": "^0.44.0",
     "supertokens-node": "^20.0.0",
-    "supertokens-web-js": "^0.13.0",
-    "react-single-calendar-events": "^2.2.0"
+    "supertokens-web-js": "^0.13.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.3.0",

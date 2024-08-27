@@ -5,12 +5,16 @@ import { getSuperTokensRoutesForReactRouterDom } from 'supertokens-auth-react/ui
 import * as reactRouterDom from 'react-router-dom';
 import { ThirdPartyPreBuiltUI } from 'supertokens-auth-react/recipe/thirdparty/prebuiltui';
 import { EmailPasswordPreBuiltUI } from 'supertokens-auth-react/recipe/emailpassword/prebuiltui';
-import { SessionAuth } from "supertokens-auth-react/recipe/session";
+// import { SessionAuth } from "supertokens-auth-react/recipe/session";
 import Header from '../../shared/components/header/Header.tsx';
 import FormularyCreateClientFolderPage
     from '../../pages/formularyCreateClientFolderPage/FormularyCreateClientFolderPage.tsx';
 import FormularyCreateFolderPage from '../../pages/formularyCreateClientFolderPage/FormularyCreateFolderPage.tsx';
 import CalendarPage from '../../pages/calendarPage/CalendarPage.tsx';
+import TramitsCustomPage from '../../pages/tramitsCustomPage/TramitsCustomPage.tsx';
+import TramitViewPage from '../../pages/TramitPage/TramitViewPage.tsx';
+import ProcedureViewPage from '../../pages/ProcedureViewPage/ProcedureViewPage.tsx';
+import FormularyTramitCreatePage from '../../pages/formularyCreateTramitPage/FormularyTramitCreatePage.tsx';
 
 const Layout: React.FC = () => (
     <>
@@ -31,6 +35,12 @@ const AppRoutes = () => (
                     <Route path=":id">
                         <Route path="ClientsFolder" element={<ClientsFolderPage />} />
                         <Route path="Calendar" element={<CalendarPage />} />
+                        <Route path={"Custom"}>
+                            <Route path={"TramitsCustom"} element={<TramitsCustomPage />}/>
+                            <Route path={"TramitsCustom/TramitViewPage/:idTramit"} element={<TramitViewPage />}/>
+                            <Route path={"TramitsCustom/ProcedureViewPage/:idProcedure"} element={<ProcedureViewPage />}/>
+                            <Route path={"TramitsCustom/TramitCreateNew"} element={<FormularyTramitCreatePage/> }/>
+                        </Route>
                         <Route path="CreateClientFolder">
                             <Route path={"CreateClient"} element={<FormularyCreateClientFolderPage/>}/>
                             <Route path={":idClient/CreateFolder"} element={<FormularyCreateFolderPage/>}/>
