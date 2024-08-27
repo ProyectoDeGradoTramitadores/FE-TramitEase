@@ -1,7 +1,7 @@
 export interface Procedure {
-    idProcedure?: number;
+    idProcedure: number;
+    idTramitador?: number;
     name: string;
     description?: string;
-    startDate: Date;
-    endDate?: Date;
+    dayDuring?: number;
 }

@@ -27,7 +27,7 @@ export const PageContainerClientFolder = styled(Box)({
     flexDirection: 'column',
     padding: '205px 120px',
     backgroundColor: 'white',
-    width: '1665px',
+    width: '1676px',
     height: '540px',
     gap: '20px',
 });

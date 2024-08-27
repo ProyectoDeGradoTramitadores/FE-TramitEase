@@ -24,6 +24,11 @@ export const getProcedureById = async (id: number): Promise<Procedure> => {
     return response.data;
 };
 
+export const getProceduresByTramitadorId = async (tramitadorId: number): Promise<Procedure[]> => {
+    const response = await api.get(`/byTramitador/${tramitadorId}`);
+    return response.data;
+};
+
 export const createProcedure = async (procedure: Procedure): Promise<void> => {
     await api.post('/', procedure);
 };

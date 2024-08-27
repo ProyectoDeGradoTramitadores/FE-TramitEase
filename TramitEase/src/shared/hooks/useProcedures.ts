@@ -6,9 +6,9 @@ import {
     getProcedureById,
     getProcedures,
     updateProcedure,
-    checkProcedureExists,
+    checkProcedureExists, getProceduresByTramitadorId,
 }
- from '../services/procedure/ProcedureService.ts';
+    from '../services/procedure/ProcedureService.ts';
 
 export const useProcedures = () => {
     const [procedures, setProcedures] = useState<Procedure[]>([]);
@@ -46,6 +46,19 @@ export const useProcedures = () => {
             }
         }
         return undefined;
+    };
+
+    const fetchProceduresByTramitadorId = async (tramitadorId: number): Promise<Procedure[] | undefined> => {
+        try {
+            const data = await getProceduresByTramitadorId(tramitadorId);
+            return data;
+        } catch (err) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError('An unknown error occurred');
+            }
+        }
     };
 
     const checkProcedureExistsAndFetch = async (id: number): Promise<Procedure | null> => {
@@ -106,5 +119,6 @@ export const useProcedures = () => {
         }
     };
 
-    return { procedures, loading, error, fetchProcedureById, createNewProcedure, updateExistingProcedure, deleteExistingProcedure, checkProcedureExistsAndFetch };
+    return { procedures, loading, error, fetchProceduresByTramitadorId,
+        fetchProcedureById, createNewProcedure, updateExistingProcedure, deleteExistingProcedure, checkProcedureExistsAndFetch };
 };

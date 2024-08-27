@@ -24,5 +24,15 @@ export const updateTypeTramit = async (id: number, typeTramit: TypeTramit): Prom
 };
 
 export const deleteTypeTramit = async (id: number): Promise<void> => {
-    await api.delete(`/typeTramit/${id}`);
+    try {
+        await api.delete(`/typeTramit/${id}`);
+    } catch (error) {
+        throw new Error('Oops, algún trámite usa este tipo');
+    }
+};
+
+
+export const getTypeTramitsByTramitadorId = async (idTramitador: number): Promise<TypeTramit[]> => { // Añadido
+    const response = await api.get(`/typeTramit/tramitador/${idTramitador}`);
+    return response.data;
 };

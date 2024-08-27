@@ -3,5 +3,5 @@ export interface Tramit {
     idTypeTramit: number;
     idTramitador: number;
     name?: string;
-    days_during?: number;
+    dayDuring?: number;
 }
