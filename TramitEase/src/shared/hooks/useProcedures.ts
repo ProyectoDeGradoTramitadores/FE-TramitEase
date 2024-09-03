@@ -78,12 +78,13 @@ export const useProcedures = () => {
         return null;
     };
 
-    const createNewProcedure = async (procedure: Procedure) => {
+    const createNewProcedure = async (procedure: Procedure): Promise<Procedure | undefined> => {
         try {
             const newProcedure = await createProcedure(procedure);
             if (newProcedure != null) {
                 setProcedures([...procedures, newProcedure]);
             }
+            return newProcedure;
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);

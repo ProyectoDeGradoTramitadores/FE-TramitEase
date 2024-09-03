@@ -23,7 +23,7 @@ export const useTramitData = () => {
 
     const fetchTramitData = async (idTramit: number) => {
         const tramitData = await fetchTramitById(idTramit);
-        const tramitTypeData = await fetchTypeTramitById(idTramit);
+        const tramitTypeData = await fetchTypeTramitById((tramitData?.idTypeTramit || 0));
         const tramitProcedures = await fetchTramitProceduresByTramitId(idTramit);
 
         if (tramitProcedures) {
@@ -46,6 +46,7 @@ export const useTramitData = () => {
             setProceduresWithSteps(stepsMap);
         }
 
+        console.log(tramitTypeData);
         setTypeTramit(tramitTypeData || null);
         setTramit(tramitData || null);
     };

@@ -28,13 +28,12 @@ const TramitsViewPage: React.FC = () => {
             navigate(`/TramitEase/Tramitador/${id}/Custom/TramitsCustom/TramitCreateNew`);
         }
     };
-
     return (
         <div
             style={{
                 backgroundColor: '#ffffff',
-                minHeight: '640px',
-                minWidth: '1842px',
+                minHeight: '646px',
+                minWidth: '1843px',
                 padding: '30px 10px 20px 20px',
                 display: 'flex',
                 flexDirection: 'column',

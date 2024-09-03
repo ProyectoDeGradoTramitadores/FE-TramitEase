@@ -56,12 +56,13 @@ export const useTramits = () => {
         }
     };
 
-    const createNewTramit = async (tramit: Tramit) => {
+    const createNewTramit = async (tramit: Tramit): Promise<Tramit | undefined> => {
         try {
-            await createTramit(tramit);
             setTramits([...tramits, tramit]);
+            return await createTramit(tramit);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An unknown error occurred');
+            return undefined;
         }
     };
 

@@ -15,7 +15,7 @@ const ProcedureViewPage: React.FC = () => {
         if (idProcedure) {
             fetchProcedureData(parseInt(idProcedure));
         }
-    }, [idProcedure, fetchProcedureData]);
+    }, []);
 
     return (
         <Box
@@ -30,10 +30,10 @@ const ProcedureViewPage: React.FC = () => {
         >
             {procedure ? (
                 <div>
-                    <Typography variant="h2" color={theme.colors.ternary.default} gutterBottom>
+                    <Typography variant="h3" color={theme.colors.ternary.default} gutterBottom>
                         {procedure.name}
                     </Typography>
-                    <Typography variant="h5" color={theme.colors.secondary.default} gutterBottom>
+                    <Typography variant="h6" color={theme.colors.secondary.default} gutterBottom>
                         Descripcion: {procedure.description}
                     </Typography>
                     <Typography variant="body1" color={theme.colors.secondary.default}>

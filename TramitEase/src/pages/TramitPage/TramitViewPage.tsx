@@ -2,29 +2,29 @@ import React, { useEffect } from 'react';
 import { Box, Typography, Divider } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useTramitData } from '../../shared/hooks/useTramitData.ts';
-import { useTheme } from 'styled-components';
 import CustomButtonGroup from '../../shared/widgets/CustomButtonGroup.tsx';
 import ProceduresList from '../../shared/components/TramitViewComponent/ProceduresList.tsx';
+import { useTheme } from 'styled-components';
 
 const TramitViewPage: React.FC = () => {
     const theme = useTheme();
     const { idTramit } = useParams<{ idTramit: string }>();
     const { tramit, typeTramit, procedures, proceduresWithSteps, fetchTramitData } = useTramitData();
-
     useEffect(() => {
         if (idTramit) {
             fetchTramitData(parseInt(idTramit));
         }
-    }, [idTramit, fetchTramitData]);
-
+    }, []);
     return (
         <Box
             sx={{
                 backgroundColor: 'white',
                 marginTop: '150px',
-                padding: '60px',
+                padding: '60px 46px 40px 60px',
                 boxShadow: 1,
-                minWidth: '1785px',
+                minWidth: '1799px',
+                minHeight: '685px',
+                position: 'relative',
             }}
         >
             {tramit ? (
@@ -43,7 +43,7 @@ const TramitViewPage: React.FC = () => {
                         Procedimientos:
                     </Typography>
                     <ProceduresList procedures={procedures} proceduresWithSteps={proceduresWithSteps} />
-                    <CustomButtonGroup idTramit={idTramit || ''}/>
+                    <CustomButtonGroup idTramit={idTramit || ''} />
                 </div>
             ) : (
                 <Typography variant="body1" color="text.primary">

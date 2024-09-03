@@ -1,22 +1,59 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import CustomButton from '../components/buttons/CustomButton.tsx';
 import { useNavigate } from 'react-router-dom';
-import { CustomButtonGroupProps } from '../types/TramitComponentProps.ts';
+import { useCustomButtonGroup } from '../hooks/useCustomButtonGroup.ts';
+import CustomFabButton from '../components/TramitViewPage/CustomFabButton.tsx';
+import ActionMenu from '../components/TramitViewPage/ActionMenu.tsx';
+import WarningModal from '../components/TramitViewPage/WarningModal.tsx';
+import ConfirmationModal from '../components/TramitViewPage/ConfirmationModal.tsx';
+import { CustomButtonGroupProps } from '../types/TramitViewProps.ts';
 
-const CustomButtonGroup: React.FC<CustomButtonGroupProps> = ({idTramit}) => {
+const CustomButtonGroup: React.FC<CustomButtonGroupProps> = ({ idTramit }) => {
     const navigate = useNavigate();
+    const {
+        anchorEl,
+        openWarningModal,
+        openConfirmationModal,
+        handleMenuOpen,
+        handleMenuClose,
+        handleDelete,
+        confirmDelete,
+        setOpenWarningModal,
+        setOpenConfirmationModal,
+    } = useCustomButtonGroup(idTramit);
 
-    const handleClick = (path: string) => () => {
+    const handleNavigate = (path: string) => {
         navigate(path);
     };
 
     return (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '18px', mt: 2 }}>
-            <CustomButton $text="exit" $textStyle="bold" size="s" color="secondary"
-                          onClick={handleClick('/TramitEase/Tramitador/1/Custom/TramitsCustom')}/>
-            <CustomButton $text="Edit Tramit" $textStyle="bold" size="s" color="ternary"
-                          onClick={handleClick(`/TramitEase/Tramitador/1/Custom/TramitsCustom/TramitEditPage/${idTramit}`)}/>
+        <Box
+            sx={{
+                padding: '0 50px 0 10px',
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: '18px',
+                mt: 2,
+            }}
+        >
+            <CustomFabButton onClick={handleMenuOpen} />
+            <ActionMenu
+                anchorEl={anchorEl}
+                onClose={handleMenuClose}
+                onDelete={handleDelete}
+                idTramit={idTramit}
+                navigate={handleNavigate}
+            />
+            <WarningModal
+                open={openWarningModal}
+                onClose={() => setOpenWarningModal(false)}
+            />
+
+            <ConfirmationModal
+                open={openConfirmationModal}
+                onClose={() => setOpenConfirmationModal(false)}
+                onConfirm={confirmDelete}
+            />
         </Box>
     );
 };

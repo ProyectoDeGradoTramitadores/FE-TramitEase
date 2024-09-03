@@ -9,6 +9,11 @@ const SidebarEvent: React.FC<SidebarEventProps> = ({ event }) => {
             <ListItemText
                 primary={event.title}
                 secondary={formatDate(event.start!, { year: 'numeric', month: 'short', day: 'numeric' })}
+                sx={{
+                    '& .MuiListItemText-secondary': {
+                        color: 'white',
+                    },
+                }}
             />
         </ListItem>
     );

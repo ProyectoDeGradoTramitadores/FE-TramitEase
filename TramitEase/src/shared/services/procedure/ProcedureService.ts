@@ -29,8 +29,9 @@ export const getProceduresByTramitadorId = async (tramitadorId: number): Promise
     return response.data;
 };
 
-export const createProcedure = async (procedure: Procedure): Promise<void> => {
-    await api.post('/', procedure);
+export const createProcedure = async (procedure: Procedure): Promise<Procedure> => {
+    const response = await api.post('/', procedure);
+    return response.data;
 };
 
 export const updateProcedure = async (id: number, procedure: Procedure): Promise<void> => {
