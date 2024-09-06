@@ -51,6 +51,7 @@ export const useProcedures = () => {
     const fetchProceduresByTramitadorId = async (tramitadorId: number): Promise<Procedure[] | undefined> => {
         try {
             const data = await getProceduresByTramitadorId(tramitadorId);
+            setProcedures(data);
             return data;
         } catch (err) {
             if (err instanceof Error) {

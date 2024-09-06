@@ -113,6 +113,7 @@ const useTramitCreate = () => {
 
     return {
         procedures,
+        id,
         tramitId,
         name,
         selectedType,
