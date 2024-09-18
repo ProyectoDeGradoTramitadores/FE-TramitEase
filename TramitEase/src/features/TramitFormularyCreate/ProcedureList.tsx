@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
     Box,
     Button,
@@ -9,52 +9,29 @@ import {
     DialogTitle,
     Select,
     MenuItem,
-    CircularProgress,
-    SelectChangeEvent,
+    CircularProgress, IconButton,
 } from '@mui/material';
 import CustomButtonAddProcedure from '../../shared/components/TramitFormularyCreate/CustomButtonAddProcedure.tsx';
 import ProcedureItem from './ProcedureItem.tsx';
 import { ProcedureListProps } from '../../shared/types/FormComponentProps.ts';
-import { useProcedures } from '../../shared/hooks/useProcedures.ts';
-import { useStepProcedures } from '../../shared/hooks/useStepProcedures.ts';
+import CustomButton from '../../shared/components/buttons/CustomButton.tsx';
+import CloseIcon from '@mui/icons-material/Close';
 
-const ProcedureList: React.FC<ProcedureListProps> = ({ procedures, onAddProcedure, onProcedureChange, onRemoveProcedure }) => {
-    const [openModal, setOpenModal] = useState(false);
-    const [openSelectModal, setOpenSelectModal] = useState(false);
-    const [selectedProcedure, setSelectedProcedure] = useState<number | null>(null);
-    const {fetchStepProceduresByProcedureId} = useStepProcedures();
-    const { fetchProceduresByTramitadorId, procedures: tramitadorProcedures, loading } = useProcedures();
-
-    useEffect(() => {
-        fetchProceduresByTramitadorId(1);
-    }, []);
-
-    const handleOpenModal = () => {
-        setOpenModal(true);
-    };
-
-    const handleCloseModal = () => {
-        setOpenModal(false);
-    };
-
-    const handleAddNewProcedure = () => {
-        handleCloseModal();
-        onAddProcedure();
-    };
-
-    const handleUseExistingProcedure = () => {
-        handleCloseModal();
-        setOpenSelectModal(true);
-    };
-
-    const handleSelectProcedure = (event: SelectChangeEvent<number>) => {
-        const procedureId = event.target.value as number;
-        setSelectedProcedure(procedureId);
-        console.log('Selected Procedure:', tramitadorProcedures.find(p => p.idProcedure === procedureId));
-        console.log("step procedure:", fetchStepProceduresByProcedureId(procedureId));
-        setOpenSelectModal(false);
-    };
-
+const ProcedureList: React.FC<ProcedureListProps> = ({ procedures,
+                                                         onProcedureChange,
+                                                         onRemoveProcedure,
+                                                         handleOpenModal,
+                                                         handleCloseModal,
+                                                         handleAddNewProcedure,
+                                                         handleUseExistingProcedure,
+                                                         handleSelectProcedure,
+                                                         openModal,
+                                                         openSelectModal,
+                                                         loading,
+                                                         selectedProcedure,
+                                                         setOpenSelectModal,
+                                                         tramitadorProcedures
+                                                     }) => {
     return (
         <Box>
             {procedures.map((procedure, index) => (
@@ -71,8 +48,19 @@ const ProcedureList: React.FC<ProcedureListProps> = ({ procedures, onAddProcedur
                     Añadir Procedimiento
                 </CustomButtonAddProcedure>
             </Box>
-
             <Dialog open={openModal} onClose={handleCloseModal}>
+                <IconButton
+                    aria-label="close"
+                    onClick={handleCloseModal}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
                 <DialogTitle>Añadir Procedimiento</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
@@ -80,20 +68,26 @@ const ProcedureList: React.FC<ProcedureListProps> = ({ procedures, onAddProcedur
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleAddNewProcedure} color="primary" variant="contained">
-                        Añadir Nuevo
-                    </Button>
-                    <Button onClick={handleUseExistingProcedure} color="secondary" variant="contained">
-                        Usar Existente
-                    </Button>
-                    <Button onClick={handleCloseModal}>
-                        Cancelar
-                    </Button>
+                    <CustomButton
+                        $text={"Añadir Nuevo"}
+                        $textStyle={"bold"}
+                        size={"s"}
+                        color={"primary"}
+                        onClick={handleAddNewProcedure}
+                    />
+                    <CustomButton
+                        $text={"Usar Existente"}
+                        $textStyle={"bold"}
+                        size={"s"}
+                        color={"ternary"}
+                        onClick={handleUseExistingProcedure}
+                    />
                 </DialogActions>
             </Dialog>
 
             <Dialog open={openSelectModal} onClose={() => setOpenSelectModal(false)}>
-                <DialogTitle>Seleccionar Procedimiento</DialogTitle>
+                <DialogTitle>Seleccionar Procedimiento
+                </DialogTitle>
                 <DialogContent>
                     {loading ? (
                         <CircularProgress />

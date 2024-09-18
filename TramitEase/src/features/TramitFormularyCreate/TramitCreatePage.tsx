@@ -15,10 +15,20 @@ const TramitCreatePage: React.FC = () => {
         setTramitId,
         setName,
         setSelectedType,
-        handleAddProcedure,
         handleProcedureChange,
         handleRemoveProcedure,
-        handleSubmit
+        handleSubmit,
+        handleOpenModal,
+        handleCloseModal,
+        handleAddNewProcedure,
+        handleUseExistingProcedure,
+        handleSelectProcedure,
+        openModal,
+        openSelectModal,
+        loading,
+        selectedProcedure,
+        tramitadorProcedures,
+        setOpenSelectModal,
     } = useTramitCreate();
 
     return (
@@ -36,9 +46,19 @@ const TramitCreatePage: React.FC = () => {
             />
             <ProcedureList
                 procedures={procedures}
-                onAddProcedure={handleAddProcedure}
                 onProcedureChange={handleProcedureChange}
                 onRemoveProcedure={handleRemoveProcedure}
+                handleOpenModal={handleOpenModal}
+                handleCloseModal={handleCloseModal}
+                handleAddNewProcedure={handleAddNewProcedure}
+                handleUseExistingProcedure={handleUseExistingProcedure}
+                handleSelectProcedure={handleSelectProcedure}
+                openModal={openModal}
+                openSelectModal={openSelectModal}
+                loading={loading}
+                selectedProcedure={selectedProcedure}
+                setOpenSelectModal={setOpenSelectModal}
+                tramitadorProcedures={tramitadorProcedures}
             />
             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <CustomButton

@@ -13,6 +13,8 @@ export const ROUTES = {
     PROCEDURE_VIEW: (id: string | number, idProcedure: string | number) => `/TramitEase/Tramitador/${id}/Custom/TramitsCustom/ProcedureViewPage/${idProcedure}`,
     TRAMIT_CREATE_NEW: (id: string | number) => `/TramitEase/Tramitador/${id}/Custom/TramitsCustom/TramitCreateNew`,
     EDIT_TRAMIT: (id: string | number, idTramit: string | number) => `/TramitEase/Tramitador/${id}/Custom/TramitsCustom/TramitEditPage/${idTramit}`,
+    EDIT_PROCEDURE: (id: string | number, idProcedure: string | number) => `/TramitEase/Tramitador/${id}/Custom/TramitsCustom/ProcedureEditPage/${idProcedure}`,
+
 
     // Create Client Folder routes
     CREATE_CLIENT_FOLDER: (id: string | number) => `/TramitEase/Tramitador/${id}/CreateClientFolder/CreateClient`,

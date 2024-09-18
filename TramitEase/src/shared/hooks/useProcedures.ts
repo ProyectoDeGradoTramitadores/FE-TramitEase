@@ -95,10 +95,11 @@ export const useProcedures = () => {
         }
     };
 
-    const updateExistingProcedure = async (id: number, procedure: Procedure) => {
+    const updateExistingProcedure = async (id: number, procedure: Procedure): Promise<Procedure | undefined> => {
         try {
             await updateProcedure(id, procedure);
             setProcedures(procedures.map(t => (t.idProcedure === id ? procedure : t)));
+            return procedure;
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);

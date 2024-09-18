@@ -1,4 +1,6 @@
 import React from 'react';
+import { SelectChangeEvent } from '@mui/material';
+import { Procedure } from '../../entities/Procedure.ts';
 
 export interface FormFieldProps {
     label: string;
@@ -24,12 +26,14 @@ export interface CustomButtonStepProps {
 }
 
 export interface ProcedureForm {
+    id?: number;
     name: string;
     description: string;
-    steps: { name: string; requirements: string; days: number }[];
+    steps: { name: string; requirements: string; days: number; idStepProcedure?: number; }[];
 }
 
 export interface Step {
+    idStepProcedure?: number;
     name: string;
     requirements: string;
     days: number;
@@ -50,6 +54,12 @@ export interface TramitFormProps {
     setSelectedType: (value: string) => void;
 }
 
+export interface ProcedureItemFormularyProps {
+    procedure: ProcedureForm;
+    index?: number;
+    onChange: (updatedProcedure: ProcedureForm) => void;
+}
+
 export interface ProcedureItemProps {
     procedure: ProcedureForm;
     index: number;
@@ -59,7 +69,17 @@ export interface ProcedureItemProps {
 
 export interface ProcedureListProps {
     procedures: ProcedureForm[];
-    onAddProcedure: () => void;
     onProcedureChange: (index: number, updatedProcedure: ProcedureForm) => void;
     onRemoveProcedure: (index: number) => void;
+    handleOpenModal: () => void;
+    handleCloseModal: () => void;
+    handleAddNewProcedure: () => void;
+    handleUseExistingProcedure: () => void;
+    handleSelectProcedure: (event: SelectChangeEvent<number>) => Promise<void>;
+    openModal: boolean;
+    openSelectModal: boolean;
+    loading: boolean;
+    selectedProcedure: number | null;
+    setOpenSelectModal: (open: boolean) => void;
+    tramitadorProcedures: Procedure[];
 }

@@ -1,32 +1,37 @@
 import React from 'react';
-import { Box, TextField, Typography, IconButton } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Box, TextField, Typography } from '@mui/material';
 import CustomButtonStep from '../../shared/components/TramitFormularyCreate/CustomButtonStep.tsx';
-import StepItem from './StepItem.tsx';
-import { ProcedureItemProps, Step } from '../../shared/types/FormComponentProps.ts';
+import { ProcedureItemFormularyProps, Step } from '../../shared/types/FormComponentProps.ts';
 import { useStepProcedures } from '../../shared/hooks/useStepProcedures.ts';
+import StepItem from '../TramitFormularyCreate/StepItem.tsx';
 
-const ProcedureItem: React.FC<ProcedureItemProps> = ({ procedure, onChange, onRemove }) => {
+const ProcedureItemFormulary: React.FC<ProcedureItemFormularyProps> = ({ procedure, onChange }) => {
     const { deleteExistingStepProcedure } = useStepProcedures();
 
     const handleAddStep = () => {
-        const updatedProcedure = { ...procedure, steps: [...procedure.steps, { name: '', requirements: '', days: 0 }] };
-        onChange(updatedProcedure);
+        if(procedure != null && onChange !== undefined) {
+            const updatedProcedure = { ...procedure, steps: [...procedure?.steps, { name: '', requirements: '', days: 0 }] };
+            onChange(updatedProcedure);
+        }
     };
 
     const handleStepChange = (stepIndex: number, updatedStep: Step) => {
-        const updatedSteps = procedure.steps.map((step, i) => (i === stepIndex ? updatedStep : step));
-        onChange({ ...procedure, steps: updatedSteps });
+        if(procedure != null && updatedStep !== null && onChange !== undefined) {
+            const updatedSteps = procedure?.steps?.map((step, i) => (i === stepIndex ? updatedStep : step));
+            onChange({ ...procedure, steps: updatedSteps });
+        }
     };
 
     const handleRemoveStep = async (stepIndex: number) => {
-        const stepToRemove = procedure.steps[stepIndex];
+        const stepToRemove = procedure?.steps[stepIndex];
         try {
-            if (stepToRemove.idStepProcedure) {
+            if (stepToRemove != null && stepToRemove.idStepProcedure) {
                 await deleteExistingStepProcedure(stepToRemove.idStepProcedure);
             }
-            const updatedSteps = procedure.steps.filter((_, i) => i !== stepIndex);
-            onChange({ ...procedure, steps: updatedSteps });
+            if(procedure != null && onChange !== undefined) {
+                const updatedSteps = procedure.steps.filter((_, i) => i !== stepIndex);
+                onChange({ ...procedure, steps: updatedSteps });
+            }
         } catch (error) {
             console.error("Error removing step:", error);
         }
@@ -37,19 +42,16 @@ const ProcedureItem: React.FC<ProcedureItemProps> = ({ procedure, onChange, onRe
             <Typography variant="h5" component="h2" gutterBottom style={{ color: 'black' }}>
                 Procedimiento
             </Typography>
-            <IconButton onClick={onRemove} sx={{ position: 'absolute', right: 0, top: 0 }}>
-                <DeleteIcon />
-            </IconButton>
             <TextField
                 label="Nombre del Procedimiento"
-                value={procedure.name}
+                value={procedure?.name}
                 onChange={(e) => onChange({ ...procedure, name: e.target.value })}
                 fullWidth
                 sx={{ marginBottom: '10px' }}
             />
             <TextField
                 label="Descripción del Procedimiento"
-                value={procedure.description}
+                value={procedure?.description}
                 onChange={(e) => onChange({ ...procedure, description: e.target.value })}
                 fullWidth
                 sx={{ marginBottom: '10px' }}
@@ -60,7 +62,7 @@ const ProcedureItem: React.FC<ProcedureItemProps> = ({ procedure, onChange, onRe
                 </CustomButtonStep>
             </Box>
 
-            {procedure.steps.map((step, stepIndex) => (
+            {procedure?.steps.map((step, stepIndex) => (
                 <StepItem
                     key={stepIndex}
                     step={step}
@@ -72,4 +74,4 @@ const ProcedureItem: React.FC<ProcedureItemProps> = ({ procedure, onChange, onRe
     );
 };
 
-export default ProcedureItem;
+export default ProcedureItemFormulary;

@@ -1,18 +1,26 @@
 import React, { useState } from 'react';
-import { Box, Button, IconButton, Menu, MenuItem, Typography } from '@mui/material';
+import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { CustomButtonStepsGroupProps } from '../types/ProcedureComponentProps.ts';
 import { useTramitProcedures } from '../hooks/useTramitProcedures.ts';
 import AddIcon from '@mui/icons-material/Add';
 import { Modal } from '@mui/joy';
 import { useTheme } from 'styled-components';
+import { useProcedures } from '../hooks/useProcedures.ts';
+import { useStepProcedures } from '../hooks/useStepProcedures.ts';
+import { IDS, ROUTES } from '../constants/routes.ts';
+import CustomButton from '../components/buttons/CustomButton.tsx';
 
 const CustomButtonWithMenu: React.FC<CustomButtonStepsGroupProps> = ({ idProcedure }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [openModal, setOpenModal] = useState<boolean>(false);
     const [errorModal, setErrorModal] = useState<boolean>(false);
-    const { fetchTramitProceduresByProcedureId, deleteExistTramitProcedure } = useTramitProcedures();
+    const { fetchTramitProceduresByProcedureId } = useTramitProcedures();
+    const { deleteExistingProcedure } = useProcedures();
+    const { deleteExistingStepProcedure, fetchStepProceduresByProcedureId } = useStepProcedures();
     const navigate = useNavigate();
+    const id = IDS().TRAMITADOR_ID;
+    const route = ROUTES.TRAMITS_CUSTOM(id);
     const theme = useTheme();
 
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -34,8 +42,19 @@ const CustomButtonWithMenu: React.FC<CustomButtonStepsGroupProps> = ({ idProcedu
     };
 
     const handleConfirmDelete = async () => {
-        await deleteExistTramitProcedure(parseInt(idProcedure));
+        const deleteStepsProcedures = await fetchStepProceduresByProcedureId(parseInt(idProcedure));
+
+        if (deleteStepsProcedures && deleteStepsProcedures.length > 0) {
+            await Promise.all(
+                deleteStepsProcedures.map(async (stepProcedure) => {
+                    await deleteExistingStepProcedure(stepProcedure.idStepProcedure);
+                })
+            );
+        }
+
+        await deleteExistingProcedure(parseInt(idProcedure));
         setOpenModal(false);
+        navigate(route);
     };
 
     return (
@@ -60,9 +79,9 @@ const CustomButtonWithMenu: React.FC<CustomButtonStepsGroupProps> = ({ idProcedu
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
             >
-                <MenuItem onClick={() => navigate(`/TramitEase/Tramitador/1/Custom/TramitsCustom/ProcedureEditPage/${idProcedure}`)}>Edit</MenuItem>
+                <MenuItem onClick={() => navigate(`/TramitEase/Tramitador/${id}/Custom/TramitsCustom/ProcedureEditPage/${idProcedure}`)}>Edit</MenuItem>
                 <MenuItem onClick={handleDelete}>Delete</MenuItem>
-                <MenuItem onClick={() => navigate('/TramitEase/Tramitador/1/Custom/TramitsCustom')}>Exit</MenuItem>
+                <MenuItem onClick={() => navigate(`/TramitEase/Tramitador/${id}/Custom/TramitsCustom`)}>Exit</MenuItem>
             </Menu>
 
             <Modal
@@ -82,16 +101,24 @@ const CustomButtonWithMenu: React.FC<CustomButtonStepsGroupProps> = ({ idProcedu
                     boxShadow: 24,
                     borderRadius: 2
                 }}>
-                    <Typography id="confirm-delete-title" variant="h6" component="h2">
+                    <Typography id="confirm-delete-title" variant="h6" component="h2" color={"black"}>
                         Are you sure you want to delete this procedure?
                     </Typography>
                     <Box mt={2} display="flex" justifyContent="flex-end" gap={2}>
-                        <Button variant="contained" color="secondary" onClick={() => setOpenModal(false)}>
-                            Cancel
-                        </Button>
-                        <Button variant="contained" color="primary" onClick={handleConfirmDelete}>
-                            Continue
-                        </Button>
+                        <CustomButton
+                            color={"primary"}
+                            $textStyle={"bold"}
+                            size={"s"}
+                            $text={"Continue"}
+                            onClick={handleConfirmDelete}
+                        />
+                        <CustomButton
+                            color={"ternary"}
+                            $textStyle={"bold"}
+                            size={"s"}
+                            $text={"Cancel"}
+                            onClick={() => setOpenModal(false)}
+                        />
                     </Box>
                 </Box>
             </Modal>
@@ -113,16 +140,20 @@ const CustomButtonWithMenu: React.FC<CustomButtonStepsGroupProps> = ({ idProcedu
                     boxShadow: 24,
                     borderRadius: 2
                 }}>
-                    <Typography id="error-delete-title" variant="h6" component="h2" color="error">
+                    <Typography id="error-delete-title" variant="h6" component="h2" color="black">
                         Oops, you cannot delete this procedure!
                     </Typography>
-                    <Typography id="error-delete-description" mt={2}>
+                    <Typography id="error-delete-description" mt={2} color="black">
                         This procedure is being used by one or more tramits.
                     </Typography>
                     <Box mt={2} display="flex" justifyContent="flex-end">
-                        <Button variant="contained" color="secondary" onClick={() => setErrorModal(false)}>
-                            Close
-                        </Button>
+                        <CustomButton
+                            color={"ternary"}
+                            $textStyle={"bold"}
+                            size={"s"}
+                            $text={"Cancel"}
+                            onClick={() => setErrorModal(false)}
+                        />
                     </Box>
                 </Box>
             </Modal>

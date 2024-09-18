@@ -3,8 +3,8 @@ import { Box, Typography, Divider } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useTheme } from 'styled-components';
 import { useProcedureData } from '../../shared/hooks/useProcedureData.ts';
-import CustomButtonStepsProcedureGroup from '../../shared/widgets/CustomButtonStepsProcedureGroup.tsx';
 import ProcedureStepsList from '../../shared/components/ProcedureViewComponent/ProcedureStepsList.tsx';
+import CustomButtonStepsProcedureGroup from '../../shared/widgets/CustomButtonStepsProcedureGroup.tsx';
 
 const ProcedureViewPage: React.FC = () => {
     const theme = useTheme();

@@ -15,6 +15,7 @@ import TramitsCustomPage from '../../pages/tramitsCustomPage/TramitsCustomPage.t
 import TramitViewPage from '../../pages/TramitPage/TramitViewPage.tsx';
 import ProcedureViewPage from '../../pages/ProcedureViewPage/ProcedureViewPage.tsx';
 import FormularyTramitCreatePage from '../../pages/formularyCreateTramitPage/FormularyTramitCreatePage.tsx';
+import FormularyProcedureCreatePage from '../../pages/formularyCreateProcedurePage/FormularyProcedureCreatePage.tsx';
 
 const Layout: React.FC = () => (
     <>
@@ -40,6 +41,9 @@ const AppRoutes = () => (
                             <Route path={"TramitsCustom/TramitViewPage/:idTramit"} element={<TramitViewPage />}/>
                             <Route path={"TramitsCustom/ProcedureViewPage/:idProcedure"} element={<ProcedureViewPage />}/>
                             <Route path={"TramitsCustom/TramitCreateNew"} element={<FormularyTramitCreatePage/> }/>
+                            <Route path={"TramitsCustom/ProcedureCreateNew"} element={<FormularyProcedureCreatePage/> }/>
+                            <Route path={"TramitsCustom/TramitEditPage/:idTramit"} element={<FormularyTramitCreatePage/> }/>
+                            <Route path={"TramitsCustom/ProcedureEditPage/:idProcedure"} element={<FormularyProcedureCreatePage/> }/>
                         </Route>
                         <Route path="CreateClientFolder">
                             <Route path={"CreateClient"} element={<FormularyCreateClientFolderPage/>}/>
