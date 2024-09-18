@@ -5,6 +5,7 @@ import { useClientFoldersByTramitadorId } from './useClientFoldersByTramitadorId
 
 export function useCalendarEvents(tramitadorId: number) {
     const { filteredClientFolders, loading, error } = useClientFoldersByTramitadorId(tramitadorId);
+
     const [currentEvents, setCurrentEvents] = useState<EventInput[]>([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState<EventApi | null>(null);

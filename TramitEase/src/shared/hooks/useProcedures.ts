@@ -51,6 +51,7 @@ export const useProcedures = () => {
     const fetchProceduresByTramitadorId = async (tramitadorId: number): Promise<Procedure[] | undefined> => {
         try {
             const data = await getProceduresByTramitadorId(tramitadorId);
+            setProcedures(data);
             return data;
         } catch (err) {
             if (err instanceof Error) {
@@ -78,12 +79,13 @@ export const useProcedures = () => {
         return null;
     };
 
-    const createNewProcedure = async (procedure: Procedure) => {
+    const createNewProcedure = async (procedure: Procedure): Promise<Procedure | undefined> => {
         try {
             const newProcedure = await createProcedure(procedure);
             if (newProcedure != null) {
                 setProcedures([...procedures, newProcedure]);
             }
+            return newProcedure;
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);
@@ -93,10 +95,11 @@ export const useProcedures = () => {
         }
     };
 
-    const updateExistingProcedure = async (id: number, procedure: Procedure) => {
+    const updateExistingProcedure = async (id: number, procedure: Procedure): Promise<Procedure | undefined> => {
         try {
             await updateProcedure(id, procedure);
             setProcedures(procedures.map(t => (t.idProcedure === id ? procedure : t)));
+            return procedure;
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);

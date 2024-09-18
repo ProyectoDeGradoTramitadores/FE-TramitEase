@@ -15,8 +15,9 @@ export const getTramitById = async (id: number): Promise<Tramit> => {
     return response.data;
 };
 
-export const createTramit = async (tramit: Tramit): Promise<void> => {
-    await api.post('/tramit', tramit);
+export const createTramit = async (tramit: Tramit): Promise<Tramit> => {
+    const response= await api.post('/tramit', tramit);
+    return response.data;
 };
 
 export const updateTramit = async (id: number, tramit: Tramit): Promise<void> => {

@@ -6,20 +6,32 @@ import CustomButton from '../../shared/components/buttons/CustomButton.tsx';
 import { emptyFolder, clearEmptyFolder } from '../../shared/constants/FolderCreate.ts';
 import { useClientFolders } from '../../shared/hooks/useClientFolders.ts';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useTramits } from '../../shared/hooks/useTramits.ts';
 
 const FormularyCreateFolderPage: React.FC = () => {
     const {createNewClientFolder} = useClientFolders();
+    const {fetchTramitById} = useTramits();
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
     const handleSaveFolder = async () => {
         if (emptyFolder) {
+            await fetchTramitById(emptyFolder.idTramit).then(tramit => {
+                const creationDate = new Date(emptyFolder.creationDate);
+                const endDate = new Date(creationDate);
+                if (tramit?.dayDuring) {
+                    endDate.setDate(creationDate.getDate() + tramit.dayDuring);
+                }
+                emptyFolder.endDate = endDate.toISOString();
+            });
+
+            console.log("emptyFolder", emptyFolder);
             await createNewClientFolder(emptyFolder);
-            console.log('create new folder:', emptyFolder);
             clearEmptyFolder();
             navigate(`/TramitEase/Tramitador/${id}/ClientsFolder`);
         }
     };
+
     return (
         <Box
             sx={{

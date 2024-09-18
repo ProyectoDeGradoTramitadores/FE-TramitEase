@@ -48,11 +48,12 @@ export const useTramitProcedures = () => {
         }
     };
 
-    const fetchTramitProceduresByProcedureId = async (procedureId: number) => {
+    const fetchTramitProceduresByProcedureId = async (procedureId: number): Promise<TramitProcedure[] | undefined>  => {
         setLoading(true);
         try {
             const data = await getTramitProceduresByProcedureId(procedureId);
             setTramitProcedures(data);
+            return data;
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An unknown error occurred');
         } finally {

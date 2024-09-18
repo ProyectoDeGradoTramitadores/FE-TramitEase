@@ -6,6 +6,14 @@ import { ProceduresListProps } from '../../types/ProceduresListProps.ts';
 const ProceduresList: React.FC<ProceduresListProps> = ({ procedures, proceduresWithSteps }) => {
     const theme = useTheme();
 
+    if (procedures.length === 0) {
+        return (
+            <Typography variant="body1" color="text.primary" sx={{marginTop:'60px'}}>
+                No hay procedimientos dentro de este trámite.
+            </Typography>
+        );
+    }
+
     return (
         <List component="ol">
             {procedures.map((procedure, index) => (
@@ -57,7 +65,7 @@ const ProceduresList: React.FC<ProceduresListProps> = ({ procedures, proceduresW
                             ))}
                         </List>
                     ) : (
-                        <Typography variant="body2" color="text.primary" sx={{ ml: 6 }}>
+                        <Typography variant="body2" color="text.primary" sx={{ ml: 6, marginTop:'50px' }}>
                             No se encontro Pasos.
                         </Typography>
                     )}
