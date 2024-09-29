@@ -38,9 +38,9 @@ const LandingHeader: React.FC<{
 }> = ({ onAboutClick, onFeaturesClick, onHomeClick }) => {
     return (
         <HeaderContainer>
-            <LogoBlack size={'l'} color={'primary'} onClick={onHomeClick} /> {/* Botón de inicio */}
+            <LogoBlack size={'l'} color={'primary'} onClick={onHomeClick} />
             <ButtonContainer>
-                <CustomButton size={'m'} color={'primary'} $text={"ABOUT"} $textStyle={'bold'} onClick={onAboutClick}/>
+                <CustomButton size={'m'} color={'primary'} $text={"ACERCA DE"} $textStyle={'bold'} onClick={onAboutClick}/>
                 <CustomButton size={'m'} color={'primary'} $text={"CARACTERISTICAS"} $textStyle={'bold'} onClick={onFeaturesClick}/>
                 <CustomButton size={'m'} color={'ternary'} $text={"INICIAR SESION"} $textStyle={'bold'} />
             </ButtonContainer>

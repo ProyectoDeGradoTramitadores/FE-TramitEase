@@ -27,7 +27,7 @@ const StepItem: React.FC<StepItemProps> = ({ step, onChange, onRemove }) => {
                 sx={{ marginBottom: '10px' }}
             />
             <TextField
-                label="Días del Paso"
+                label="Nº de Días del Paso"
                 value={step.days}
                 onChange={(e) => onChange({ ...step, days: Number(e.target.value) })}
                 fullWidth

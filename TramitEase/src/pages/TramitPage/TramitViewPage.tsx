@@ -22,7 +22,7 @@ const TramitViewPage: React.FC = () => {
                 marginTop: '150px',
                 padding: '60px 46px 40px 60px',
                 boxShadow: 1,
-                minWidth: '1799px',
+                minWidth: '1814px',
                 minHeight: '685px',
                 position: 'relative',
             }}

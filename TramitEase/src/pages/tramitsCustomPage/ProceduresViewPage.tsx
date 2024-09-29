@@ -32,8 +32,8 @@ const ProceduresViewPage: React.FC = () => {
         <div
             style={{
                 backgroundColor: '#ffffff',
-                minHeight: '640px',
-                minWidth: '1858px',
+                minHeight: '647px',
+                minWidth: '1857px',
                 padding: '30px 10px 20px 20px',
                 display: 'flex',
                 flexDirection: 'column',

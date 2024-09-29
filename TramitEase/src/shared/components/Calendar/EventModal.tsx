@@ -4,7 +4,7 @@ import { formatDate } from '@fullcalendar/core';
 import { EventModalProps } from '../../types/CalendarProps.ts';
 import CustomButton from '../buttons/CustomButton.tsx';
 
-const EventModal: React.FC<EventModalProps> = ({ open, event, onClose }) => {
+const EventModal: React.FC<EventModalProps> = ({ open, event, onClose, redirectTo }) => {
     return (
         <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth PaperProps={{ style: { borderRadius: 5 } }}>
             <DialogTitle>Event Details</DialogTitle>
@@ -23,7 +23,7 @@ const EventModal: React.FC<EventModalProps> = ({ open, event, onClose }) => {
             </DialogContent>
             <DialogActions>
                 <CustomButton size="xs" onClick={onClose} color="primary" $text="Close" $textStyle="normal" />
-                <CustomButton size="xs" onClick={onClose} color="ternary" $text="Open Client Folder" $textStyle="normal" />
+                <CustomButton size="xs" onClick={redirectTo} color="ternary" $text="Open Client Folder" $textStyle="normal" />
             </DialogActions>
         </Dialog>
     );

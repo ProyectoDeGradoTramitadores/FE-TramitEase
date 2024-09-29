@@ -3,13 +3,13 @@ import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { CustomButtonStepsGroupProps } from '../types/ProcedureComponentProps.ts';
 import { useTramitProcedures } from '../hooks/useTramitProcedures.ts';
-import AddIcon from '@mui/icons-material/Add';
 import { Modal } from '@mui/joy';
 import { useTheme } from 'styled-components';
 import { useProcedures } from '../hooks/useProcedures.ts';
 import { useStepProcedures } from '../hooks/useStepProcedures.ts';
 import { IDS, ROUTES } from '../constants/routes.ts';
 import CustomButton from '../components/buttons/CustomButton.tsx';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 
 const CustomButtonWithMenu: React.FC<CustomButtonStepsGroupProps> = ({ idProcedure }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -71,7 +71,7 @@ const CustomButtonWithMenu: React.FC<CustomButtonStepsGroupProps> = ({ idProcedu
                             backgroundColor: theme.colors.ternary.action,
                         }}}
                 >
-                    <AddIcon />
+                    <FormatListBulletedIcon />
                 </IconButton>
             </Box>
             <Menu
@@ -79,9 +79,9 @@ const CustomButtonWithMenu: React.FC<CustomButtonStepsGroupProps> = ({ idProcedu
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
             >
-                <MenuItem onClick={() => navigate(`/TramitEase/Tramitador/${id}/Custom/TramitsCustom/ProcedureEditPage/${idProcedure}`)}>Edit</MenuItem>
-                <MenuItem onClick={handleDelete}>Delete</MenuItem>
-                <MenuItem onClick={() => navigate(`/TramitEase/Tramitador/${id}/Custom/TramitsCustom`)}>Exit</MenuItem>
+                <MenuItem onClick={() => navigate(`/TramitEase/Tramitador/${id}/Custom/TramitsCustom/ProcedureEditPage/${idProcedure}`)}>Editar</MenuItem>
+                <MenuItem onClick={handleDelete}>Eliminar</MenuItem>
+                <MenuItem onClick={() => navigate(`/TramitEase/Tramitador/${id}/Custom/TramitsCustom`)}>Salir</MenuItem>
             </Menu>
 
             <Modal
@@ -102,21 +102,21 @@ const CustomButtonWithMenu: React.FC<CustomButtonStepsGroupProps> = ({ idProcedu
                     borderRadius: 2
                 }}>
                     <Typography id="confirm-delete-title" variant="h6" component="h2" color={"black"}>
-                        Are you sure you want to delete this procedure?
+                        ¿Estas seguro de Eliminar el Procedimiento?
                     </Typography>
                     <Box mt={2} display="flex" justifyContent="flex-end" gap={2}>
                         <CustomButton
                             color={"primary"}
                             $textStyle={"bold"}
                             size={"s"}
-                            $text={"Continue"}
+                            $text={"Continuar"}
                             onClick={handleConfirmDelete}
                         />
                         <CustomButton
                             color={"ternary"}
                             $textStyle={"bold"}
                             size={"s"}
-                            $text={"Cancel"}
+                            $text={"Cancelar"}
                             onClick={() => setOpenModal(false)}
                         />
                     </Box>
@@ -141,17 +141,17 @@ const CustomButtonWithMenu: React.FC<CustomButtonStepsGroupProps> = ({ idProcedu
                     borderRadius: 2
                 }}>
                     <Typography id="error-delete-title" variant="h6" component="h2" color="black">
-                        Oops, you cannot delete this procedure!
+                        Oops, No puede eliminar este procedimiento!
                     </Typography>
                     <Typography id="error-delete-description" mt={2} color="black">
-                        This procedure is being used by one or more tramits.
+                        Este procedimiento esta siendo usado por un tramite!
                     </Typography>
                     <Box mt={2} display="flex" justifyContent="flex-end">
                         <CustomButton
                             color={"ternary"}
                             $textStyle={"bold"}
                             size={"s"}
-                            $text={"Cancel"}
+                            $text={"Cancelar"}
                             onClick={() => setErrorModal(false)}
                         />
                     </Box>

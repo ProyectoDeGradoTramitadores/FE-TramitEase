@@ -1,127 +1,94 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Procedure } from '../../entities/Procedure.ts';
 import {
-    createProcedure,
-    deleteProcedure,
-    getProcedureById,
-    getProcedures,
-    updateProcedure,
-    checkProcedureExists, getProceduresByTramitadorId,
-}
-    from '../services/procedure/ProcedureService.ts';
+    createProcedure, deleteProcedure, getProcedureById, getProcedures,
+    updateProcedure, checkProcedureExists, getProceduresByTramitadorId
+} from '../services/procedure/ProcedureService.ts';
 
 export const useProcedures = () => {
     const [procedures, setProcedures] = useState<Procedure[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    const handleError = (err: unknown) => {
+        if (err instanceof Error) {
+            setError(err.message);
+        } else {
+            setError('An unknown error occurred');
+        }
+        setLoading(false);
+    };
+
     useEffect(() => {
         const fetchProcedures = async () => {
             try {
                 const data = await getProcedures();
                 setProcedures(data);
-                setLoading(false);
             } catch (err) {
-                if (err instanceof Error) {
-                    setError(err.message);
-                } else {
-                    setError('An unknown error occurred');
-                }
+                handleError(err);
+            } finally {
                 setLoading(false);
             }
         };
-
-        fetchProcedures().then(r => console.log(r));
+        fetchProcedures();
     }, []);
 
-    const fetchProcedureById = async (id: number): Promise<Procedure | undefined> => {
+    const fetchProcedureById = useCallback(async (id: number) => {
         try {
-            const procedure = await getProcedureById(id);
-            return procedure;
+            return await getProcedureById(id);
         } catch (err) {
-            if (err instanceof Error) {
-                setError(err.message);
-            } else {
-                setError('An unknown error occurred');
-            }
+            handleError(err);
         }
-        return undefined;
-    };
+    }, []);
 
-    const fetchProceduresByTramitadorId = async (tramitadorId: number): Promise<Procedure[] | undefined> => {
+    const fetchProceduresByTramitadorId = useCallback(async (tramitadorId: number) => {
         try {
             const data = await getProceduresByTramitadorId(tramitadorId);
             setProcedures(data);
             return data;
         } catch (err) {
-            if (err instanceof Error) {
-                setError(err.message);
-            } else {
-                setError('An unknown error occurred');
-            }
+            handleError(err);
         }
-    };
+    }, []);
 
-    const checkProcedureExistsAndFetch = async (id: number): Promise<Procedure | null> => {
-        try {
-            const exists = await checkProcedureExists(id);
-            if (exists) {
-                const procedure = await getProcedureById(id);
-                return procedure;
-            }
-        } catch (err) {
-            if (err instanceof Error) {
-                setError(err.message);
-            } else {
-                setError('An unknown error occurred');
-            }
-        }
-        return null;
-    };
-
-    const createNewProcedure = async (procedure: Procedure): Promise<Procedure | undefined> => {
+    const createNewProcedure = useCallback(async (procedure: Procedure) => {
         try {
             const newProcedure = await createProcedure(procedure);
-            if (newProcedure != null) {
-                setProcedures([...procedures, newProcedure]);
-            }
+            setProcedures([...procedures, newProcedure]);
             return newProcedure;
         } catch (err) {
-            if (err instanceof Error) {
-                setError(err.message);
-            } else {
-                setError('An unknown error occurred');
-            }
+            handleError(err);
         }
-    };
+    }, [procedures]);
 
-    const updateExistingProcedure = async (id: number, procedure: Procedure): Promise<Procedure | undefined> => {
+    const updateExistingProcedure = useCallback(async (id: number, procedure: Procedure) => {
         try {
             await updateProcedure(id, procedure);
-            setProcedures(procedures.map(t => (t.idProcedure === id ? procedure : t)));
+            setProcedures(procedures.map(t => t.idProcedure === id ? procedure : t));
             return procedure;
         } catch (err) {
-            if (err instanceof Error) {
-                setError(err.message);
-            } else {
-                setError('An unknown error occurred');
-            }
+            handleError(err);
         }
-    };
+    }, [procedures]);
 
-    const deleteExistingProcedure = async (id: number) => {
+    const deleteExistingProcedure = useCallback(async (id: number) => {
         try {
             await deleteProcedure(id);
             setProcedures(procedures.filter(t => t.idProcedure !== id));
         } catch (err) {
-            if (err instanceof Error) {
-                setError(err.message);
-            } else {
-                setError('An unknown error occurred');
-            }
+            handleError(err);
         }
-    };
+    }, [procedures]);
 
-    return { procedures, loading, error, fetchProceduresByTramitadorId,
-        fetchProcedureById, createNewProcedure, updateExistingProcedure, deleteExistingProcedure, checkProcedureExistsAndFetch };
+    return {
+        procedures,
+        loading,
+        error,
+        fetchProcedureById,
+        fetchProceduresByTramitadorId,
+        createNewProcedure,
+        updateExistingProcedure,
+        deleteExistingProcedure,
+        checkProcedureExists
+    };
 };

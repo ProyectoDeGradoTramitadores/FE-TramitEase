@@ -26,6 +26,7 @@ const TypeTramitCreateView: React.FC<TypeTramitCreateViewProps> = ({ newName, se
                 variant="outlined"
                 margin="normal"
                 InputProps={{ style: { color: 'white' } }}
+                placeholder="Nombre del tipo de trámite"
                 InputLabelProps={{ style: { color: 'white' } }}
                 sx={{
                     '& .MuiOutlinedInput-root': {
