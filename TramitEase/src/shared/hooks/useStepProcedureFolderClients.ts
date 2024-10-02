@@ -124,8 +124,8 @@ export const useStepProcedureFolderClients = () => {
         loading,
         error,
         fetchStepProcedureFolderClientById,
-        fetchStepProcedureFolderClientsByProcedureFolderClientId,  // Newly added function
-        fetchStepProcedureFolderClientByProcedureAndStep,  // Newly added function
+        fetchStepProcedureFolderClientsByProcedureFolderClientId,
+        fetchStepProcedureFolderClientByProcedureAndStep,
         createNewStepProcedureFolderClient,
         updateExistingStepProcedureFolderClient,
         deleteExistingStepProcedureFolderClient

@@ -49,7 +49,7 @@ const TypeViewPage: React.FC = () => {
             style={{
                 backgroundColor: '#ffffff',
                 minHeight: '646px',
-                minWidth: '1857px',
+                minWidth: '1777px',
                 padding: '30px 10px 20px 20px',
                 display: 'flex',
                 flexDirection: 'column',

@@ -14,7 +14,7 @@ const ProcedureCreatePage: React.FC = () => {
     } = useProcedureCreate();
 
     return (
-        <Box sx={{ backgroundColor: '#ffffff', minHeight: '690px', minWidth: '1840px',
+        <Box sx={{ backgroundColor: '#ffffff', minHeight: '690px', minWidth: '1774px',
             padding: '220px 25px 40px 40px', display: 'flex',
             flexDirection: 'column', gap: '20px' }}>
             <TitleBreadCrumbsProcedureCreate />

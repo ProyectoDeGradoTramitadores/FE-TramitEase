@@ -91,7 +91,7 @@ const FormularyCreateFolderPage: React.FC = () => {
             sx={{
                 backgroundColor: 'white',
                 padding: '169px 50px',
-                width: '1820px',
+                width: '1739px',
                 height: '590px',
                 display: 'flex',
                 flexDirection: 'column',

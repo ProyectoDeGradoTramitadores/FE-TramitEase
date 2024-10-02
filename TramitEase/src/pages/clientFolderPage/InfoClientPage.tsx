@@ -28,7 +28,7 @@ const InfoClientPage = () => {
                 const clientFolderResponse = await fetchClientFolderById(Number(idClientFolder));
                 setClientFolder(clientFolderResponse);
 
-                const clientResponse = await fetchClientById(clientFolderResponse?.idClient || '');
+                const clientResponse = await fetchClientById(clientFolderResponse?.idClient ?? '');
                 setClient(clientResponse);
 
                 const tramitResponse = await fetchTramitById(Number(clientFolderResponse?.idTramit || ''));
@@ -44,29 +44,29 @@ const InfoClientPage = () => {
     return (
         <div>
             <div style={{
-                minWidth: '1833px', display: 'flex', flexDirection: 'column',
+                minWidth: '1767px', display: 'flex', flexDirection: 'column',
                 padding: '20px', minHeight: '67vh', justifyContent: 'center'
             }}>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '40px' }}>
                     <div>
                         <TramitCard
-                            procedureName={clientFolder?.name || ''}
+                            procedureName={clientFolder?.name ?? ''}
                             imageUrl={clientTramitImg}
                         />
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '30px',
                         marginTop: '25px' }}>
-                        <ProcedureDataCard name={(client?.name || '') + ' '+ (client?.lastName || '')}
-                                           CI={client?.idClient || ''}
-                                           celnumber={client?.cellNumber || ''}
-                                           birth={client?.birth || ''} email={client?.email || ''}  />
+                        <ProcedureDataCard name={(client?.name ?? '') + ' '+ (client?.lastName ?? '')}
+                                           CI={client?.idClient ?? ''}
+                                           celnumber={client?.cellNumber ?? ''}
+                                           birth={client?.birth ?? ''} email={client?.email ?? ''}  />
                         <ClientTimelineCard
-                            startDate={clientFolder?.creationDate || ''}
-                            endDate={clientFolder?.endDate || ''}
+                            startDate={clientFolder?.creationDate ?? ''}
+                            endDate={clientFolder?.endDate ?? ''}
                         />
                         <ProcedureInfoCard
-                            procedureName={tramit?.name || ''}
-                            duration={Number(tramit?.dayDuring || '')}
+                            procedureName={tramit?.name ?? ''}
+                            duration={Number(tramit?.dayDuring ?? '')}
                         />
                     </div>
                 </div>

@@ -48,7 +48,7 @@ const ClientsFolderPage: React.FC = () => {
                     <CustomButton
                         color={"ternary"}
                         $textStyle={"bold"}
-                        size={"m"}
+                        size={"s"}
                         $text={"Crear una carpeta nueva"}
                         onClick={navigateToCreateClientFolder}
                     />
