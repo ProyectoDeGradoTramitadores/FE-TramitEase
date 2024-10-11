@@ -17,6 +17,7 @@ import ProcedureViewPage from '../../pages/ProcedureViewPage/ProcedureViewPage.t
 import FormularyTramitCreatePage from '../../pages/formularyCreateTramitPage/FormularyTramitCreatePage.tsx';
 import FormularyProcedureCreatePage from '../../pages/formularyCreateProcedurePage/FormularyProcedureCreatePage.tsx';
 import ClientFolderPage from '../../pages/clientFolderPage/ClientFolderPage.tsx';
+import UserProfile from '../../pages/UserProfile/UserProfile.tsx';
 
 const Layout: React.FC = () => (
     <>
@@ -35,6 +36,7 @@ const AppRoutes = () => (
                 <Route index element={<LandingPage />} />
                 <Route path="Tramitador" element={<Layout />}>
                     <Route path=":id">
+                        <Route path={"perfil"} element={<UserProfile/>} />
                         <Route path="ClientsFolder" element={<ClientsFolderPage />} />
                         <Route path="ClientsFolder/ClientFolder/:idClientFolder" element={<ClientFolderPage />} />
                         <Route path="Calendar" element={<CalendarPage />} />

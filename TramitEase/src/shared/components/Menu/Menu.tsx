@@ -20,7 +20,7 @@ const Menu: React.FC = () => {
 
             </MenuSection>
             <MenuSection>
-                <MenuItem title="PERFIL" onClick={() => handleMenuClick('/perfil')} />
+                <MenuItem title="PERFIL" onClick={() => handleMenuClick('perfil')} />
                 <MenuItem title="LOGOUT" onClick={() => handleMenuClick('/logout')} />
             </MenuSection>
         </MenuContainer>
