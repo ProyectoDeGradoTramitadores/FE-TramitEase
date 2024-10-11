@@ -14,6 +14,5 @@ export interface CardDocumentProps {
 
 export interface  DocumentListProps{
     idStepProcedureClientFolder: number;
-    onDocumentSelect?: (document: Document) => void;
-
+    onDocumentSelect?: (document: Document) => Promise<void>;
 }

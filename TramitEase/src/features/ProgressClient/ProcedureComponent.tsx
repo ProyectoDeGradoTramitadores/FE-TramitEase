@@ -2,7 +2,6 @@ import {
     Stepper,
     Step,
     StepLabel,
-    Button,
     Stack,
     CircularProgress,
     Alert,
@@ -53,7 +52,6 @@ const ProcedureComponent = () => {
     return (
         <Stack sx={{ width: '100%', minWidth: "1805px", minHeight: "700px" }} spacing={4}>
             <StepperProcedure idFolderClient={idCLientFOlder} />
-
             {activeStep < procedureDetails.length && (
                 <Box sx={{
                     mt: 2, display: 'flex',
@@ -73,62 +71,75 @@ const ProcedureComponent = () => {
                                 activeStep={activeStepProcedure}
                                 connector={<ColorlibConnector />}
                             >
-                                {stepProcedures[activeStep]?.map((stepProcedure) => (
+                                {stepProcedures.get(procedureDetails[activeStep].id)?.map((stepProcedure) => (
                                     <Step key={stepProcedure?.idStep}>
                                         <StepLabel StepIconComponent={ColorlibStepIcon}>
                                             {stepProcedure.name ?? 'Loading...'}
                                         </StepLabel>
                                     </Step>
-                                )) || 'Loading...'}
+                                )) ?? 'Loading...'}
                             </Stepper>
-                            {activeStepProcedure < stepProcedures[activeStep].length && (
-                                <Box sx={{ mt: 2,
+                            {activeStepProcedure < (stepProcedures.get(procedureDetails[activeStep].id)?.length ?? 0) && (
+                                <Box sx={{
+                                    mt: 2,
                                     display: 'flex',
                                     justifyContent: 'center',
                                     alignItems: 'center',
-                                    flexDirection: 'column', gap: 3 }}>
-                                    <StepProcedureData name={stepProcedures[activeStep][activeStepProcedure].name ?? ''}
-                                                       estimate={stepProcedures[activeStep][activeStepProcedure].estimate}
-                                                       endDate={stepProcedures[activeStep][activeStepProcedure].endDate}
-                                                       startDate={stepProcedures[activeStep][activeStepProcedure].startDate}
-                                                       dayDuRING={stepProcedures[activeStep][activeStepProcedure].dayDuring}
-                                                       requeriments={stepProcedures[activeStep][activeStepProcedure].requirements} />
+                                    flexDirection: 'column',
+                                    gap: 3
+                                }}>
+                                    <StepProcedureData
+                                        name={stepProcedures.get(procedureDetails[activeStep].id)?.[activeStepProcedure]?.name ?? ''}
+                                        estimate={stepProcedures.get(procedureDetails[activeStep].id)?.[activeStepProcedure]?.estimate ?? ''}
+                                        endDate={stepProcedures.get(procedureDetails[activeStep].id)?.[activeStepProcedure]?.endDate}
+                                        startDate={stepProcedures.get(procedureDetails[activeStep].id)?.[activeStepProcedure]?.startDate}
+                                        dayDuRING={stepProcedures.get(procedureDetails[activeStep].id)?.[activeStepProcedure]?.dayDuring}
+                                        requeriments={stepProcedures.get(procedureDetails[activeStep].id)?.[activeStepProcedure]?.requirements}
+                                    />
                                     <FormControl component="fieldset">
                                         <FormLabel component="legend">Estado del paso</FormLabel>
                                         <RadioGroup
                                             row
                                             aria-label="status"
                                             name="status"
-                                            value={stepProcedures[activeStep][activeStepProcedure].isComplete ? 'Complete' : 'InProgress'}
+                                            value={stepProcedures.get(procedureDetails[activeStep].id)?.[activeStepProcedure]?.isComplete ? 'Complete' : 'InProgress'}
                                             onChange={(e) =>
                                                 handleStatusChange(
-                                                    Number(stepProcedures[activeStep][activeStepProcedure].idStep),
+                                                    Number(stepProcedures.get(procedureDetails[activeStep].id)?.[activeStepProcedure]?.idStepProc),
                                                     e.target.value === 'Complete',
                                                 )
                                             }
                                         >
-                                            <FormControlLabel value="InProgress" control={<Radio />}
-                                                              label="En progreso" />
+                                            <FormControlLabel value="InProgress" control={<Radio />} label="En progreso" />
                                             <FormControlLabel value="Complete" control={<Radio />} label="Completado" />
                                         </RadioGroup>
                                     </FormControl>
                                     <div style={{ display: 'flex', gap: '23px' }}>
-                                        <CustomButton onClick={handleBackProcedure} $textStyle={'bold'}
-                                                      $text={'anterior Paso'} disabled={activeStepProcedure === 0}
-                                                      size={'s'} color={'primary'} />
-                                        <CustomButton disabled={
-                                            !stepProcedures[activeStep] ||
-                                            activeStepProcedure === stepProcedures[activeStep].length - 1
-                                        }
-                                                      onClick={handleNextProcedure} $textStyle={'bold'}
-                                                      $text={'Siguiente Paso'} size={'s'} color={'secondary'} />
+                                        <CustomButton
+                                            onClick={handleBackProcedure}
+                                            $textStyle={'bold'}
+                                            $text={'anterior Paso'}
+                                            disabled={activeStepProcedure === 0}
+                                            size={'s'}
+                                            color={'primary'}
+                                        />
+                                        <CustomButton
+                                            disabled={(stepProcedures.get(procedureDetails[activeStep].id)?.
+                                                length ?? 1 - 1) === activeStep}
+                                            onClick={handleNextProcedure}
+                                            $textStyle={'bold'}
+                                            $text={'Siguiente Paso'}
+                                            size={'s'}
+                                            color={'secondary'}
+                                        />
                                     </div>
                                 </Box>
                             )}
                             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '34px' }}>
                                 <Typography variant="h6">Documentos</Typography>
                                 <DocumentsList
-                                    idStepProcedureClientFolder={Number(stepProcedures[activeStep][activeStepProcedure]?.idStepProc)}
+                                    idStepProcedureClientFolder={Number(stepProcedures?.get(procedureDetails[activeStep].id)?.
+                                        [activeStepProcedure]?.idStepProc)}
                                     onDocumentSelect={createDocument}
                                 />
                             </Box>

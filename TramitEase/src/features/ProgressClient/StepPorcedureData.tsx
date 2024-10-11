@@ -12,7 +12,7 @@ const StepProcedureData: React.FC<ProcedureStepDataProps> = ({
                                                                    dayDuRING,
                                                                }) => {
     return (
-        <div>
+        <div style={{maxWidth: '600'}}>
             <Typography variant="h6">{name}</Typography>
             <Typography variant="body1">
                 Requerimientos: {requeriments ?? 'No requeriments available'}

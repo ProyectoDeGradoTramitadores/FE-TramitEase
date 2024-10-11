@@ -7,6 +7,7 @@ import CardAddDocument from '../../shared/components/cards/CardAddDocument.tsx';
 
 const DocumentsList: React.FC<DocumentListProps> = ({ idStepProcedureClientFolder, onDocumentSelect }) => {
     const { fetchDocumentsByStepProcedureId, documents } = useDocuments();
+    console.log("documents", idStepProcedureClientFolder);
 
     useEffect(() => {
         const fetchData = async () => {

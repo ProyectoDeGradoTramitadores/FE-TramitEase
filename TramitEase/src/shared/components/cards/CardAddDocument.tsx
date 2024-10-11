@@ -34,11 +34,12 @@ const CardAddDocument: React.FC<CardAddDocumentProps> = ({ onDocumentSelect, idS
             uploadFile(file).then((downloadURL) => {
                 const newDocument: Document = {
                     idDocument: 0,
-                    idStepProcedureFolderClient,
+                    idStepProcedureFolderClient: idStepProcedureFolderClient,
                     fileName: file.name,
                     filePath: downloadURL,
                     mimeType: file.type,
                 };
+                console.log(newDocument);
                 if (onDocumentSelect) {
                     onDocumentSelect(newDocument);
                 } else {

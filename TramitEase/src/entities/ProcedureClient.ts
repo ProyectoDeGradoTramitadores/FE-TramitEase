@@ -1,4 +1,5 @@
 export interface ProcedureClient {
+    id: number;
     name: string;
     description: string;
     startDate: string;
