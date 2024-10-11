@@ -12,7 +12,7 @@ const Button = styled.button<CustomButtonProps>`
     padding: 10px 60px;
     border-radius: 50px;
     border: none;
-    cursor: pointer;
+    cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
     transition: background-color 0.3s ease;
     box-shadow: none;
 

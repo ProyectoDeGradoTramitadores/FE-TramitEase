@@ -2,9 +2,13 @@ import { useState, useEffect } from 'react';
 import { DateSelectArg, EventApi, EventClickArg, EventInput } from '@fullcalendar/core';
 import { createEventId } from '../utils/event-utils-calendar.ts';
 import { useClientFoldersByTramitadorId } from './useClientFoldersByTramitadorId.ts';
+import { useNavigate } from 'react-router-dom';
+import { IDS, ROUTES } from '../constants/routes.ts';
 
 export function useCalendarEvents(tramitadorId: number) {
     const { filteredClientFolders, loading, error } = useClientFoldersByTramitadorId(tramitadorId);
+    const navigate = useNavigate();
+    const id = IDS().TRAMITADOR_ID;
 
     const [currentEvents, setCurrentEvents] = useState<EventInput[]>([]);
     const [showModal, setShowModal] = useState(false);
@@ -12,20 +16,21 @@ export function useCalendarEvents(tramitadorId: number) {
 
     useEffect(() => {
         if (!loading && filteredClientFolders.length > 0 && currentEvents.length <= 0) {
-            setCurrentEvents(
-                filteredClientFolders.map(folder => ({
-                    id: createEventId(),
+            const updatedEvents = filteredClientFolders.map(folder => {
+                return {
+                    id: folder.idClientFolder,
                     title: folder.name,
                     start: folder.creationDate,
                     end: folder.endDate ?? undefined,
                     backgroundColor: '#898989'
-                })) as EventInput[]
-            );
+                } as EventInput;
+            });
+
+            setCurrentEvents(updatedEvents);
         } else if (loading && currentEvents.length == 0) {
             console.log('Loading events...');
         }
-    }, [ currentEvents,filteredClientFolders, loading]);
-
+    }, [currentEvents, filteredClientFolders, loading]);
 
     const handleDateSelect = (selectInfo: DateSelectArg) => {
         const title = prompt('Please enter a new title for your event');
@@ -41,6 +46,14 @@ export function useCalendarEvents(tramitadorId: number) {
                 allDay: selectInfo.allDay,
                 backgroundColor: '#848184'
             });
+        }
+    };
+
+    const handleOpenClientFolder = () => {
+        if (selectedEvent) {
+            console.log(id);
+            const routeClientFolder = ROUTES.CLIENT_FOLDER(id, selectedEvent.id);
+            navigate(routeClientFolder);
         }
     };
 
@@ -62,6 +75,7 @@ export function useCalendarEvents(tramitadorId: number) {
         currentEvents,
         showModal,
         selectedEvent,
+        handleOpenClientFolder,
         loading,
         error,
         handleDateSelect,

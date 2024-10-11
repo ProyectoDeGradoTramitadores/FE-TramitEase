@@ -1,6 +1,6 @@
 import React from 'react';
 import { Fab } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { useTheme } from 'styled-components';
 import { CustomFabButtonProps } from '../../types/TramitViewProps.ts';
 
@@ -18,7 +18,7 @@ const CustomFabButton: React.FC<CustomFabButtonProps> = ({ onClick }) => {
             }}
             onClick={onClick}
         >
-            <AddIcon />
+            <FormatListBulletedIcon />
         </Fab>
     );
 };

@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
     PageContainerClientFolder,
     ButtonContainer,
@@ -9,19 +9,21 @@ import ClientFolderEmptyPage from '../../features/ClientFolder/ClientFolderEmpty
 import CustomButton from '../../shared/components/buttons/CustomButton.tsx';
 import { useNavigatePage } from '../../shared/hooks/UseNavigatePage.ts';
 import { useClientFoldersByTramitadorId } from '../../shared/hooks/useClientFoldersByTramitadorId.ts';
+import { ROUTES } from '../../shared/constants/routes.ts';
 
 const ClientsFolderPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const tramitId = parseInt(id || '');
     const { filteredClientFolders, loading, error } = useClientFoldersByTramitadorId(tramitId);
+    const navigate = useNavigate();
 
     const navigateToCreateClientFolder = useNavigatePage(
         `/TramitEase/Tramitador/${id}/CreateClientFolder/CreateClient`
     );
 
     const handleFolderClick = (folderId: number) => {
-        console.log(folderId);
-        console.log(id);
+        const routeCreateFolder = ROUTES.CLIENT_FOLDER((id || ''), folderId);
+        navigate(routeCreateFolder);
     };
 
     if (loading) {
@@ -46,7 +48,7 @@ const ClientsFolderPage: React.FC = () => {
                     <CustomButton
                         color={"ternary"}
                         $textStyle={"bold"}
-                        size={"m"}
+                        size={"s"}
                         $text={"Crear una carpeta nueva"}
                         onClick={navigateToCreateClientFolder}
                     />

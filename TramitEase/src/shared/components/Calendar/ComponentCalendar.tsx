@@ -18,6 +18,7 @@ export default function ComponentCalendar() {
         handleDateSelect,
         handleEventClick,
         handleCloseModal,
+        handleOpenClientFolder,
         handleEvents
     } = useCalendarEvents(tramitadorId);
 
@@ -45,6 +46,7 @@ export default function ComponentCalendar() {
                 open={showModal}
                 event={selectedEvent}
                 onClose={handleCloseModal}
+                redirectTo={handleOpenClientFolder}
             />
         </div>
     );

@@ -15,10 +15,8 @@ const Menu: React.FC = () => {
         <MenuContainer>
             <MenuSection>
                 <MenuItem title="CARPETAS" onClick={() => handleMenuClick('ClientsFolder')} />
-                <MenuItem title="PERSONALIZACION" onClick={() => handleMenuClick('Custom/TramitsCustom')} />
-                <MenuItem title="LLENADO DE CASILLAS" onClick={() => handleMenuClick('/llenado-de-casillas')} />
+                <MenuItem title="PLANTILLAS DE TRAMITES" onClick={() => handleMenuClick('Custom/TramitsCustom')} />
                 <MenuItem title="CALENDARIO" onClick={() => handleMenuClick('Calendar')} />
-                <MenuItem title="REPORTES" onClick={() => handleMenuClick('/reports')} />
 
             </MenuSection>
             <MenuSection>

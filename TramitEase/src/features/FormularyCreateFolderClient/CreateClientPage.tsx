@@ -19,7 +19,6 @@ const CreateClientPage: React.FC = () => {
             console.log('Client updated:', emptyClient);
         } else {
             await createNewClient(emptyClient);
-            console.log('New client created:', emptyClient);
         }
         navigate(`/TramitEase/Tramitador/${id}/CreateClientFolder/${emptyClient.idClient}/CreateFolder`);
     };

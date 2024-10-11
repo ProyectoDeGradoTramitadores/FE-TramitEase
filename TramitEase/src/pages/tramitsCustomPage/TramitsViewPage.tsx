@@ -32,8 +32,8 @@ const TramitsViewPage: React.FC = () => {
         <div
             style={{
                 backgroundColor: '#ffffff',
-                minHeight: '646px',
-                minWidth: '1843px',
+                minHeight: '647px',
+                minWidth: '1777px',
                 padding: '30px 10px 20px 20px',
                 display: 'flex',
                 flexDirection: 'column',

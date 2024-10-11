@@ -25,8 +25,9 @@ export const getClientFolderById = async (id: number): Promise<ClientFolder> => 
     return response.data;
 };
 
-export const createClientFolder = async (clientFolder: ClientFolder): Promise<void> => {
-    await api.post('/', clientFolder);
+export const createClientFolder = async (clientFolder: ClientFolder):  Promise<ClientFolder> => {
+    const response = await api.post('/', clientFolder);
+    return response.data;
 };
 
 export const updateClientFolder = async (id: number, clientFolder: ClientFolder): Promise<void> => {

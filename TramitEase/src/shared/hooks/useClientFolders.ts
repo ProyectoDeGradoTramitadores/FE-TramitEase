@@ -77,16 +77,18 @@ export const useClientFolders = () => {
         }
     };
 
-    const createNewClientFolder = async (clientFolder: ClientFolder) => {
+    const createNewClientFolder = async (clientFolder: ClientFolder):  Promise<ClientFolder | undefined> => {
         try {
-            await createClientFolder(clientFolder);
+            const clientFolde = await createClientFolder(clientFolder);
             setClientFolders([...clientFolders, clientFolder]);
+            return clientFolde;
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);
             } else {
                 setError('An unknown error occurred');
             }
+            return undefined;
         }
     };
 

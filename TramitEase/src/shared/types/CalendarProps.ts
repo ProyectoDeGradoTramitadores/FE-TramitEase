@@ -8,6 +8,7 @@ export interface EventModalProps {
     open: boolean;
     event: EventApi | null;
     onClose: () => void;
+    redirectTo: () => void;
 }
 
 export interface CalendarProps {

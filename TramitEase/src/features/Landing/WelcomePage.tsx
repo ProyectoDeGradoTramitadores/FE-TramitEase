@@ -14,9 +14,9 @@ const WelcomePage: React.FC = () => {
         <div style={{ display: 'flex', height: '81vh', background: theme.colors.primary.default, gap: 30, padding: '0px 205px' }}>
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center',
                 alignItems: 'flex-start' }}>
-                <h1 style={{ fontSize: 150, textAlign: 'left' }}>Welcome!</h1>
+                <h1 style={{ fontSize: 150, textAlign: 'left' }}>Bienvenido!</h1>
                 <CustomButton
-                    $text="Get Started"
+                    $text="Comenzar"
                     $textStyle="bold"
                     size="m"
                     color="secondary"

@@ -11,7 +11,7 @@ export const HeaderContainer = styled.div`
     top: 0;
     left: 0;
     right: 0;
-    gap: 1502px;
+    gap: 1402px;
     z-index: 1000;
 `;
 
