@@ -30,7 +30,7 @@ export const useClients = () => {
             }
         };
 
-        fetchClients().then(r => console.log(r));
+        fetchClients();
     }, []);
 
     const fetchClientById = async (id: string): Promise<Client | undefined> => {

@@ -50,4 +50,37 @@ export interface TableProcedureProps {
 
 export interface MetricsProcedureProps extends TableProcedureProps{
     nameProcedure: string;
+    endProcedure: Date | null;
+    complete: boolean;
+    daysEstimate: number;
+}
+
+export interface BorderRadiusProps {
+    namesSteps: string[];
+    valuesStepsDateFinished: number[];
+    valuesStepsDateEstimate: number[];
+}
+
+export interface PieChartData {
+    id: number;
+    value: number;
+    label: string;
+    color?: string;
+}
+
+export interface PieChartComponentProps {
+    title: string;
+    data: PieChartData[];
+}
+
+export interface Task {
+    id: number;
+    name: string;
+    start: Date;
+    end: Date;
+}
+
+export interface GanttChartComponentProps {
+    title: string;
+    tasks: Task[];
 }

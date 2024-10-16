@@ -1,14 +1,11 @@
 import React from 'react';
-import { Typography, Box, Table, TableBody, TableCell,
+import { Box, Table, TableBody, TableCell,
     TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { TableProcedureProps } from '../../../shared/types/MetricsClientFolderProps.ts';
 
 const TableProcedure: React.FC<TableProcedureProps> = ({ steps }) => {
     return (
         <Box mt={4}>
-            <Typography variant="h6" gutterBottom>
-                Reportes por Procedimiento
-            </Typography>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>

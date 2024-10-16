@@ -23,7 +23,7 @@ export default function ComponentCalendar() {
     } = useCalendarEvents(tramitadorId);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div style={{backgroundColor: '#ffff'}}>Loading...</div>;
     }
 
     if (error) {

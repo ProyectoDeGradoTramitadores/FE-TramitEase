@@ -3,18 +3,23 @@ import WelcomePage from "../../features/Landing/WelcomePage.tsx";
 import IntroducePage from "../../features/Landing/IntroducePage.tsx";
 import LandingHeader from "../../features/Landing/LandingHeader.tsx";
 import InfoAppPage from "../../features/Landing/InfoAppPage.tsx";
+import { useNavigate } from 'react-router-dom';
 
 const LandingPage: React.FC = () => {
     const [currentPage, setCurrentPage] = useState('welcome');
     const introduceRef = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
     const infoRef = useRef<HTMLDivElement>(null);
     const welcomeRef = useRef<HTMLDivElement>(null);
+
+    const handleLoginClick = () => {
+        navigate(`/TramitEase/login`);
+    };
 
     const handleAboutClick = () => {
         setCurrentPage('introduce');
 
         if (introduceRef.current) {
-            console.log(currentPage);
             introduceRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     };
@@ -61,6 +66,7 @@ const LandingPage: React.FC = () => {
                     onAboutClick={handleAboutClick}
                     onFeaturesClick={handleFeaturesClick}
                     onHomeClick={handleHomeClick}
+                    onLogin={handleLoginClick}
                 />
             </div>
             <main style={mainStyle}>

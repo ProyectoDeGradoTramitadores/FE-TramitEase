@@ -35,14 +35,15 @@ const LandingHeader: React.FC<{
     onAboutClick: () => void;
     onFeaturesClick: () => void;
     onHomeClick: () => void;
-}> = ({ onAboutClick, onFeaturesClick, onHomeClick }) => {
+    onLogin: () => void;
+}> = ({ onAboutClick, onFeaturesClick, onHomeClick, onLogin }) => {
     return (
         <HeaderContainer>
             <LogoBlack size={'l'} color={'primary'} onClick={onHomeClick} />
             <ButtonContainer>
                 <CustomButton size={'m'} color={'primary'} $text={"ACERCA DE"} $textStyle={'bold'} onClick={onAboutClick}/>
                 <CustomButton size={'m'} color={'primary'} $text={"CARACTERISTICAS"} $textStyle={'bold'} onClick={onFeaturesClick}/>
-                <CustomButton size={'m'} color={'ternary'} $text={"INICIAR SESION"} $textStyle={'bold'} />
+                <CustomButton size={'m'} color={'ternary'} $text={"INICIAR SESION"} $textStyle={'bold'}  onClick={onLogin}/>
             </ButtonContainer>
         </HeaderContainer>
     );

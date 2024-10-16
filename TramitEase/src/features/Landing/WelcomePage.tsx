@@ -7,7 +7,7 @@ const WelcomePage: React.FC = () => {
     const navigate = useNavigate();
 
     const handleGetStartedClick = () => {
-        navigate(`Tramitador/1/ClientsFolder`);
+        navigate(`login`);
     };
 
     return (

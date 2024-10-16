@@ -1,11 +1,6 @@
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import LandingPage from '../../pages/landingPage/LandingPage.tsx';
 import ClientsFolderPage from '../../pages/clientsFolderPage/ClientsFolderPage.tsx';
-import { getSuperTokensRoutesForReactRouterDom } from 'supertokens-auth-react/ui';
-import * as reactRouterDom from 'react-router-dom';
-import { ThirdPartyPreBuiltUI } from 'supertokens-auth-react/recipe/thirdparty/prebuiltui';
-import { EmailPasswordPreBuiltUI } from 'supertokens-auth-react/recipe/emailpassword/prebuiltui';
-// import { SessionAuth } from "supertokens-auth-react/recipe/session";
 import Header from '../../shared/components/header/Header.tsx';
 import FormularyCreateClientFolderPage
     from '../../pages/formularyCreateClientFolderPage/FormularyCreateClientFolderPage.tsx';
@@ -18,6 +13,7 @@ import FormularyTramitCreatePage from '../../pages/formularyCreateTramitPage/For
 import FormularyProcedureCreatePage from '../../pages/formularyCreateProcedurePage/FormularyProcedureCreatePage.tsx';
 import ClientFolderPage from '../../pages/clientFolderPage/ClientFolderPage.tsx';
 import UserProfile from '../../pages/UserProfile/UserProfile.tsx';
+import LoginPage from '../../pages/AuthentificationPage/LoginPage.tsx';
 
 const Layout: React.FC = () => (
     <>
@@ -31,9 +27,9 @@ const Layout: React.FC = () => (
 const AppRoutes = () => (
     <BrowserRouter>
         <Routes>
-            {getSuperTokensRoutesForReactRouterDom(reactRouterDom, [ThirdPartyPreBuiltUI, EmailPasswordPreBuiltUI])}
             <Route path="/TramitEase">
                 <Route index element={<LandingPage />} />
+                <Route path="login" element={ <LoginPage />} />
                 <Route path="Tramitador" element={<Layout />}>
                     <Route path=":id">
                         <Route path={"perfil"} element={<UserProfile/>} />

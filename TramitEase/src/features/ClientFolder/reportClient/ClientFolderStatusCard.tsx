@@ -4,9 +4,10 @@ import { Gauge, gaugeClasses } from '@mui/x-charts';
 
 interface ClientFolderStatusProps {
     valuePercent: number;
+    name: string;
 }
 
-const ClientFolderStatusCard: React.FC<ClientFolderStatusProps> = ({ valuePercent }) => {
+const ClientFolderStatusCard: React.FC<ClientFolderStatusProps> = ({ valuePercent, name }) => {
 
     const getGaugeColor = (value: number) => {
         if (value < 30) {
@@ -20,10 +21,10 @@ const ClientFolderStatusCard: React.FC<ClientFolderStatusProps> = ({ valuePercen
 
     return (
         <Card sx={{ boxShadow: 1, width: '100%',
-            backgroundColor: '#ededed', color: '#000000' }}>
+            backgroundColor: '#ffffff', color: '#000000', borderRadius:6 }}>
             <CardContent>
                 <Typography variant="h5" align="center">
-                    Estado de la carpeta del cliente
+                    {name}
                 </Typography>
                 <Box
                     display="flex"

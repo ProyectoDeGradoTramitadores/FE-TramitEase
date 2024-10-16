@@ -152,7 +152,7 @@ const IntroducePage: React.FC = () => {
                 <StyledOfferItemsContainer>
                     <StyledOfferItem>
                         <StyledOfferNumber color={numberColors[1]}>01</StyledOfferNumber>
-                        <StyledOfferText>Personalizacion de Documentos, Formularios y procedimientos</StyledOfferText>
+                        <StyledOfferText>Personalizacion de Tramites, Tipos de Tramites y Procedimientos</StyledOfferText>
                     </StyledOfferItem>
                     <StyledOfferItem>
                         <StyledOfferNumber color={numberColors[2]}>02</StyledOfferNumber>
