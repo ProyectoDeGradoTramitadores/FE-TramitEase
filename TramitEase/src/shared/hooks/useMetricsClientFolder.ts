@@ -13,6 +13,7 @@ import { Procedure } from '../../entities/Procedure.ts';
 import { useStepProcedureFolderClients } from './useStepProcedureFolderClients.ts';
 import { useStepProcedures } from './useStepProcedures.ts';
 import { StepProcedureFolderClient } from '../../entities/StepProcedureFolderClient.ts';
+import { useTramits } from './useTramits.ts';
 
 export const useMetricsClientFolder = () => {
     const [clientFolder, setClientFolder] = useState<ClientFolder>();
@@ -25,7 +26,7 @@ export const useMetricsClientFolder = () => {
         sizeProcedures: 0,
         numberPercentComplete: 0,
         initialProcedure: null,
-        endActuallyProcedure: null,
+        endEstimateDate: null,
         completeTramit: false,
         delayTramit: false,
         daysDelay: 0,
@@ -33,6 +34,7 @@ export const useMetricsClientFolder = () => {
     });
     const { fetchProcedureFolderClientsByClientFolderId, procedureFolderClients } = useProcedureFolderClients();
     const { fetchProcedureById } = useProcedures();
+    const { fetchTramitById } = useTramits();
     const { fetchStepProcedureFolderClientsByProcedureFolderClientId } = useStepProcedureFolderClients();
     const { fetchStepProcedureById } = useStepProcedures();
 
@@ -62,9 +64,9 @@ export const useMetricsClientFolder = () => {
         const dataSecond = [];
 
         const startDate = new Date(clientFolder?.creationDate ?? '');
-        const endDate = new Date(clientFolder?.endDate ?? '');
+        const endDate = new Date(metricsClientFolder.dateLastProcedure ?? '');
 
-        const endDate2 = new Date(metricsClientFolder.dateLastProcedure ?? '');
+        const endDate2 = new Date(metricsClientFolder.endEstimateDate ?? '');
 
         const diffDays = obtainDays(startDate, endDate);
 
@@ -81,13 +83,13 @@ export const useMetricsClientFolder = () => {
         return [
             {
                 label: 'Fecha finalizacion o progreso de la carpeta del cliente',
-                data: dataSecond,
+                data: dataFirst,
                 borderColor: 'rgb(98,103,103)',
                 backgroundColor: 'rgba(52,53,53,0.2)',
             },
             {
                 label: 'Fecha estimada de finalizacion de la Carpeta del cliente',
-                data: dataFirst,
+                data: dataSecond,
                 borderColor: 'rgb(218,126,52)',
                 backgroundColor: 'rgb(250,154,77)',
             },
@@ -98,23 +100,23 @@ export const useMetricsClientFolder = () => {
         setDataSet(dataGrafics);
 
         if (metricsClientFolder?.initialProcedure != null) {
-            if (metricsClientFolder.dateLastProcedure && metricsClientFolder.endActuallyProcedure ) {
+            if (metricsClientFolder.dateLastProcedure && metricsClientFolder.endEstimateDate ) {
                 if(clientFolder?.endDate  && new Date(clientFolder?.endDate) >
                     new Date(metricsClientFolder.dateLastProcedure) && new Date(clientFolder?.endDate) >
-                    new Date(metricsClientFolder.endActuallyProcedure)){
+                    new Date(metricsClientFolder.endEstimateDate)){
                     generateDateRange(metricsClientFolder.initialProcedure, new Date(clientFolder?.endDate));
 
-                } else if (metricsClientFolder.dateLastProcedure > metricsClientFolder.endActuallyProcedure) {
+                } else if (metricsClientFolder.dateLastProcedure > metricsClientFolder.endEstimateDate) {
                     generateDateRange(metricsClientFolder.initialProcedure, metricsClientFolder.dateLastProcedure);
                 } else {
-                    generateDateRange(metricsClientFolder.initialProcedure, metricsClientFolder.endActuallyProcedure);
+                    generateDateRange(metricsClientFolder.initialProcedure, metricsClientFolder.endEstimateDate);
                 }
             } else if (metricsClientFolder.dateLastProcedure != null) {
 
                 generateDateRange(metricsClientFolder.initialProcedure, metricsClientFolder.dateLastProcedure);
-            } else if (metricsClientFolder.endActuallyProcedure != null) {
+            } else if (metricsClientFolder.endEstimateDate != null) {
 
-                generateDateRange(metricsClientFolder.initialProcedure, metricsClientFolder.endActuallyProcedure);
+                generateDateRange(metricsClientFolder.initialProcedure, metricsClientFolder.endEstimateDate);
             }
         }
 
@@ -124,7 +126,7 @@ export const useMetricsClientFolder = () => {
         if (clientFolder && metricsClientFolder) {
             void daysDelateOrBeTime();
         }
-    }, [clientFolder, metricsClientFolder]);
+    }, [clientFolder]);
 
 
     useEffect(() => {
@@ -144,12 +146,12 @@ export const useMetricsClientFolder = () => {
     }, [idClientFolder]);
 
     const fetchMetricsProcedure = async (idClientFolder: number) => {
-        const clientF = fetchClientFolderById(Number(idClientFolder));
+        const clientF = await fetchClientFolderById(Number(idClientFolder));
 
-        setClientFolder(await clientF);
+        setClientFolder(clientF);
         const obtainProcedure = await fetchProcedureFolderClientsByClientFolderId(idClientFolder);
+        obtainProcedure?.sort((a, b) => a.idProcedureFolderClient - b.idProcedureFolderClient);
 
-        let secondValue: Date | null = null;
         let proceduresComplete = 0;
 
         if (obtainProcedure) {
@@ -166,7 +168,6 @@ export const useMetricsClientFolder = () => {
                 const stepsClientFolder = await fetchStepProcedureFolderClientsByProcedureFolderClientId(procedure.idProcedureFolderClient)
 
                 if(procedure.endDate != null){
-                    secondValue = procedure.endDate;
                     proceduresComplete += 1;
                 }
 
@@ -187,64 +188,62 @@ export const useMetricsClientFolder = () => {
                     firstValue = procedure.startDate;
                 }
 
-                if(index === obtainProcedure.length - 1 && procedure.endDate != null){
+                if(procedure.endDate != null){
                     setMetricsClientFolder(prevState => ({
                         ...prevState,
                         dateLastProcedure: procedure?.endDate ?? new Date(),
                     }));
-
-                    if(procedure.isComplete){
-                        setMetricsClientFolder(prevState => ({
-                            ...prevState,
-                            completeTramit: true,
-                        }));
-                    }
                 }
+            }
+
+            const tramitget = await fetchTramitById(Number(clientF?.idTramit));
+            const dates = calculateEndDate(clientF?.creationDate?.toString()?? "", tramitget?.dayDuring ?? 0)
+
+            setMetricsClientFolder(prevState => ({
+                ...prevState,
+                initialProcedure: firstValue?? new Date,
+                endEstimateDate: dates,
+            }));
+
+            if(obtainProcedure[obtainProcedure.length -1].isComplete){
+                setMetricsClientFolder(prevState => ({
+                    ...prevState,
+                    completeTramit: true,
+                }));
             }
 
             setMetricsClientFolder(prevState => ({
                 ...prevState,
                 numberPercentComplete: (proceduresComplete * 100)  / obtainProcedure.length ,
             }));
-
-            setMetricsClientFolder(prevState => ({
-                ...prevState,
-                initialProcedure: firstValue?? new Date,
-                endActuallyProcedure: secondValue,
-            }));
         }
     };
 
     const daysDelateOrBeTime = async () => {
-        const procedures = await fetchProcedureFolderClientsByClientFolderId(Number(idClientFolder));
+        const tramitget = await fetchTramitById(Number(clientFolder?.idTramit));
 
-        let secondValue: Date | null = null;
+        const secondValue  = calculateEndDate(clientFolder?.creationDate ?? '', tramitget?.dayDuring ?? 0);
 
-        procedures?.map(procedure => {
-            if (procedure.endDate != null) {
-                secondValue = procedure.endDate;
+        const secondDate = new Date(secondValue ?? '');
 
-                const secondDate = new Date(secondValue);
-                if (clientFolder?.endDate) {
-                    const endDate = new Date(clientFolder.endDate);
+        if (clientFolder?.endDate) {
+            const endDate = new Date(clientFolder.endDate);
 
-                    if (endDate < secondDate) {
-                        const differenceInDays = obtainDays(secondDate, endDate);
-                        setMetricsClientFolder(prevState => ({
-                            ...prevState,
-                            daysDelay: differenceInDays,
-                            delayTramit: true,
-                        }));
-                    } else if (endDate > secondDate) {
-                        const differenceInDays = obtainDays(secondDate, endDate);
-                        setMetricsClientFolder(prevState => ({
-                            ...prevState,
-                            daysOnTime: differenceInDays,
-                        }));
-                    }
-                }
+            if (endDate < secondDate) {
+                const differenceInDays = obtainDays(secondDate, endDate);
+                setMetricsClientFolder(prevState => ({
+                    ...prevState,
+                    daysOnTime: differenceInDays,
+                }));
+            } else if (endDate > secondDate) {
+                const differenceInDays = obtainDays(secondDate, endDate);
+                setMetricsClientFolder(prevState => ({
+                    ...prevState,
+                    daysDelay: differenceInDays,
+                    delayTramit: true,
+                }));
             }
-        })
+        }
     };
 
     const calculateEndDate = (startDate: string, daysToAdd: number): Date => {

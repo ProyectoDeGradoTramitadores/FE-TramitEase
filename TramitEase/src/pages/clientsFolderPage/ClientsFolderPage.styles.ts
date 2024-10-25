@@ -28,7 +28,7 @@ export const PageContainerClientFolder = styled(Box)({
     padding: '205px 120px',
     backgroundColor: 'white',
     width: '1598px',
-    height: '540px',
+    minHeight: '540px',
     gap: '20px',
 });
 

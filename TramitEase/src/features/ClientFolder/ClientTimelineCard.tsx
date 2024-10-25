@@ -16,7 +16,7 @@ const ClientTimelineCard: React.FC<ClientTimelineCardProps> = ({ startDate, endD
                         Día de iniciación: {startDate}
                     </Typography>
                     <Typography variant="body1">
-                        Estimado de día de finalización: {endDate}
+                        Día de finalización: {endDate ? endDate : "En progreso"}
                     </Typography>
                 </Box>
                 <RedLine />

@@ -6,7 +6,6 @@ import CustomButton from '../../shared/components/buttons/CustomButton.tsx';
 import { emptyFolder, clearEmptyFolder } from '../../shared/constants/FolderCreate.ts';
 import { useClientFolders } from '../../shared/hooks/useClientFolders.ts';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useTramits } from '../../shared/hooks/useTramits.ts';
 import { useProcedureFolderClients } from '../../shared/hooks/useProcedureFolderClient.ts';
 import { useStepProcedureFolderClients } from '../../shared/hooks/useStepProcedureFolderClients.ts';
 import { useProcedures } from '../../shared/hooks/useProcedures.ts';
@@ -22,24 +21,14 @@ const FormularyCreateFolderPage: React.FC = () => {
     const {fetchTramitProceduresByTramitId} = useTramitProcedures();
     const {fetchProcedureById} = useProcedures();
     const {fetchStepProceduresByProcedureId} = useStepProcedures();
-    const {fetchTramitById} = useTramits();
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
     const handleSaveFolder = async () => {
         if (emptyFolder) {
-            const creationDate = new Date(emptyFolder.creationDate);
-
             try {
-                const tramit = await fetchTramitById(emptyFolder.idTramit);
-                if (tramit?.dayDuring) {
-                    const endDate = new Date(creationDate);
-                    endDate.setDate(creationDate.getDate() + tramit.dayDuring);
-                    emptyFolder.endDate = endDate.toISOString();
-                }
-
                 const newClientFolder = await createNewClientFolder(emptyFolder);
-                let isFirstTramit = true;
+                console.log("step3", newClientFolder, emptyFolder);
 
                 const tramits = await fetchTramitProceduresByTramitId(emptyFolder.idTramit);
                 if( tramits != undefined ){
@@ -47,32 +36,30 @@ const FormularyCreateFolderPage: React.FC = () => {
                         const procedure = await fetchProcedureById(tramit.idProcedure);
                         const newProcedureFolderClient: ProcedureFolderClient = {
                             idProcedureFolderClient: 0,
-                            idClientFolder: Number(newClientFolder?.idClientFolder || ''),
-                            idProcedure: Number(procedure?.idProcedure || ''),
+                            idClientFolder: Number(newClientFolder?.idClientFolder ?? ''),
+                            idProcedure: Number(procedure?.idProcedure ?? ''),
                             isComplete: false,
-                            startDate: isFirstTramit ? new Date() : null,
+                            startDate: null,
                             endDate: null,
                         };
 
                         const procedureCnt = await createNewProcedureFolderClient(newProcedureFolderClient);
-                        const procedureSteps = await fetchStepProceduresByProcedureId(Number(procedure?.idProcedure || ''));
+                        const procedureSteps = await fetchStepProceduresByProcedureId(Number(procedure?.idProcedure ?? ''));
 
                         if(procedureSteps != null){
                             for (const [index, step] of procedureSteps.entries()) {
                                 const newStepProcedureFolderClient: StepProcedureFolderClient = {
                                     idStepProcedureFolderClient: 0,
-                                    idProcedureFolderClient: Number(procedureCnt?.idProcedureFolderClient || ''),
+                                    idProcedureFolderClient: Number(procedureCnt?.idProcedureFolderClient ?? ''),
                                     idStepProcedure: step.idStepProcedure,
                                     isComplete: false,
-                                    startDate: isFirstTramit && index === 0 ? new Date() : null,
+                                    commentsDelay: '',
+                                    startDate: null,
                                     endDate: null,
                                 };
+                                console.log("step", newStepProcedureFolderClient);
                                 await createNewStepProcedureFolderClient(newStepProcedureFolderClient);
                             }
-                        }
-
-                        if (isFirstTramit) {
-                            isFirstTramit = false;
                         }
                     }
                 }

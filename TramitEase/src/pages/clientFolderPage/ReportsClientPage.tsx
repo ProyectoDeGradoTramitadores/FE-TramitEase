@@ -15,6 +15,8 @@ const ReportsClientPage = () => {
 
     const tasks = useGanttChart(metricsProcedures);
 
+    console.log("end date", metricsClientFolder?.endEstimateDate);
+
     return (
         <Box p={4} minWidth={"1710px"} minHeight={"598px"} alignItems="center" paddingLeft={6} paddingRight={6}>
             <Box>
@@ -34,8 +36,8 @@ const ReportsClientPage = () => {
                         <CardInfoClientFolder
                             nameFolder={clientFolder?.name ?? ''}
                             creationDate={clientFolder?.creationDate ?? ''}
-                            endProcedure={metricsClientFolder.endActuallyProcedure?.toString() ?? 'x'}
-                            estimateDate={clientFolder?.endDate ?? ''}
+                            endProcedure={clientFolder?.endDate ?? 'x'}
+                            estimateDate={metricsClientFolder?.endEstimateDate?.toString() ?? ''}
                             completeTramit={metricsClientFolder.completeTramit}
                             delayTramit={metricsClientFolder.delayTramit}
                             daysDelay={metricsClientFolder.daysDelay}

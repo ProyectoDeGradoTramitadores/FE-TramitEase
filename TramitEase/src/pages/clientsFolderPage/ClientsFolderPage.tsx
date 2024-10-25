@@ -10,11 +10,12 @@ import CustomButton from '../../shared/components/buttons/CustomButton.tsx';
 import { useNavigatePage } from '../../shared/hooks/UseNavigatePage.ts';
 import { useClientFoldersByTramitadorId } from '../../shared/hooks/useClientFoldersByTramitadorId.ts';
 import { ROUTES } from '../../shared/constants/routes.ts';
+import SearchBar from '../../shared/components/Search/SearchBar.tsx';
 
 const ClientsFolderPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const tramitId = parseInt(id || '');
-    const { filteredClientFolders, loading, error } = useClientFoldersByTramitadorId(tramitId);
+    const tramitId = parseInt(id ?? '');
+    const { filteredClientFolders, handleSearch, filteredFolders, loading, error } = useClientFoldersByTramitadorId(tramitId);
     const navigate = useNavigate();
 
     const navigateToCreateClientFolder = useNavigatePage(
@@ -22,7 +23,7 @@ const ClientsFolderPage: React.FC = () => {
     );
 
     const handleFolderClick = (folderId: number) => {
-        const routeCreateFolder = ROUTES.CLIENT_FOLDER((id || ''), folderId);
+        const routeCreateFolder = ROUTES.CLIENT_FOLDER((id ?? ''), folderId);
         navigate(routeCreateFolder);
     };
 
@@ -40,8 +41,9 @@ const ClientsFolderPage: React.FC = () => {
                 <TitleTypography variant="h4" gutterBottom>
                     Carpetas del Cliente
                 </TitleTypography>
+                <SearchBar placeholder="Buscar carpeta..." onSearch={handleSearch} />
                 <FolderClientsViewComponent
-                    clientFolders={filteredClientFolders}
+                    clientFolders={filteredFolders}
                     onFolderClick={handleFolderClick}
                 />
                 <ButtonContainer>

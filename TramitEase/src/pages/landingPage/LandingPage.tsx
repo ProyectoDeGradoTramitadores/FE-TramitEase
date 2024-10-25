@@ -41,7 +41,7 @@ const LandingPage: React.FC = () => {
     };
 
     const headerStyle = {
-        position: 'sticky' as 'sticky',
+        position: 'sticky' as const,
         top: 0,
         zIndex: 100,
         width: '100%'
@@ -49,14 +49,14 @@ const LandingPage: React.FC = () => {
 
     const mainStyle = {
         flex: 1,
-        overflowY: 'auto' as 'auto'
+        overflowY: 'auto' as const
     };
 
     const containerStyle = {
         display: 'flex',
-        flexDirection: 'column' as 'column',
+        flexDirection: 'column' as const,
         height: '100vh',
-        overflow: 'hidden' as 'hidden'
+        overflow: 'hidden' as const
     };
 
     return (

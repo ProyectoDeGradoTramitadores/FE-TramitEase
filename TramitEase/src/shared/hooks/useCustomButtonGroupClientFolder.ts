@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { IDS, ROUTES } from '../constants/routes.ts';
 import { useProcedureFolderClients } from './useProcedureFolderClient.ts';
 import { useStepProcedureFolderClients } from './useStepProcedureFolderClients.ts';
+import { useDocuments } from './useDocuments.ts';
 
 export const useCustomButtonGroupClientFolder = (idClientFolder: string | number) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -12,6 +13,7 @@ export const useCustomButtonGroupClientFolder = (idClientFolder: string | number
     const id = IDS().TRAMITADOR_ID
 
     const { deleteExistingClientFolder,fetchClientFolderById  } = useClientFolders();
+    const { deleteExistingDocument,fetchDocumentsByStepProcedureId, documents  } = useDocuments();
     const { deleteExistingProcedureFolderClient, fetchProcedureFolderClientsByClientFolderId } = useProcedureFolderClients();
     const { deleteExistingStepProcedureFolderClient, fetchStepProcedureFolderClientsByProcedureFolderClientId  } = useStepProcedureFolderClients();
 
@@ -44,14 +46,23 @@ export const useCustomButtonGroupClientFolder = (idClientFolder: string | number
             );
 
             if (ProceduresClientFolder && ProceduresClientFolder.length > 0) {
+
                 const deletePromises = ProceduresClientFolder.map(async (procedure) => {
                     const stepsProceduresClientFolder = await fetchStepProcedureFolderClientsByProcedureFolderClientId(
                         Number(procedure.idProcedureFolderClient)
                     );
 
-                    stepsProceduresClientFolder?.map(async (stepProcedure) => {
-                        await deleteExistingStepProcedureFolderClient(stepProcedure.idStepProcedureFolderClient);
-                    });
+                    await Promise.all(
+                        stepsProceduresClientFolder?.map(async (stepProcedure) => {
+                            await fetchDocumentsByStepProcedureId(stepProcedure.idStepProcedureFolderClient);
+                            await Promise.all(
+                                documents.map(async (document) => {
+                                    await deleteExistingDocument(document.idDocument);
+                                })
+                            );
+                            await deleteExistingStepProcedureFolderClient(stepProcedure.idStepProcedureFolderClient);
+                        }) ?? []
+                    );
 
                     await deleteExistingProcedureFolderClient(procedure?.idProcedureFolderClient);
                 });

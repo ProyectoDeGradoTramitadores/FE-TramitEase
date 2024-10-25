@@ -17,6 +17,9 @@ import StepperProcedure from './StepperProcedure.tsx';
 import DataProcedure from './DataProcedure.tsx';
 import StepProcedureData from './StepPorcedureData.tsx';
 import CustomButton from '../../shared/components/buttons/CustomButton.tsx';
+import { Checkbox } from '@mui/joy';
+import CommentModal from '../../shared/components/Modals/CommentModal.tsx';
+import NotesCard from '../../shared/components/cards/NotesCard.tsx';
 
 const ProcedureComponent = () => {
     const idCLientFOlder = IDS().CLIENT_FOLDER_ID;
@@ -25,6 +28,12 @@ const ProcedureComponent = () => {
         proceduresClient,
         activeStepProcedure,
         procedureDetails,
+        stepProcedureFirst,
+        isChecked,
+        openModal,
+        handleSaveComment,
+        handleCloseModal,
+        handleCheckboxChange,
         handleBackProcedure,
         handleStatusChange,
         handleNextProcedure,
@@ -35,7 +44,6 @@ const ProcedureComponent = () => {
         loading,
         error
     } = useProgressClientLogic(idCLientFOlder);
-
 
     if (loading) {
         return (
@@ -60,6 +68,7 @@ const ProcedureComponent = () => {
                     <DataProcedure Status={procedureDetails[activeStep].status}
                                    name={procedureDetails[activeStep].name}
                                    description={procedureDetails[activeStep].description}
+                                   endDate={procedureDetails[activeStep].endDate}
                                    initialDay={procedureDetails[activeStep].startDate}
                                    estimateDay={procedureDetails[activeStep].estimatedDate}
                                    durationDays={String(procedureDetails[activeStep].durationDays)} />
@@ -86,7 +95,7 @@ const ProcedureComponent = () => {
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                     flexDirection: 'column',
-                                    gap: 3
+                                    gap: 1
                                 }}>
                                     <StepProcedureData
                                         name={stepProcedures.get(procedureDetails[activeStep].id)?.[activeStepProcedure]?.name ?? ''}
@@ -96,24 +105,48 @@ const ProcedureComponent = () => {
                                         dayDuRING={stepProcedures.get(procedureDetails[activeStep].id)?.[activeStepProcedure]?.dayDuring}
                                         requeriments={stepProcedures.get(procedureDetails[activeStep].id)?.[activeStepProcedure]?.requirements}
                                     />
-                                    <FormControl component="fieldset">
-                                        <FormLabel component="legend">Estado del paso</FormLabel>
-                                        <RadioGroup
-                                            row
-                                            aria-label="status"
-                                            name="status"
-                                            value={stepProcedures.get(procedureDetails[activeStep].id)?.[activeStepProcedure]?.isComplete ? 'Complete' : 'InProgress'}
-                                            onChange={(e) =>
-                                                handleStatusChange(
-                                                    Number(stepProcedures.get(procedureDetails[activeStep].id)?.[activeStepProcedure]?.idStepProc),
-                                                    e.target.value === 'Complete',
-                                                )
+                                    <CommentModal
+                                        open={openModal}
+                                        onClose={handleCloseModal}
+                                        onSave={handleSaveComment}
+                                    />
+                                    {stepProcedures.get(procedureDetails[activeStep].id)?.[activeStepProcedure]?.endDate &&
+                                        stepProcedures.get(procedureDetails[activeStep].id)?.[activeStepProcedure]?.commentsDelay && (
+                                            <NotesCard notes={stepProcedures.get(procedureDetails[activeStep].id)?.[activeStepProcedure]?.commentsDelay ?? ""}/>
+                                    )}
+                                    {!stepProcedures.get(procedureDetails[activeStep].id)?.[activeStepProcedure]?.endDate  && stepProcedureFirst?.startDate && (
+                                            <FormControl component="fieldset">
+                                                <FormLabel component="legend">Estado del paso</FormLabel>
+                                                <RadioGroup
+                                                    row
+                                                    aria-label="status"
+                                                    name="status"
+                                                    value={stepProcedures.get(procedureDetails[activeStep].id)?.[activeStepProcedure]?.isComplete ? 'Complete' : 'InProgress'}
+                                                    onChange={(e) =>
+                                                        handleStatusChange(
+                                                            Number(stepProcedures.get(procedureDetails[activeStep].id)?.[activeStepProcedure]?.idStepProc),
+                                                            e.target.value === 'Complete',
+                                                        )
+                                                    }
+                                                >
+                                                    <FormControlLabel value="InProgress" control={<Radio />} label="En progreso" />
+                                                    <FormControlLabel value="Complete" control={<Radio />} label="Completado" />
+                                                </RadioGroup>
+                                            </FormControl>
+                                        )}
+                                    {stepProcedureFirst?.startDate === null && (
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    name="iniciarTramite"
+                                                    checked={isChecked}
+                                                    onChange={handleCheckboxChange}
+                                                    sx={{ marginRight: 2 }}
+                                                />
                                             }
-                                        >
-                                            <FormControlLabel value="InProgress" control={<Radio />} label="En progreso" />
-                                            <FormControlLabel value="Complete" control={<Radio />} label="Completado" />
-                                        </RadioGroup>
-                                    </FormControl>
+                                            label="Iniciar trámite"
+                                        />
+                                    )}
                                     <div style={{ display: 'flex', gap: '23px' }}>
                                         <CustomButton
                                             onClick={handleBackProcedure}
@@ -135,14 +168,16 @@ const ProcedureComponent = () => {
                                     </div>
                                 </Box>
                             )}
-                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '34px' }}>
-                                <Typography variant="h6">Documentos</Typography>
-                                <DocumentsList
-                                    idStepProcedureClientFolder={Number(stepProcedures?.get(procedureDetails[activeStep].id)?.
-                                        [activeStepProcedure]?.idStepProc)}
-                                    onDocumentSelect={createDocument}
-                                />
-                            </Box>
+                            {stepProcedureFirst?.startDate && (
+                                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '34px' }}>
+                                    <Typography variant="h6">Documentos</Typography>
+                                    <DocumentsList
+                                        idStepProcedureClientFolder={Number(stepProcedures?.get(procedureDetails[activeStep].id)?.
+                                            [activeStepProcedure]?.idStepProc)}
+                                        onDocumentSelect={createDocument}
+                                    />
+                                </Box>
+                            )}
                         </Stack>
                     </div>
                 </Box>

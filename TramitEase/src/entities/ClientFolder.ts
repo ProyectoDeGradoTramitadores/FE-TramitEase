@@ -3,6 +3,6 @@ export interface ClientFolder {
     idClient: string;
     idTramit: number;
     name: string;
-    creationDate: string;
+    creationDate?: string | null;
     endDate?: string | null;
 }

@@ -9,21 +9,41 @@ import { StepProcedureFolderClient } from '../../entities/StepProcedureFolderCli
 import { useDocuments } from './useDocuments.ts';
 import { ProcedureClient } from '../../entities/ProcedureClient.ts';
 import { ProcedureStepData } from '../../entities/ProcedureStepData.tsx';
+import { useClientFolders } from './useClientFolders.ts';
 
 const useProgressClientLogic = (idClientFolder: string | number) => {
+    const [openModal, setOpenModal] = useState(false);
+    const [newDataStep, setNewData] = useState<StepProcedureFolderClient>();
     const [activeStep, setActiveStep] = useState(0);
+    const [isChecked, setIsChecked] = useState(false);
     const [activeStepProcedure, setActiveStepProcedure] = useState(0);
     const [procedureNames, setProcedureNames] = useState<string[]>([]);
     const [stepProcedures, setStepProcedures] = useState<Map<number, ProcedureStepData[]>>(new Map());
+    const [stepProcedureFirst, setStepProcedureFirst] = useState<StepProcedureFolderClient>();
     const [procedureDetails, setProcedureDetails] = useState<ProcedureClient[]>([]);
     const { loading, error, fetchProcedureFolderClientsByClientFolderId,
         updateExistingProcedureFolderClient } = useProcedureFolderClients();
     const { fetchProcedureById } = useProcedures();
+    const {updateExistingClientFolder, fetchClientFolderById} = useClientFolders()
     const { fetchStepProcedureFolderClientsByProcedureFolderClientId,
-        updateExistingStepProcedureFolderClient } = useStepProcedureFolderClients();
+        updateExistingStepProcedureFolderClient} = useStepProcedureFolderClients();
     const { fetchStepProcedureById } = useStepProcedures();
     const { createNewDocument } = useDocuments();
     const [proceduresClient, setProceduresClient] = useState<ProcedureFolderClient[]>([]);
+
+    const handleSaveComment = async (comment: string) => {
+
+        if(newDataStep){
+            await updateExistingStepProcedureFolderClient(newDataStep.idStepProcedureFolderClient, {...newDataStep, commentsDelay: comment})
+            console.log('Comentario guardado:', newDataStep);
+        }
+
+        setOpenModal(false);
+    };
+
+    const handleCloseModal = () => {
+        setOpenModal(false);
+    };
 
     const createDocument = async (document: Document) => {
         try {
@@ -67,7 +87,6 @@ const useProgressClientLogic = (idClientFolder: string | number) => {
 
     const findNextInProgressProcedure = () => {
         for (let i = activeStep + 1; i < procedureDetails.length; i++) {
-            console.log("procedures", activeStep, procedureDetails)
             if (procedureDetails[i].status === 'En progreso') {
                 return activeStep +1;
             }
@@ -82,17 +101,27 @@ const useProgressClientLogic = (idClientFolder: string | number) => {
     useEffect(() => {
         const fetchProcedureNames = async () => {
             if (proceduresClient.length > 0) {
+                proceduresClient?.sort((a, b) => (a.idProcedureFolderClient ?? 0) - (b.idProcedureFolderClient ?? 0));
+
                 try {
                     const details: ProcedureClient[] = await Promise.all(
-                        proceduresClient.map(async (procedureClient) => {
+                        proceduresClient.map(async (procedureClient, index) => {
                             const procedure = await fetchProcedureById(procedureClient.idProcedure);
                             const estimatedDate = calculateEstimatedDate(
                                 procedureClient?.startDate ?? '',
                                 procedure?.dayDuring ?? 0
                             );
+
+
                             const stepsProcedu = await fetchStepProcedureFolderClientsByProcedureFolderClientId(
                                 procedureClient?.idProcedureFolderClient
                             );
+
+                            stepsProcedu?.sort((a, b) => (a.idStepProcedureFolderClient ?? 0) - (b.idStepProcedureFolderClient ?? 0));
+
+                            if(index == 0 && stepsProcedu){
+                                setStepProcedureFirst(stepsProcedu[0]);
+                            }
 
                             const detailsStep: ProcedureStepData[] = await Promise.all(
                                 (stepsProcedu ?? []).map(async (stepProc) => {
@@ -113,6 +142,7 @@ const useProgressClientLogic = (idClientFolder: string | number) => {
                                         estimate: estimatedDateStep,
                                         dayDuring: procStep?.dayDuring,
                                         isComplete: stepProc.isComplete,
+                                        commentsDelay: stepProc.commentsDelay,
                                     };
                                 })
                             );
@@ -151,6 +181,10 @@ const useProgressClientLogic = (idClientFolder: string | number) => {
     useEffect(() => {
         const setInitialSteps = () => {
             for (let i = 0; i < procedureDetails.length; i++) {
+                console.log(procedureDetails);
+                if(procedureDetails.length - 1 == i && procedureDetails[i].status === 'Completado'){
+                    setActiveStep(i);
+                }
                 if (procedureDetails[i].status === 'En progreso') {
                     setActiveStep(i);
                     for (let j = 0; j < (stepProcedures.get(procedureDetails[i].id)?.length?? 0); j++) {
@@ -192,6 +226,8 @@ const useProgressClientLogic = (idClientFolder: string | number) => {
                 endDate: new Date().toISOString(),
                 startDate: currentStep.startDate,
             };
+
+            setNewData(newData);
 
             await updateExistingStepProcedureFolderClient(Number(currentStep.idStepProc), newData);
 
@@ -249,31 +285,42 @@ const useProgressClientLogic = (idClientFolder: string | number) => {
                 };
 
                 await updateExistingProcedureFolderClient(currentProcedure.idProcedureFolderClient, updateData);
-                const nextProcedure = proceduresClient[nextProcedureIndex];
 
-                const newData: ProcedureFolderClient = {
-                    ...nextProcedure,
-                    isComplete: false,
-                    startDate: new Date(),
-                };
+                if(nextProcedureIndex != -1){
+                    const nextProcedure = proceduresClient[nextProcedureIndex];
 
-                await updateExistingProcedureFolderClient(nextProcedure?.idProcedureFolderClient, newData);
-                const currentProcedureSteps = stepProcedures.get(nextProcedure.idProcedureFolderClient) ?? [];
+                    const newData: ProcedureFolderClient = {
+                        ...nextProcedure,
+                        isComplete: false,
+                        startDate: new Date(),
+                    };
 
-                const currentStep = currentProcedureSteps[0];
-                console.log("next Procedure", nextProcedureIndex,nextProcedure, stepProcedures,
-                    currentProcedureSteps,procedureDetails);
-                const newDataStep: StepProcedureFolderClient = {
-                    idStepProcedureFolderClient: Number(currentStep.idStepProc),
-                    idProcedureFolderClient: Number(currentStep.idProcedure),
-                    idStepProcedure: Number(currentStep.idStep),
-                    isComplete: false,
-                    endDate: null,
-                    startDate: new Date(),
-                };
-                await updateExistingStepProcedureFolderClient(Number(currentStep.idStepProc), newDataStep);
+                    await updateExistingProcedureFolderClient(nextProcedure?.idProcedureFolderClient, newData);
 
-                if (nextProcedureIndex !== -1 && nextProcedureIndex < proceduresClient.length) {
+                    const currentProcedureSteps = stepProcedures.get(nextProcedure.idProcedureFolderClient) ?? [];
+
+                    const currentStep = currentProcedureSteps[0];
+
+                    const newDataStep: StepProcedureFolderClient = {
+                        idStepProcedureFolderClient: Number(currentStep.idStepProc),
+                        idProcedureFolderClient: Number(currentStep.idProcedure),
+                        idStepProcedure: Number(currentStep.idStep),
+                        isComplete: false,
+                        endDate: null,
+                        startDate: new Date(),
+                    };
+                    await updateExistingStepProcedureFolderClient(Number(currentStep.idStepProc), newDataStep);
+                }else {
+                    const clientfolder = await fetchClientFolderById(Number(idClientFolder));
+                    if(clientfolder){
+                        await updateExistingClientFolder(Number(idClientFolder),
+                            {...clientfolder, endDate: (new Date()).toISOString()})
+
+                    }
+                    setActiveStep(0);
+                }
+
+                if (nextProcedureIndex !== -1 && nextProcedureIndex < proceduresClient.length - 1) {
                     const updatedProcedureData: ProcedureFolderClient = {
                         ...proceduresClient[activeStep],
                         isComplete: true,
@@ -285,11 +332,50 @@ const useProgressClientLogic = (idClientFolder: string | number) => {
                     setActiveStepProcedure(0);
 
                 }
+
+                if(stepProcedureFirst){
+                    await updateExistingStepProcedureFolderClient((stepProcedureFirst?.idStepProcedureFolderClient) ?? 0,
+                        {
+                            ...stepProcedureFirst,
+                            startDate: new Date()
+                        }
+                    );
+                }
             }else {
                 handleNextProcedure();
             }
+
+            if(newStatus){
+                setOpenModal(true);
+            }
         } catch (err) {
             console.error('Error changing status:', err);
+        }
+    };
+
+    const handleCheckboxChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const checked = event.target.checked;
+        setIsChecked(checked);
+
+        if (checked) {
+            const clientfolder = await fetchClientFolderById(Number(idClientFolder));
+
+            if (clientfolder) {
+                await updateExistingClientFolder(Number(idClientFolder), { ...clientfolder,
+                    creationDate: (new Date()).toISOString() });
+
+                await updateExistingProcedureFolderClient(proceduresClient[0].idProcedureFolderClient,
+                    {...proceduresClient[0], startDate: new Date()});
+
+                if(stepProcedureFirst){
+                    await updateExistingStepProcedureFolderClient((stepProcedureFirst?.idStepProcedureFolderClient) ?? 0,
+                        {
+                            ...stepProcedureFirst,
+                            startDate: new Date()
+                        }
+                    );
+                }
+            }
         }
     };
 
@@ -300,14 +386,20 @@ const useProgressClientLogic = (idClientFolder: string | number) => {
         activeStepProcedure,
         procedureNames,
         stepProcedures,
+        isChecked,
         procedureDetails,
         proceduresClient,
+        stepProcedureFirst,
+        openModal,
+        handleCheckboxChange,
         createDocument,
         handleBack,
+        handleSaveComment,
+        handleCloseModal,
+        handleStatusChange,
         handleNext,
         handleNextProcedure,
         handleBackProcedure,
-        handleStatusChange,
     };
 };
 

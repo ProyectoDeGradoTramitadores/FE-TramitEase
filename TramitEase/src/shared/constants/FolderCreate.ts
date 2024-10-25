@@ -1,11 +1,11 @@
 import { ClientFolder } from '../../entities/ClientFolder.ts';
 
-export var emptyFolder: ClientFolder = {
+export let emptyFolder: ClientFolder = {
     idClientFolder: 0,
     idClient: '',
     idTramit: 0,
     name: '',
-    creationDate: new Date().toISOString(),
+    creationDate: null,
     endDate: '',
 };
 
@@ -38,14 +38,12 @@ export const setIdClient = (idClient: string) => {
 }
 
 export const clearEmptyFolder = () => {
-    var emptyFolderClean: ClientFolder = {
+    emptyFolder = {
         idClientFolder: 0,
         idClient: '',
         idTramit: 0,
         name: '',
         creationDate: new Date().toISOString(),
         endDate: '',
-    };
-
-    emptyFolder = emptyFolderClean
+    }
 }

@@ -6,6 +6,7 @@ export interface DataProcedureProps {
     name: string;
     description: string;
     initialDay: string;
+    endDate?: string;
     estimateDay: string;
     durationDays: string;
     Status: string;

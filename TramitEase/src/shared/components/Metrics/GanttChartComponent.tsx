@@ -7,11 +7,16 @@ const GanttChartComponent: React.FC<GanttChartComponentProps> = ({ title, tasks 
     const [dateRange, setDateRange] = useState<{ start: Date; end: Date } | null>(null);
 
     useEffect(() => {
-        const startDates = tasks.map(task => task.start);
-        const endDates = tasks.map(task => task.end);
-        const minStartDate = new Date(Math.min(...startDates.map(date => date.getTime())));
-        const maxEndDate = new Date(Math.max(...endDates.map(date => date.getTime())));
-        setDateRange({ start: minStartDate, end: maxEndDate });
+        if (tasks.length > 0) {
+            const startDates = tasks.map(task => task.start);
+            const endDates = tasks.map(task => task.end);
+            const minStartDate = new Date(Math.min(...startDates.map(date => date.getTime())));
+            const maxEndDate = new Date(Math.max(...endDates.map(date => date.getTime())));
+            setDateRange({ start: minStartDate, end: maxEndDate });
+
+            const generatedColors = tasks.map(() => getRandomPastelColor());
+            setColors(generatedColors);
+        }
     }, [tasks]);
 
     const getWidth = (start: Date, end: Date): string => {
@@ -31,11 +36,6 @@ const GanttChartComponent: React.FC<GanttChartComponentProps> = ({ title, tasks 
         const b = Math.floor(Math.random() * 128) + 127;
         return `rgb(${r}, ${g}, ${b})`;
     };
-
-    useEffect(() => {
-        const generatedColors = tasks.map(() => getRandomPastelColor());
-        setColors(generatedColors);
-    }, []);
 
     return (
         <Card sx={{ padding: '20px', minWidth: '700px', margin: '20px' }}>

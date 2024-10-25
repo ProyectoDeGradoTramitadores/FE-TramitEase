@@ -17,7 +17,7 @@ const CardInfoClientFolder: React.FC<CardReportProps> = ({ nameFolder, creationD
                 </Box>
                 <Typography>Fecha de Inicio: {creationDate}</Typography>
                 <Typography>Fecha de Finalización: {endProcedure ?? 'x'}</Typography>
-                <Typography>Fecha Estimada de FInalizacion: {estimateDate}</Typography>
+                <Typography>Fecha de Finalizacion Estimada: {estimateDate}</Typography>
                 <Typography>
                     Estado:
                     {completeTramit ? ' Completado' : ' En progreso'}

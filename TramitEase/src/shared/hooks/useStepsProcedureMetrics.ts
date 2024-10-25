@@ -3,6 +3,7 @@ import { TableProcedureProps } from '../types/MetricsClientFolderProps.ts';
 
 export const useStepsProcedureMetrics = (steps: TableProcedureProps, daysEstimate: number) => {
     const { steps: stepList } = steps;
+    console.log('useStepsProcedureMetrics', steps);
 
     const estimatedDate = useMemo(() => {
         const creationDate = new Date(stepList[0].creationDate);
