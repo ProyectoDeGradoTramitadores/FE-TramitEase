@@ -9,8 +9,10 @@ const FolderClientsViewComponent: React.FC<FolderClientsViewComponentProps> = ({
             sx={{
                 display: 'flex',
                 flexWrap: 'wrap',
-                gap: '90px',
+                gap: '60px',
                 overflow: 'hidden',
+                justifyContent: 'space-between',
+                alignItems: 'center',
             }}
         >
             {clientFolders.map((folder) => (

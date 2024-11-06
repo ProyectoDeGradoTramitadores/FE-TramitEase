@@ -8,7 +8,7 @@ import { ProcedureFolderClient } from '../../entities/ProcedureFolderClient.ts';
 import { StepProcedureFolderClient } from '../../entities/StepProcedureFolderClient.ts';
 import { useDocuments } from './useDocuments.ts';
 import { ProcedureClient } from '../../entities/ProcedureClient.ts';
-import { ProcedureStepData } from '../../entities/ProcedureStepData.tsx';
+import { ProcedureStepData } from '../../entities/ProcedureStepData.ts';
 import { useClientFolders } from './useClientFolders.ts';
 
 const useProgressClientLogic = (idClientFolder: string | number) => {
@@ -395,6 +395,7 @@ const useProgressClientLogic = (idClientFolder: string | number) => {
         createDocument,
         handleBack,
         handleSaveComment,
+        calculateEstimatedDate,
         handleCloseModal,
         handleStatusChange,
         handleNext,

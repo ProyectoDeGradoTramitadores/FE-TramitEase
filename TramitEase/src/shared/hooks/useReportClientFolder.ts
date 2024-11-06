@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useClientFolders } from './useClientFolders.ts';
 import { useTramits } from './useTramits.ts';
 import { useTypeTramits } from './useTypeTramits.ts';
 import { ClientFolder, TramitReportsProps } from '../types/MetricsClientFolderProps.ts';
 import { useTramitProcedures } from './useTramitProcedures.ts';
 import { useProcedureFolderClients } from './useProcedureFolderClient.ts';
+import { useClientFoldersByTramitadorId } from './useClientFoldersByTramitadorId.ts';
+import { IDS } from '../constants/routes.ts';
 
 export const useReportClientFolder = () => {
-    const { clientFolders } = useClientFolders();
+    const idTramitador = IDS().TRAMITADOR_ID
+    const { filteredClientFolders } = useClientFoldersByTramitadorId(Number(idTramitador));
     const { fetchProcedureFolderClientsByClientFolderId } = useProcedureFolderClients();
     const { fetchTramitById, tramits } = useTramits();
     const { fetchTramitProceduresByTramitId } = useTramitProcedures();
@@ -17,14 +19,24 @@ export const useReportClientFolder = () => {
     const [tramitsMetric, setTramitsMetric] = useState<TramitReportsProps[]>([]);
     const [tramitsById, setTramitsById] = useState<Record<string, number>>({});
 
-    const totalClientFolders = useMemo(() => clientFolders.length, [clientFolders]);
+    const totalClientFolders = useMemo(() => filteredClientFolders.length, [filteredClientFolders]);
+
+    const calculateEstimatedDate = (startDate: string | Date, durationDays: number) => {
+        if (!startDate || isNaN(new Date(startDate).getTime())) {
+            return 'N/A';
+        }
+        const start = new Date(startDate);
+        const estimatedDate = new Date(start);
+        estimatedDate.setDate(start.getDate() + durationDays);
+        return estimatedDate.toISOString().split('T')[0];
+    };
 
     useEffect(() => {
         const fetchTramits = async () => {
             const tramitsByTypeAccumulator: Record<string, number> = {};
             const tramitsByIdAccumulator: Record<string, number> = {};
 
-            for (const folder of clientFolders) {
+            for (const folder of filteredClientFolders) {
                 const tramit = await fetchTramitById(folder.idTramit);
                 const typeTramit = await fetchTypeTramitById(tramit?.idTypeTramit ?? 0);
 
@@ -44,7 +56,7 @@ export const useReportClientFolder = () => {
                 const numberdeProcedures = await fetchTramitProceduresByTramitId(tramit?.idTramit);
                 const tramitsCLientFOlder : ClientFolder[] = [];
 
-                const clientFoldersForTramit = clientFolders.filter(
+                const clientFoldersForTramit = filteredClientFolders.filter(
                     (folder) => folder.idTramit === tramit.idTramit
                 );
 
@@ -64,7 +76,7 @@ export const useReportClientFolder = () => {
 
                         proceduresFolder?.forEach((proc) => {
                             if (proc.isComplete ) {
-                                if(new Date(proc.startDate?? '') > dateEnd){
+                                if(dateEnd != null && new Date(proc.startDate?? '') > dateEnd){
                                     dateEnd = new Date(proc.endDate ?? '') ;
                                     proceduresFolderDays += calculateDaysBetweenDates(
                                         proc.startDate?.toString(),
@@ -75,7 +87,8 @@ export const useReportClientFolder = () => {
                             }
                         });
 
-                        const daysEstimate = calculateDaysBetweenDates(folder.creationDate, folder.endDate ?? '');
+                        const daysEstimate = folder.creationDate?
+                            calculateDaysBetweenDates(folder.creationDate, folder.endDate ?? '') : 0;
                         let isDelayClientFolder = false;
                         proceduresFolderDays = Math.abs(proceduresFolderDays);
 
@@ -90,8 +103,9 @@ export const useReportClientFolder = () => {
                         return {
                             clientFolderName: folder.name,
                             durationDays: daysEstimate,
-                            startDate: folder.creationDate.toString(),
-                            estimatedCompletionDate: folder.endDate?.toString(),
+                            startDate: folder?.creationDate?.toString() ?? undefined,
+                            estimatedCompletionDate: folder?.creationDate && tramit.dayDuring?
+                                calculateEstimatedDate(folder?.creationDate, tramit.dayDuring): undefined,
                             completionDate: proceduresFolder?.[proceduresFolder.length - 1]?.endDate?.toString() ?? '',
                             isCompleted: (proceduresFolder?.[proceduresFolder.length - 1]?.isComplete) ?? false,
                             isDelay: isDelayClientFolder,
@@ -122,7 +136,7 @@ export const useReportClientFolder = () => {
         };
 
         fetchTramits();
-    }, [clientFolders]);
+    }, [filteredClientFolders]);
 
     const calculateDaysBetweenDates = (startDate?: string, endDate?: string): number => {
         if (!startDate || !endDate) {

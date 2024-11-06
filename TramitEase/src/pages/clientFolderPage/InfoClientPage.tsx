@@ -31,7 +31,7 @@ const InfoClientPage = () => {
                 const clientResponse = await fetchClientById(clientFolderResponse?.idClient ?? '');
                 setClient(clientResponse);
 
-                const tramitResponse = await fetchTramitById(Number(clientFolderResponse?.idTramit || ''));
+                const tramitResponse = await fetchTramitById(Number(clientFolderResponse?.idTramit ?? ''));
                 setTramit(tramitResponse);
             } catch (error) {
                 console.error('Error fetching data:', error);

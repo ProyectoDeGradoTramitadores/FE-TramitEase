@@ -1,4 +1,4 @@
-import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Outlet, Route, Routes, useParams } from 'react-router-dom';
 import LandingPage from '../../pages/landingPage/LandingPage.tsx';
 import ClientsFolderPage from '../../pages/clientsFolderPage/ClientsFolderPage.tsx';
 import Header from '../../shared/components/header/Header.tsx';
@@ -15,6 +15,13 @@ import ClientFolderPage from '../../pages/clientFolderPage/ClientFolderPage.tsx'
 import UserProfile from '../../pages/UserProfile/UserProfile.tsx';
 import LoginPage from '../../pages/AuthentificationPage/LoginPage.tsx';
 import ReportsClientFolderPage from '../../pages/ReportsClientFOlder/ReportsClientFolderPage.tsx';
+import RegisterPage from '../../pages/AuthentificationPage/RegisterPage.tsx';
+import { AuthProvider } from '../../shared/context/AuthContext.tsx';
+import ProtectedRoute from '../../shared/components/auth/ProtectedRoute.tsx';
+import { useEffect, useState } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../../shared/services/firebase/firebaseService.ts';
+import { useTramitadores } from '../../shared/hooks/useTramitadores.ts';
 
 const Layout: React.FC = () => (
     <>
@@ -25,37 +32,64 @@ const Layout: React.FC = () => (
     </>
 );
 
+const PrivateRoute = ({ children }: { children: JSX.Element }) => {
+    const { id } = useParams<{ id: string }>();
+    const [userId, setUserId] = useState<string | null>(null);
+    const {tramitadores} = useTramitadores();
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            const tramitador = tramitadores.find(t => t.email === user?.email);
+            setUserId(tramitador?.idTramitador ? String(tramitador?.idTramitador) : null);
+        });
+        return () => unsubscribe();
+    }, []);
+
+    if (userId && id !== userId) {
+        return <Navigate to="/TramitEase/login" replace />;
+    }
+
+    return children;
+};
+
 const AppRoutes = () => (
-    <BrowserRouter>
-        <Routes>
-            <Route path="/TramitEase">
-                <Route index element={<LandingPage />} />
-                <Route path="login" element={ <LoginPage />} />
-                <Route path="Tramitador" element={<Layout />}>
-                    <Route path=":id">
-                        <Route path={"perfil"} element={<UserProfile/>} />
-                        <Route path={"reports"} element={<ReportsClientFolderPage/>} />
-                        <Route path="ClientsFolder" element={<ClientsFolderPage />} />
-                        <Route path="ClientsFolder/ClientFolder/:idClientFolder" element={<ClientFolderPage />} />
-                        <Route path="Calendar" element={<CalendarPage />} />
-                        <Route path={"Custom"}>
-                            <Route path={"TramitsCustom"} element={<TramitsCustomPage />}/>
-                            <Route path={"TramitsCustom/TramitViewPage/:idTramit"} element={<TramitViewPage />}/>
-                            <Route path={"TramitsCustom/ProcedureViewPage/:idProcedure"} element={<ProcedureViewPage />}/>
-                            <Route path={"TramitsCustom/TramitCreateNew"} element={<FormularyTramitCreatePage/> }/>
-                            <Route path={"TramitsCustom/ProcedureCreateNew"} element={<FormularyProcedureCreatePage/> }/>
-                            <Route path={"TramitsCustom/TramitEditPage/:idTramit"} element={<FormularyTramitCreatePage/> }/>
-                            <Route path={"TramitsCustom/ProcedureEditPage/:idProcedure"} element={<FormularyProcedureCreatePage/> }/>
-                        </Route>
-                        <Route path="CreateClientFolder">
-                            <Route path={"CreateClient"} element={<FormularyCreateClientFolderPage/>}/>
-                            <Route path={":idClient/CreateFolder"} element={<FormularyCreateFolderPage/>}/>
+    <AuthProvider>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/TramitEase">
+                    <Route index element={<LandingPage />} />
+                    <Route path="login" element={ <LoginPage />} />
+                    <Route path="Register" element={ <RegisterPage />} />
+                    <Route element={<ProtectedRoute />}>
+                        <Route path="Tramitador" element={<Layout />}>
+                            <Route path=":id" element={<PrivateRoute>
+                                <Outlet />
+                            </PrivateRoute>}>
+                                <Route path={"perfil"} element={<UserProfile/>} />
+                                <Route path={"reports"} element={<ReportsClientFolderPage/>} />
+                                <Route path="ClientsFolder" element={<ClientsFolderPage />} />
+                                <Route path="ClientsFolder/ClientFolder/:idClientFolder" element={<ClientFolderPage />} />
+                                <Route path="Calendar" element={<CalendarPage />} />
+                                <Route path={"Custom"}>
+                                    <Route path={"TramitsCustom"} element={<TramitsCustomPage />}/>
+                                    <Route path={"TramitsCustom/TramitViewPage/:idTramit"} element={<TramitViewPage />}/>
+                                    <Route path={"TramitsCustom/ProcedureViewPage/:idProcedure"} element={<ProcedureViewPage />}/>
+                                    <Route path={"TramitsCustom/TramitCreateNew"} element={<FormularyTramitCreatePage/> }/>
+                                    <Route path={"TramitsCustom/ProcedureCreateNew"} element={<FormularyProcedureCreatePage/> }/>
+                                    <Route path={"TramitsCustom/TramitEditPage/:idTramit"} element={<FormularyTramitCreatePage/> }/>
+                                    <Route path={"TramitsCustom/ProcedureEditPage/:idProcedure"} element={<FormularyProcedureCreatePage/> }/>
+                                </Route>
+                                <Route path="CreateClientFolder">
+                                    <Route path={"CreateClient"} element={<FormularyCreateClientFolderPage/>}/>
+                                    <Route path={":idClient/CreateFolder"} element={<FormularyCreateFolderPage/>}/>
+                                </Route>
+                            </Route>
                         </Route>
                     </Route>
                 </Route>
-            </Route>
-        </Routes>
-    </BrowserRouter>
+            </Routes>
+        </BrowserRouter>
+    </AuthProvider>
 );
 
 export default AppRoutes;

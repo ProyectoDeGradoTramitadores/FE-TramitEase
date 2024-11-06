@@ -16,6 +16,10 @@ const ReportsClientFolderPage: React.FC = () => {
     const labelsTramit = Object.keys(tramitsById);
     const dataChartTramit = Object.values(tramitsById);
 
+    const uniqueTramitsMetric = Array.from(
+        new Map(tramitsMetric.map((metric) => [metric.procedureName, metric])).values()
+    );
+
     return (
         <Box
             sx={{
@@ -98,7 +102,7 @@ const ReportsClientFolderPage: React.FC = () => {
             <Typography variant="h5" component="h2"  sx={{ color: 'black' }}>
                 Reporte de Trámites
             </Typography>
-            {tramitsMetric.map((metric, index) => (
+            {uniqueTramitsMetric.map((metric, index) => (
                 <TramitReports
                     key={index} procedureName={metric.procedureName} procedureType={metric.procedureType}
                     numberOfProcedures={metric.numberOfProcedures} durationDays={metric.durationDays}

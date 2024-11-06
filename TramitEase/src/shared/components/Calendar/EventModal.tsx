@@ -7,23 +7,23 @@ import CustomButton from '../buttons/CustomButton.tsx';
 const EventModal: React.FC<EventModalProps> = ({ open, event, onClose, redirectTo }) => {
     return (
         <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth PaperProps={{ style: { borderRadius: 5 } }}>
-            <DialogTitle>Event Details</DialogTitle>
+            <DialogTitle>Carpeta del Cliente</DialogTitle>
             <DialogContent>
                 {event && (
                     <div>
                         <Typography variant="h6">{event.title}</Typography>
                         <Typography>
-                            <strong>Start:</strong> {formatDate(event.start!, { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' })}
+                            <strong>Dia de Inicio:</strong> {formatDate(event.start!, { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' })}
                         </Typography>
                         <Typography>
-                            <strong>End:</strong> {formatDate(event.end!, { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' })}
+                            <strong>Dia de FInalizacion o Dia estimado de finalizacion:</strong> {formatDate(event.end!, { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' })}
                         </Typography>
                     </div>
                 )}
             </DialogContent>
             <DialogActions>
-                <CustomButton size="xs" onClick={onClose} color="primary" $text="Close" $textStyle="normal" />
-                <CustomButton size="xs" onClick={redirectTo} color="ternary" $text="Open Client Folder" $textStyle="normal" />
+                <CustomButton size="xs" onClick={onClose} color="primary" $text="Cerrar" $textStyle="normal" />
+                <CustomButton size="xs" onClick={redirectTo} color="ternary" $text="Ingresar a la Carpeta" $textStyle="normal" />
             </DialogActions>
         </Dialog>
     );

@@ -36,7 +36,9 @@ export default function ComponentCalendar() {
             {currentEvents.length > 0 && (
                 <Calendar
                     key={tramitadorId}
-                    initialEvents={currentEvents as EventInput[]}
+                    initialEvents={currentEvents.map(event => ({
+                        ...event
+                    })) as EventInput[]}
                     handleDateSelect={handleDateSelect}
                     handleEventClick={handleEventClick}
                     handleEvents={handleEvents}

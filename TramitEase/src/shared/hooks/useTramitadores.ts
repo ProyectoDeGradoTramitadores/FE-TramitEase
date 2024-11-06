@@ -46,12 +46,13 @@ export const useTramitadores = () => {
         return undefined;
     };
 
-    const createNewTramitador = async (tramitador: Tramitador) => {
+    const createNewTramitador = async (tramitador: Tramitador): Promise<Tramitador | undefined> => {
         try {
             const newTramitador = await createTramitador(tramitador);
             if (newTramitador != null) {
                 setTramitadores([...tramitadores, newTramitador]);
             }
+            return newTramitador;
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);

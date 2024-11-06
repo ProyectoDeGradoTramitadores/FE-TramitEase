@@ -20,8 +20,8 @@ const TramitReports: React.FC<TramitReportsProps> = ({
 
     return (
         <Box gap="1532px">
-            <Typography variant="body1">
-                Nombre: {procedureName}
+            <Typography variant="h4" sx={{ color: 'black' }}>
+                {procedureName}
             </Typography>
             <Box marginBottom={"34px"} display="flex" flexDirection="row" gap="152px" alignItems="center" justifyContent="center">
                 <Box gap={"12px"}>

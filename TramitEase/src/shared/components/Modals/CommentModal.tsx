@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Box } from '@mui/material';
+import CustomButton from '../buttons/CustomButton.tsx';
 
 interface CommentModalProps {
     open: boolean;
@@ -29,9 +30,21 @@ const CommentModal: React.FC<CommentModalProps> = ({ open, onClose, onSave }) =>
             <DialogTitle>{showTextField? "Añade comentarios" : "¿Quieres añadir comentarios?"}</DialogTitle>
             <DialogContent>
                 {!showTextField && (
-                    <Box>
-                        <Button onClick={() => setShowTextField(true)}>Sí</Button>
-                        <Button onClick={handleClose}>No</Button>
+                    <Box gap={"23px"} display="flex">
+                        <CustomButton
+                            color={"ternary"}
+                            $textStyle={"bold"}
+                            size={"s"}
+                            $text={"Si"}
+                            onClick={() => setShowTextField(true)}
+                        />
+                        <CustomButton
+                            color={"secondary"}
+                            $textStyle={"bold"}
+                            size={"s"}
+                            $text={"No"}
+                            onClick={handleClose}
+                        />
                     </Box>
                 )}
                 {showTextField && (
@@ -56,8 +69,20 @@ const CommentModal: React.FC<CommentModalProps> = ({ open, onClose, onSave }) =>
             </DialogContent>
             {showTextField && (
                 <DialogActions>
-                    <Button onClick={handleSave} color="primary">Guardar</Button>
-                    <Button onClick={handleClose} color="secondary">Cancelar</Button>
+                    <CustomButton
+                        color={"secondary"}
+                        $textStyle={"bold"}
+                        size={"s"}
+                        $text={"Guardar"}
+                        onClick={handleSave}
+                    />
+                    <CustomButton
+                        color={"secondary"}
+                        $textStyle={"bold"}
+                        size={"s"}
+                        $text={"Cancelar"}
+                        onClick={handleClose}
+                    />
                 </DialogActions>
             )}
         </Dialog>
