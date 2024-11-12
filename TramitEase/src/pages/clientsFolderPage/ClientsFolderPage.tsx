@@ -11,7 +11,7 @@ import { useNavigatePage } from '../../shared/hooks/UseNavigatePage.ts';
 import { useClientFoldersByTramitadorId } from '../../shared/hooks/useClientFoldersByTramitadorId.ts';
 import { ROUTES } from '../../shared/constants/routes.ts';
 import SearchBar from '../../shared/components/Search/SearchBar.tsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, IconButton } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { NotificationModal } from '../../features/notification/NotificationModal.tsx';
@@ -23,12 +23,17 @@ const ClientsFolderPage: React.FC = () => {
     const { filteredClientFolders, handleSearch, filteredFolders, loading, error } = useClientFoldersByTramitadorId(tramitId);
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const {sendMessage} = useSendWhatsAppMessage(filteredClientFolders);
 
     const navigateToCreateClientFolder = useNavigatePage(
         `/TramitEase/Tramitador/${id}/CreateClientFolder/CreateClient`
     );
 
-    useSendWhatsAppMessage(filteredClientFolders);
+    useEffect(() => {
+        if (filteredClientFolders.length > 0) {
+            sendMessage();
+        }
+    }, [filteredClientFolders]);
 
     const handleFolderClick = (folderId: number) => {
         const routeCreateFolder = ROUTES.CLIENT_FOLDER((id ?? ''), folderId);

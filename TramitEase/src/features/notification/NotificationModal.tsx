@@ -70,7 +70,7 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({ open, onCl
                     }
                     label={
                         <Typography variant="body1" sx={{ color: 'black' }}>
-                            ¿Quieres recibir notificaciones por WhatsApp?
+                            ¿Quieres recibir notificaciones por WhatsApp cuando se este por vencer una carpeta del cliente?
                         </Typography>
                     }
                 />

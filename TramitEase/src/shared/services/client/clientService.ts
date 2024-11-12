@@ -24,6 +24,11 @@ export const getClientById = async (id: string): Promise<Client> => {
     return response.data;
 };
 
+export const getClientsByTramitadorId = async (tramitadorId: number): Promise<Client[]> => {
+    const response = await api.get(`/tramitador/${tramitadorId}`);
+    return response.data;
+};
+
 export const createClient = async (client: Client): Promise<void> => {
     await api.post('/', client);
 };

@@ -23,6 +23,7 @@ const Menu: React.FC = () => {
         <MenuContainer>
             <MenuSection>
                 <MenuItem title="CARPETAS" onClick={() => handleMenuClick('ClientsFolder')} />
+                <MenuItem title="CLIENTES" onClick={() => handleMenuClick('clients')} />
                 <MenuItem title="PLANTILLAS DE TRAMITES" onClick={() => handleMenuClick('Custom/TramitsCustom')} />
                 <MenuItem title="CALENDARIO" onClick={() => handleMenuClick('Calendar')} />
                 <MenuItem title="REPORTES" onClick={() => handleMenuClick('reports')} />

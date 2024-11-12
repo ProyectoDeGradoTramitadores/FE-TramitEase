@@ -1,5 +1,6 @@
 export interface Client {
     idClient: string;
+    idTramitador: number;
     name?: string | null;
     secondName?: string | null;
     lastName?: string | null;

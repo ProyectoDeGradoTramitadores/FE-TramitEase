@@ -52,83 +52,85 @@ export const useReportClientFolder = () => {
             }
 
             for (const tramit of tramits){
-                const typeTramit = await fetchTypeTramitById(tramit?.idTypeTramit ?? 0);
-                const numberdeProcedures = await fetchTramitProceduresByTramitId(tramit?.idTramit);
-                const tramitsCLientFOlder : ClientFolder[] = [];
+                if(tramit.idTramitador == Number(idTramitador)) {
+                    const typeTramit = await fetchTypeTramitById(tramit?.idTypeTramit ?? 0);
+                    const numberdeProcedures = await fetchTramitProceduresByTramitId(tramit?.idTramit);
+                    const tramitsCLientFOlder : ClientFolder[] = [];
 
-                const clientFoldersForTramit = filteredClientFolders.filter(
-                    (folder) => folder.idTramit === tramit.idTramit
-                );
+                    const clientFoldersForTramit = filteredClientFolders.filter(
+                        (folder) => folder.idTramit === tramit.idTramit
+                    );
 
-                let proceduresFolderDays = 0;
-                let completeClientFolder = 0;
-                let dateEnd : Date | null = null
-                const porcentageClientFolder: Record<string, number> = {};
+                    let proceduresFolderDays = 0;
+                    let completeClientFolder = 0;
+                    let dateEnd : Date | null = null
+                    const porcentageClientFolder: Record<string, number> = {};
 
-                const clientFoldersWithDelaysForTramit: ClientFolder[] =
-                    await Promise.all(clientFoldersForTramit.map(async (folder) => {
-                        const proceduresFolder = await fetchProcedureFolderClientsByClientFolderId(folder.idClientFolder ?? 0);
-                        let completionPercentage = 0;
+                    const clientFoldersWithDelaysForTramit: ClientFolder[] =
+                        await Promise.all(clientFoldersForTramit.map(async (folder) => {
+                            const proceduresFolder = await fetchProcedureFolderClientsByClientFolderId(folder.idClientFolder ?? 0);
+                            let completionPercentage = 0;
 
-                        if(proceduresFolder?.[proceduresFolder.length -1]?.isComplete){
-                            completeClientFolder += 1;
-                        }
-
-                        proceduresFolder?.forEach((proc) => {
-                            if (proc.isComplete ) {
-                                if(dateEnd != null && new Date(proc.startDate?? '') > dateEnd){
-                                    dateEnd = new Date(proc.endDate ?? '') ;
-                                    proceduresFolderDays += calculateDaysBetweenDates(
-                                        proc.startDate?.toString(),
-                                        proc.endDate?.toString()
-                                    );
-                                }
-                                completionPercentage += 1
+                            if(proceduresFolder?.[proceduresFolder.length -1]?.isComplete){
+                                completeClientFolder += 1;
                             }
-                        });
 
-                        const daysEstimate = folder.creationDate?
-                            calculateDaysBetweenDates(folder.creationDate, folder.endDate ?? '') : 0;
-                        let isDelayClientFolder = false;
-                        proceduresFolderDays = Math.abs(proceduresFolderDays);
+                            proceduresFolder?.forEach((proc) => {
+                                if (proc.isComplete ) {
+                                    if(dateEnd != null && new Date(proc.startDate?? '') > dateEnd){
+                                        dateEnd = new Date(proc.endDate ?? '') ;
+                                        proceduresFolderDays += calculateDaysBetweenDates(
+                                            proc.startDate?.toString(),
+                                            proc.endDate?.toString()
+                                        );
+                                    }
+                                    completionPercentage += 1
+                                }
+                            });
 
-                        if (proceduresFolderDays <= daysEstimate) {
-                            proceduresFolderDays = daysEstimate - proceduresFolderDays;
-                        } else {
-                            isDelayClientFolder = true;
-                            proceduresFolderDays = proceduresFolderDays - daysEstimate;
-                        }
+                            const daysEstimate = folder.creationDate?
+                                calculateDaysBetweenDates(folder.creationDate, folder.endDate ?? '') : 0;
+                            let isDelayClientFolder = false;
+                            proceduresFolderDays = Math.abs(proceduresFolderDays);
 
-                        porcentageClientFolder[folder.name] = completionPercentage / (proceduresFolder?.length ?? 0);
-                        return {
-                            clientFolderName: folder.name,
-                            durationDays: daysEstimate,
-                            startDate: folder?.creationDate?.toString() ?? undefined,
-                            estimatedCompletionDate: folder?.creationDate && tramit.dayDuring?
-                                calculateEstimatedDate(folder?.creationDate, tramit.dayDuring): undefined,
-                            completionDate: proceduresFolder?.[proceduresFolder.length - 1]?.endDate?.toString() ?? '',
-                            isCompleted: (proceduresFolder?.[proceduresFolder.length - 1]?.isComplete) ?? false,
-                            isDelay: isDelayClientFolder,
-                            delayOrSurplusDays: proceduresFolderDays,
-                        };
-                    }));
+                            if (proceduresFolderDays <= daysEstimate) {
+                                proceduresFolderDays = daysEstimate - proceduresFolderDays;
+                            } else {
+                                isDelayClientFolder = true;
+                                proceduresFolderDays = proceduresFolderDays - daysEstimate;
+                            }
 
-                tramitsCLientFOlder.push(...clientFoldersWithDelaysForTramit);
+                            porcentageClientFolder[folder.name] = completionPercentage / (proceduresFolder?.length ?? 0);
+                            return {
+                                clientFolderName: folder.name,
+                                durationDays: daysEstimate,
+                                startDate: folder?.creationDate?.toString() ?? undefined,
+                                estimatedCompletionDate: folder?.creationDate && tramit.dayDuring?
+                                    calculateEstimatedDate(folder?.creationDate, tramit.dayDuring): undefined,
+                                completionDate: proceduresFolder?.[proceduresFolder.length - 1]?.endDate?.toString() ?? '',
+                                isCompleted: (proceduresFolder?.[proceduresFolder.length - 1]?.isComplete) ?? false,
+                                isDelay: isDelayClientFolder,
+                                delayOrSurplusDays: proceduresFolderDays,
+                            };
+                        }));
 
-                const newData : TramitReportsProps = {
-                    procedureName: tramit.name ?? "",
-                    procedureType: typeTramit?.name?? "",
-                    numberOfProcedures: numberdeProcedures?.length ?? 0,
-                    durationDays: tramit.dayDuring ?? 0,
-                    rows: tramitsCLientFOlder,
-                    porcentageClientFolder: porcentageClientFolder,
-                    porcentageTotal: completeClientFolder * 100  / clientFoldersForTramit.length,
+                    tramitsCLientFOlder.push(...clientFoldersWithDelaysForTramit);
+
+                    const newData : TramitReportsProps = {
+                        procedureName: tramit.name ?? "",
+                        procedureType: typeTramit?.name?? "",
+                        numberOfProcedures: numberdeProcedures?.length ?? 0,
+                        durationDays: tramit.dayDuring ?? 0,
+                        rows: tramitsCLientFOlder,
+                        porcentageClientFolder: porcentageClientFolder,
+                        porcentageTotal: completeClientFolder * 100  / clientFoldersForTramit.length,
+                    }
+
+                    setTramitsMetric((prevTramitsMetric) => [
+                        ...prevTramitsMetric,
+                        newData,
+                    ]);
                 }
-
-                setTramitsMetric((prevTramitsMetric) => [
-                    ...prevTramitsMetric,
-                    newData,
-                ]);
             }
 
             setTramitsByType(tramitsByTypeAccumulator);

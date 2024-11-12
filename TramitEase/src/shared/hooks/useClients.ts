@@ -6,7 +6,7 @@ import {
     getClientById,
     getClients,
     updateClient,
-    checkClientExists,
+    checkClientExists, getClientsByTramitadorId,
 } from '../services/client/clientService.ts';
 
 export const useClients = () => {
@@ -32,6 +32,23 @@ export const useClients = () => {
 
         fetchClients();
     }, []);
+
+    const fetchClientsByTramitadorId = async (tramitadorId: number) => {
+        try {
+            setLoading(true);
+            const data = await getClientsByTramitadorId(tramitadorId);
+            setClients(data);
+            return data;
+        } catch (err) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError('An unknown error occurred');
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const fetchClientById = async (id: string): Promise<Client | undefined> => {
         try {
@@ -105,5 +122,7 @@ export const useClients = () => {
         }
     };
 
-    return { clients, loading, error, fetchClientById, createNewClient, updateExistingClient, deleteExistingClient, checkClientExistsAndFetch };
+    return { clients, loading, error, fetchClientsByTramitadorId,
+        fetchClientById, createNewClient, updateExistingClient,
+        deleteExistingClient, checkClientExistsAndFetch };
 };

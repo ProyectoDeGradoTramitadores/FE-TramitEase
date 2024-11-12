@@ -11,7 +11,6 @@ const FolderClientsViewComponent: React.FC<FolderClientsViewComponentProps> = ({
                 flexWrap: 'wrap',
                 gap: '60px',
                 overflow: 'hidden',
-                justifyContent: 'space-between',
                 alignItems: 'center',
             }}
         >

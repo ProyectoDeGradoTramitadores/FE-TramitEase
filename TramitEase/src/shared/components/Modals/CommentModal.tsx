@@ -70,7 +70,7 @@ const CommentModal: React.FC<CommentModalProps> = ({ open, onClose, onSave }) =>
             {showTextField && (
                 <DialogActions>
                     <CustomButton
-                        color={"secondary"}
+                        color={"ternary"}
                         $textStyle={"bold"}
                         size={"s"}
                         $text={"Guardar"}

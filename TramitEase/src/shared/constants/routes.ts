@@ -32,10 +32,10 @@ export const IDS = () => {
     const { idProcedure } = useParams<{ idProcedure: string }>();
 
     return {
-        TRAMITADOR_ID: id || '',
-        CLIENT_ID: idClient || '',
-        TRAMIT_ID: idTramit || '',
-        PROCEDURE_ID: idProcedure || '',
-        CLIENT_FOLDER_ID: idClientFolder || '',
+        TRAMITADOR_ID: id ?? '',
+        CLIENT_ID: idClient ?? '',
+        TRAMIT_ID: idTramit ?? '',
+        PROCEDURE_ID: idProcedure ?? '',
+        CLIENT_FOLDER_ID: idClientFolder ?? '',
     };
 };

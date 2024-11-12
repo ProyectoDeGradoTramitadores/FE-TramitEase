@@ -16,6 +16,7 @@ const ReportsClientFolderPage: React.FC = () => {
     const labelsTramit = Object.keys(tramitsById);
     const dataChartTramit = Object.values(tramitsById);
 
+
     const uniqueTramitsMetric = Array.from(
         new Map(tramitsMetric.map((metric) => [metric.procedureName, metric])).values()
     );

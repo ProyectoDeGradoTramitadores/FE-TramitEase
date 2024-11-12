@@ -20,7 +20,7 @@ const UserProfile: React.FC = () => {
         };
 
         getTramitador();
-    }, [idTramitador, fetchTramitadorById]);
+    }, [idTramitador]);
 
     if (!tramitador) {
         return <div>Loading...</div>;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardContent, Typography } from '@mui/material';
-import { ClientCardProps } from '../../types/CardProps.tsx';
+import { ClientCardProps } from '../../types/CardProps.ts';
 
 const ClientCard: React.FC<ClientCardProps> = ({ numberFolder }) => {
     return (

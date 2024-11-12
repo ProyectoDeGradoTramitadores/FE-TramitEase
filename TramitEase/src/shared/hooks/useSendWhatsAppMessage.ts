@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {useState } from 'react';
 import { Message } from '../../entities/Message';
 import { SendMessageResponse } from '../../entities/SendMessageResponse';
 import { sendWhatsAppMessage } from '../services/twilio/TwilioService';
@@ -61,7 +61,6 @@ export const useSendWhatsAppMessage = (clientFolders: ClientFolder[]) => {
 
         const tramitador = await fetchTramitadorById(Number(idTramitador));
         try {
-            console.log("message");
             await Promise.all(clientFolders.map(async folder => {
                 if (folder.creationDate && !folder.endDate) {
                     const tramitClient = await fetchTramitById(folder.idTramit);
@@ -70,35 +69,35 @@ export const useSendWhatsAppMessage = (clientFolders: ClientFolder[]) => {
                     const daysEstimate = todayDate >= new Date(dateEstimate) ? daysDifference(new Date(dateEstimate), todayDate) :
                         daysDifference(todayDate, new Date(dateEstimate));
 
-                    for (const proc of procedures ?? []) {
+                    await Promise.all(procedures?.map(async proc => {
                         if (!proc.isComplete && proc.startDate) {
                             const procTramit = await fetchProcedureById(proc.idProcedure);
                             const dateEstimateProc = addDaysToDate(new Date(proc.startDate), procTramit?.dayDuring ?? 0);
-                            const daysUntilDue = todayDate >= new Date(dateEstimateProc) ?
-                                daysDifference(new Date(dateEstimateProc), todayDate) : daysDifference(todayDate, new Date(dateEstimateProc));
+                            const daysUntilDue = todayDate >= new Date(dateEstimateProc)
+                                ? daysDifference(new Date(dateEstimateProc), todayDate)
+                                : daysDifference(todayDate, new Date(dateEstimateProc));
+
                             if (todayDate <= new Date(dateEstimate) && daysEstimate <= daysBeforeDue && whatsAppNotifications) {
                                 const message: Message = {
-                                    to: tramitador?.phoneNumber?.replace(/\s+/g, '')  ?? '',
-                                    message: `Estimado cliente, su carpeta de cliente ${folder.name}
-                        vencerá en ${daysEstimate} días. En el procedimiento ${procTramit?.name ?? ''}
-                        con días de vencimiento de ${daysUntilDue} días.
-                        Por favor, tome las acciones necesarias.`,
+                                    to: tramitador?.phoneNumber?.replace(/\s+/g, '') ?? '',
+                                    message: `Estimado cliente, su carpeta de cliente ${folder.name} vencerá en ${daysEstimate} días. ` +
+                                        `En el procedimiento: ${procTramit?.name ?? ''} con días de vencimiento de ${daysUntilDue} días. ` +
+                                        `Por favor, tome las acciones necesarias.`
                                 };
                                 const result = await sendWhatsAppMessage(message);
                                 setResponse(result);
                             } else if (todayDate > new Date(dateEstimate) && notifyOnExpiry) {
                                 const message: Message = {
                                     to: tramitador?.phoneNumber?.replace(/\s+/g, '') ?? '',
-                                    message: `Estimado cliente, su carpeta de cliente ${folder.name} 
-                        venció hace ${daysEstimate} días. En el procedimiento ${procTramit?.name ?? ''}
-                        con vencimiento de ${daysUntilDue} días.
-                        Por favor, tome las acciones necesarias.`,
+                                    message: `Estimado cliente, su carpeta de cliente ${folder.name} venció hace ${daysEstimate} días. ` +
+                                        `En el procedimiento: ${procTramit?.name ?? ''} con vencimiento de ${daysUntilDue} días. ` +
+                                        `Por favor, tome las acciones necesarias.`
                                 };
                                 const result = await sendWhatsAppMessage(message);
                                 setResponse(result);
                             }
                         }
-                    }
+                    }) ?? []);
                 }
             }));
         } catch (err) {
@@ -112,10 +111,6 @@ export const useSendWhatsAppMessage = (clientFolders: ClientFolder[]) => {
             localStorage.setItem('lastRunDate', today);
         }
     };
-
-    useEffect(() => {
-        checkAndSendNotifications();
-    }, [clientFolders, whatsAppNotifications, notifyOnExpiry, daysBeforeDue]);
 
     return { sendMessage: checkAndSendNotifications, loading, error, response };
 };

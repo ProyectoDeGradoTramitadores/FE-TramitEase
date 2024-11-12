@@ -22,6 +22,10 @@ import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../shared/services/firebase/firebaseService.ts';
 import { useTramitadores } from '../../shared/hooks/useTramitadores.ts';
+import ClientsPage from '../../pages/clientsPage/ClientsPage.tsx';
+import ClientPage from '../../pages/clientsPage/ClientPage.tsx';
+import ClientFormCreatePage from '../../pages/clientsPage/ClientFormCreatePage.tsx';
+import ClientViewPage from '../../pages/clientsPage/ClientViewPage.tsx';
 
 const Layout: React.FC = () => (
     <>
@@ -67,6 +71,12 @@ const AppRoutes = () => (
                             </PrivateRoute>}>
                                 <Route path={"perfil"} element={<UserProfile/>} />
                                 <Route path={"reports"} element={<ReportsClientFolderPage/>} />
+                                <Route path={"clients"}  element={ <ClientsPage/>}/>
+                                <Route path="clients">
+                                    <Route path={"CreateClient"} element={<ClientFormCreatePage/>}/>
+                                    <Route path={":idClient/viewClient"} element={<ClientViewPage/>}/>
+                                </Route>
+                                <Route path={"clients/:idClient/client"}  element={<ClientPage/>}/>
                                 <Route path="ClientsFolder" element={<ClientsFolderPage />} />
                                 <Route path="ClientsFolder/ClientFolder/:idClientFolder" element={<ClientFolderPage />} />
                                 <Route path="Calendar" element={<CalendarPage />} />

@@ -1,13 +1,13 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import FormComponent from '../../shared/components/CreateClient/FormComponent.tsx';
-import TitleBreadCrumbs from '../../shared/components/CreateClient/TitleBreadCrumbs.tsx';
+import TitleBreadCrumbsFormClient from '../../shared/components/CreateClient/TitleBreadCrumbsFormClient.tsx';
 import CustomButton from '../../shared/components/buttons/CustomButton.tsx';
 import { emptyClient } from '../../shared/constants/ClientCreate.ts';
 import { useClients } from '../../shared/hooks/useClients';
 import { useNavigate, useParams } from 'react-router-dom';
 
-const CreateClientPage: React.FC = () => {
+const ClientFormCreatePage: React.FC = () => {
     const { createNewClient, updateExistingClient, checkClientExistsAndFetch } = useClients();
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
@@ -22,7 +22,7 @@ const CreateClientPage: React.FC = () => {
         } else {
             await createNewClient(emptyClient);
         }
-        navigate(`/TramitEase/Tramitador/${id}/CreateClientFolder/${emptyClient.idClient}/CreateFolder`);
+        navigate(`/TramitEase/Tramitador/${id}/clients`);
     };
 
     return (
@@ -30,12 +30,12 @@ const CreateClientPage: React.FC = () => {
             sx={{
                 backgroundColor: 'white',
                 padding: '269px 50px',
-                width: '1820px',
+                width: '1738px',
                 display: 'flex',
                 flexDirection: 'column',
             }}
         >
-            <TitleBreadCrumbs />
+            <TitleBreadCrumbsFormClient />
             <FormComponent />
             <Box
                 sx={{
@@ -45,7 +45,7 @@ const CreateClientPage: React.FC = () => {
                 }}
             >
                 <CustomButton
-                    $text={"Save Client"}
+                    $text={"Guardar Cliente"}
                     $textStyle={"bold"}
                     size={"s"}
                     color={"ternary"}
@@ -56,4 +56,4 @@ const CreateClientPage: React.FC = () => {
     );
 };
 
-export default CreateClientPage;
+export default ClientFormCreatePage;

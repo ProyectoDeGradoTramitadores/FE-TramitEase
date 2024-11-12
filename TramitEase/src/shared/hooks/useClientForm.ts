@@ -2,15 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useClients } from './useClients.ts';
 import { emptyClient, IsClientExist, setAddtionalInfo, setEmptyClient } from '../constants/ClientCreate.ts';
 import { Client } from '../../entities/Client.ts';
+import { useParams } from 'react-router-dom';
 
 export const useClientForm = () => {
     const [clientId, setClientId] = useState<string>('');
     const [clientData, setClientData] = useState<Client | null>(null);
-    const [additionalFields, setAdditionalFields] = useState<Array<{ id: number; label: string; value: string }>>([]);
+    const [additionalFields, setAdditionalFields] = useState<{ id: number; label: string; value: string }[]>([]);
     const { checkClientExistsAndFetch } = useClients();
+    const idTramitador = useParams<{ id: string }>();
 
     useEffect(() => {
-        if (clientData && clientData.additionalInfo) {
+        if (clientData?.additionalInfo) {
             try {
                 const additionalInfoObj = JSON.parse(clientData.additionalInfo.toString());
                 const fields = Object.entries(additionalInfoObj).map(([key, value]) => ({
@@ -37,12 +39,13 @@ export const useClientForm = () => {
 
         if (id) {
             const client = await checkClientExistsAndFetch(id);
-            if (client) {
+            if (client && client?.idTramitador == Number(idTramitador.id)) {
                 setClientData(client);
                 IsClientExist(true);
                 console.log(`Client with ID ${id} exists.`);
             } else {
                 emptyClient.idClient = id;
+                emptyClient.idTramitador = Number(idTramitador);
                 IsClientExist(false);
                 setClientData(emptyClient);
                 console.log(`Client with ID ${id} does not exist.`);
@@ -55,8 +58,8 @@ export const useClientForm = () => {
         }
     };
 
-    const updateEmptyClientAdditionalInfo = (fields: Array<{ id: number; label: string; value: string }>) => {
-        const additionalInfo: { [key: string]: any } = {};
+    const updateEmptyClientAdditionalInfo = (fields: { id: number; label: string; value: string }[]) => {
+        const additionalInfo: Record<string, any> = {};
         fields.forEach(field => {
             const [key, value] = field.value.split(": ");
             additionalInfo[key] = value;
