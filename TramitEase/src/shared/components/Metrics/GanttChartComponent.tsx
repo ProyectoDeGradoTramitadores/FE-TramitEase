@@ -53,7 +53,8 @@ const GanttChartComponent: React.FC<GanttChartComponentProps> = ({ title, tasks 
                             <Typography variant="body1">
                                 {task.name} ({duration > 0? duration : 1} días)
                                 <br />
-                                Inicio: {startDate}, Fin: {endDate}
+                                Inicio: {startDate != "Invalid Date"? startDate : "Procedimiento no iniciado"},
+                                Fin: {endDate != "Invalid Date"? endDate : "Procedimiento no iniciado"}
                             </Typography>
                             <div style={{ position: 'relative', height: '25px', width: '100%', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>
                                 <div

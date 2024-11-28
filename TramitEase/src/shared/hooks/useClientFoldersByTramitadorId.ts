@@ -36,13 +36,24 @@ export const useClientFoldersByTramitadorId = (tramitId: number) => {
                 const { folder: folderA, tramitData: tramitA } = a;
                 const { folder: folderB, tramitData: tramitB } = b;
 
+                console.log(folderB.name, folderA.name)
+
+                if (folderA.creationDate && folderA.endDate) return 1;
+                if (folderB.creationDate && folderB.endDate) return -1;
+
                 if (!folderA.creationDate || !tramitA?.dayDuring) return 1;
                 if (!folderB.creationDate || !tramitB?.dayDuring) return -1;
 
-                const expirationA = calculateEndDate(new Date(folderA.creationDate), tramitA.dayDuring).getTime();
-                const expirationB = calculateEndDate(new Date(folderB.creationDate), tramitB.dayDuring).getTime();
+                const expirationA = calculateEndDate(new Date(folderA.creationDate), tramitA.dayDuring);
+                const expirationB = calculateEndDate(new Date(folderB.creationDate), tramitB.dayDuring);
 
-                return expirationA - expirationB;
+                if (new Date() < new Date(expirationA) && expirationA < expirationB) return -1;
+                if (new Date() < new Date(expirationB) && expirationA > expirationB) return 1;
+
+                if (new Date() >= new Date(expirationA) && expirationA < expirationB) return -1;
+                if (new Date() >= new Date(expirationB) && expirationA > expirationB) return 1;
+
+                return 0;
             });
 
             return sortedClientFolders.map(result => result.folder);
@@ -74,7 +85,7 @@ export const useClientFoldersByTramitadorId = (tramitId: number) => {
 
     useEffect(() => {
         fetchAndFilterClientFolders();
-    }, [tramitId, clientFolders]);
+    },[tramitId, clientFolders]);
 
-    return { filteredClientFolders, loading, error, handleSearch, filteredFolders };
+    return { filteredClientFolders, loading, error, handleSearch, filteredFolders, calculateEndDate };
 };

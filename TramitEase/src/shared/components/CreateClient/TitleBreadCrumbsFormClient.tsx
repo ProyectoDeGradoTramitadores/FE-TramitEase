@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 
 const TItleBreadCrumbs: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const ref = `/TramitEase/Tramitador/${id}/clients`
+    const ref = `/Tramitador/${id}/clients`
 
     const breadcrumbs = [
         <LinkCustom key="1" text={"Clientes"} linkRef={ref} />,

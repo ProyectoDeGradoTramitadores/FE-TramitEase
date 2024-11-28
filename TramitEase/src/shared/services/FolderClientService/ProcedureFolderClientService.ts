@@ -2,7 +2,7 @@ import axios from 'axios';
 import { ProcedureFolderClient } from '../../../entities/ProcedureFolderClient.ts';
 
 const api = axios.create({
-    baseURL: 'http://localhost:5137/api/ProcedureFolderClient'
+    baseURL: `${import.meta.env.VITE_BACKEND_URL}/ProcedureFolderClient`
 });
 
 export const getProcedureFolderClientById = async (id: number): Promise<ProcedureFolderClient> => {

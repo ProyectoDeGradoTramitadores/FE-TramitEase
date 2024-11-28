@@ -25,7 +25,7 @@ const ProcedureItemFormulary: React.FC<ProcedureItemFormularyProps> = ({ procedu
     const handleRemoveStep = async (stepIndex: number) => {
         const stepToRemove = procedure?.steps[stepIndex];
         try {
-            if (stepToRemove != null && stepToRemove.idStepProcedure) {
+            if (stepToRemove?.idStepProcedure) {
                 await deleteExistingStepProcedure(stepToRemove.idStepProcedure);
             }
             if(procedure != null && onChange !== undefined) {

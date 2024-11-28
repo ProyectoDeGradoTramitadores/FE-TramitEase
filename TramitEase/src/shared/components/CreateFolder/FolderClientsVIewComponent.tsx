@@ -19,7 +19,7 @@ const FolderClientsViewComponent: React.FC<FolderClientsViewComponentProps> = ({
                     key={folder.idClientFolder}
                     folderName={folder.name}
                     onClick={() => onFolderClick(folder.idClientFolder ?? 0)}
-                />
+                    idClientFolder={folder.idClientFolder} />
             ))}
         </Box>
     );

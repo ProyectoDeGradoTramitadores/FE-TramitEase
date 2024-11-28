@@ -14,7 +14,7 @@ const ClientFolderEmptyPage: React.FC= () => {
 
     const navigateToCreateClientFolder = () => {
         if (id) {
-            window.location.href = `/TramitEase/Tramitador/${id}/CreateClientFolder/CreateClient`;
+            window.location.href = `/Tramitador/${id}/CreateClientFolder/CreateClient`;
         }
     };
 

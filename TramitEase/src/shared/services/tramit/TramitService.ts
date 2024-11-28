@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Tramit } from '../../../entities/Tramit.ts';
 
 const api = axios.create({
-    baseURL: 'http://localhost:5137/api'
+    baseURL: import.meta.env.VITE_BACKEND_URL
 });
 
 export const getTramits = async (): Promise<Tramit[]> => {

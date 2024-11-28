@@ -259,7 +259,6 @@ export const useMetricsClientFolder = () => {
             const stepPro = await fetchStepProcedureById(step.idStepProcedure);
             const estimatedDay = calculateEndDate(step?.startDate?.toString() ?? '',
                 stepPro?.dayDuring ?? 0);
-
             const newStepMetric: stepTableProps = {
                 idStep: step.idStepProcedure,
                 nameStep: stepPro?.nameStep ?? '',
@@ -267,12 +266,13 @@ export const useMetricsClientFolder = () => {
                 endDate: step.endDate?.toString() ?? '',
                 estimateDate: estimatedDay.toString(),
                 completeStep: step.isComplete,
-                ...(step.endDate && { delayStep: new Date(step.endDate) > new Date(estimatedDay) }),
-                daysDelayOrOnTime: step.endDate ? new Date(step.endDate) > new Date(estimatedDay) ?
+                delayStep: (step.endDate ? new Date(step.endDate) : new Date()) > new Date(estimatedDay),
+                daysDelayOrOnTime: step.endDate? new Date(step.endDate) > new Date(estimatedDay) ?
                     calculateDaysDelay(new Date(step.endDate), new Date(estimatedDay)) :
                     new Date(step.endDate) < new Date(estimatedDay) ?
                         calculateDaysDelay(new Date(estimatedDay), new Date(step.endDate)) :
-                        0 : 0,
+                        0 : new Date(estimatedDay) > new Date() ?
+                    calculateDaysDelay(new Date(estimatedDay), new Date()) : calculateDaysDelay(new Date(), new Date(estimatedDay)),
             };
 
             newMetricStep.push(newStepMetric);

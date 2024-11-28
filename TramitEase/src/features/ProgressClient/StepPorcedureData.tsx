@@ -17,12 +17,14 @@ const StepProcedureData: React.FC<ProcedureStepDataProps> = ({
             <Typography variant="body1">
                 Requerimientos: {requeriments ?? 'No requeriments available'}
             </Typography>
-            <Typography variant="body1">Día de Inicio: {startDate}</Typography>
+            <Typography variant="body1">Día de Inicio:
+                {startDate && startDate !== "" ? startDate : "Todavía no se inicializo el paso"}</Typography>
             <Typography variant="body1">
-                Día de Finalización: {endDate}
+                Día de Finalización: {endDate? endDate : (startDate? "Paso en progreso" :
+                "Todavía no se inicializo el paso")}
             </Typography>
             <Typography variant="body1">
-                Día estimado de Finalización: {estimate}
+                Día estimado de Finalización: {estimate && estimate != "N/A" ? estimate : "Todavía no se inicializo el paso"}
             </Typography>
             <Typography variant="body1">
                 Días de Duración: {dayDuRING ?? 0} days

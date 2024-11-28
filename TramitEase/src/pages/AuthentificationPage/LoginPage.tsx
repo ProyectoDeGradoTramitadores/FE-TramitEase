@@ -36,7 +36,7 @@ const LoginPage: React.FC = () => {
 
 
     return (
-        <Grid container style={{ minHeight: '926px', backgroundColor: '#323232', minWidth: "1838px" }}>
+        <Grid container style={{ minHeight: '957px', backgroundColor: '#323232', minWidth: "1838px" }}>
             <Grid item xs={6} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '20px' }}>
                 <Typography variant="h4" style={{ color: 'white' }}>Hola,</Typography>
                 <Typography variant="h2" style={{ fontWeight: 'bold', color: '#fa8a38' }}>
@@ -102,7 +102,7 @@ const LoginPage: React.FC = () => {
                     <Box display="flex" gap={30} justifyContent="space-between" marginTop={2} width="100%">
                         <CustomButton size={"xs"} color={"primary"} $text={"Ingresar"} $textStyle={"normal"} onClick={handleLogin} />
                         <CustomButton size={"xs"} color={"ternary"} $text={"Registrarse"}
-                                      $textStyle={"normal"} onClick={() => navigate('/TramitEase/Register')} />
+                                      $textStyle={"normal"} onClick={() => navigate('/Register')} />
                     </Box>
                 </Box>
             </Grid>

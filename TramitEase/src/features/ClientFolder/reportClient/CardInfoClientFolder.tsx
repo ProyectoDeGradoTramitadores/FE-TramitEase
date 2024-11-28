@@ -17,7 +17,7 @@ const CardInfoClientFolder: React.FC<CardReportProps> = ({ nameFolder, creationD
                 </Box>
                 <Typography>Fecha de Inicio: {creationDate}</Typography>
                 <Typography>Fecha de Finalización: {endProcedure ?? 'x'}</Typography>
-                <Typography>Fecha de Finalizacion Estimada: {estimateDate}</Typography>
+                <Typography>Fecha de Finalizacion Estimada: {estimateDate?? ""}</Typography>
                 <Typography>
                     Estado:
                     {completeTramit ? ' Completado' : ' En progreso'}
@@ -31,7 +31,7 @@ const CardInfoClientFolder: React.FC<CardReportProps> = ({ nameFolder, creationD
                 {delayTramit && daysDelay && daysDelay > 0 && (
                     <Typography>Días de Retraso: {daysDelay} días</Typography>
                 )}
-                {daysOnTime && daysOnTime > 0 && (
+                {delayTramit && daysOnTime && daysOnTime > 0 && (
                     <Typography>Días que sobraron para el vencimiento: {daysOnTime} días</Typography>
                 )}
             </CardContent>

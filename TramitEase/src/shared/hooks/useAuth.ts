@@ -15,8 +15,9 @@ const useAuth = () => {
     const handleLogin = async () => {
         try {
             const user = await signInWithEmail(email, password);
-            const tramitador = tramitadores.find(t => t.email === user.email);
-            navigate(`/TramitEase/Tramitador/${tramitador?.idTramitador ?? 0}/ClientsFolder`);
+            const tramitador = tramitadores.find(t =>
+                t.email?.trim().toLowerCase() === user.email?.trim().toLowerCase());
+            navigate(`/Tramitador/${tramitador?.idTramitador ?? 0}/ClientsFolder`);
         } catch (error) {
             console.error("Login error:", error);
             setError("Error: No se pudo iniciar sesión. Verifica tus credenciales e intenta de nuevo.");
@@ -28,7 +29,7 @@ const useAuth = () => {
             const user = await signInWithGoogle();
             const tramitador = tramitadores.find(t => t.email === user.email);
             if(tramitador){
-                navigate(`/TramitEase/Tramitador/${tramitador?.idTramitador}/ClientsFolder`);
+                navigate(`/Tramitador/${tramitador?.idTramitador}/ClientsFolder`);
             }else{
                 const tramitaodrnew = await createNewTramitador({
                     idTramitador: 0,
@@ -36,7 +37,7 @@ const useAuth = () => {
                     phoneNumber: user.phoneNumber?? "",
                     email: user.email ?? "",
                 });
-                navigate(`/TramitEase/Tramitador/${tramitaodrnew?.idTramitador}/ClientsFolder`);
+                navigate(`/Tramitador/${tramitaodrnew?.idTramitador}/ClientsFolder`);
             }
         } catch (error) {
             console.error("Google login error:", error);

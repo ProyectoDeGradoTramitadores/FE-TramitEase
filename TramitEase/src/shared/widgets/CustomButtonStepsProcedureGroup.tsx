@@ -79,9 +79,9 @@ const CustomButtonWithMenu: React.FC<CustomButtonStepsGroupProps> = ({ idProcedu
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
             >
-                <MenuItem onClick={() => navigate(`/TramitEase/Tramitador/${id}/Custom/TramitsCustom/ProcedureEditPage/${idProcedure}`)}>Editar</MenuItem>
+                <MenuItem onClick={() => navigate(`/Tramitador/${id}/Custom/TramitsCustom/ProcedureEditPage/${idProcedure}`)}>Editar</MenuItem>
                 <MenuItem onClick={handleDelete}>Eliminar</MenuItem>
-                <MenuItem onClick={() => navigate(`/TramitEase/Tramitador/${id}/Custom/TramitsCustom`)}>Salir</MenuItem>
+                <MenuItem onClick={() => navigate(`/Tramitador/${id}/Custom/TramitsCustom`)}>Salir</MenuItem>
             </Menu>
 
             <Modal

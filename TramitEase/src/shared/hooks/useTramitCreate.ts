@@ -14,6 +14,7 @@ import { SelectChangeEvent } from '@mui/material';
 
 const useTramitCreate = () => {
     const [procedures, setProcedures] = useState<ProcedureForm[]>([]);
+    const [procedureTramitador, setProcedureTramitador] = useState<Procedure[]>([]);
     const [tramitId, setTramitId] = useState<string>('');
     const [name, setName] = useState<string>('');
     const [isExistingProcedure, setIsExistingProcedure] = useState(false);
@@ -30,48 +31,60 @@ const useTramitCreate = () => {
     const { createNewTramitProcedure, fetchTramitProceduresByTramitId } = useTramitProcedures();
     const { createNewStepProcedure, fetchStepProceduresByProcedureId,
         updateExistingStepProcedure } = useStepProcedures();
-    const { fetchProceduresByTramitadorId, procedures: tramitadorProcedures,
-        loading, createNewProcedure, updateExistingProcedure } = useProcedures();
+    const { fetchProceduresByTramitadorId,
+        loading, createNewProcedure, updateExistingProcedure, fetchProcedureById } = useProcedures();
 
     useEffect(() => {
-        if (idTramit !== '' && idTramit) {
-            fetchTramitById(parseInt(idTramit)).then((tramit) => {
-                if (tramit) {
-                    setExistingTramit(tramit);
-                    setTramitId(tramit.idTramit.toString());
-                    setName(tramit?.name || '');
-                    setSelectedType(tramit.idTypeTramit.toString());
-                    fetchTramitProceduresByTramitId(tramit.idTramit).then(tramitProcedures => {
-                        const procedurePromises = (tramitProcedures || []).map(async (tramitProcedure) => {
-                            const procedure = tramitadorProcedures.find(p => p.idProcedure === tramitProcedure.idProcedure);
-                            if (procedure) {
-                                const steps = await fetchStepProceduresByProcedureId(procedure.idProcedure);
-                                const mappedSteps: Step[] = (steps || []).map((step) => ({
+        const fetchData = async () => {
+            if (idTramit !== '' && idTramit) {
+                try {
+                    const tramit = await fetchTramitById(parseInt(idTramit));
+                    if (tramit) {
+                        setExistingTramit(tramit);
+                        setTramitId(tramit.idTramit.toString());
+                        setName(tramit?.name ?? '');
+                        setSelectedType(tramit.idTypeTramit.toString());
+
+                        const tramitProcedures = await fetchTramitProceduresByTramitId(tramit.idTramit);
+                        const procedurePromises = (tramitProcedures ?? []).map(async (tramitProcedure) => {
+                            if (tramitProcedure) {
+                                const procedure = await fetchProcedureById(tramitProcedure.idProcedure)
+                                const steps = await fetchStepProceduresByProcedureId(tramitProcedure.idProcedure);
+                                const mappedSteps: Step[] = (steps ?? []).map((step) => ({
                                     idStepProcedure: step.idProcedure,
-                                    name: step?.nameStep || '',
-                                    requirements: step?.requirements || '',
+                                    name: step?.nameStep ?? '',
+                                    requirements: step?.requirements ?? '',
                                     days: typeof step?.dayDuring === 'number' ? step.dayDuring : Number(step?.dayDuring) || 0,
                                 }));
 
                                 return {
-                                    name: procedure.name || '',
-                                    description: procedure.description || '',
+                                    id: procedure?.idProcedure,
+                                    name: procedure?.name ?? '',
+                                    description: procedure?.description ?? 'No tiene descripcion',
                                     steps: mappedSteps
                                 };
                             }
                             return null;
                         });
 
-                        Promise.all(procedurePromises).then(results => {
-                            setProcedures(results.filter(p => p !== null) as ProcedureForm[]);
-                        });
-                    });
+                        const results = await Promise.all(procedurePromises);
+                        setProcedures(results.filter(p => p !== null) as ProcedureForm[]);
+                    }
+                } catch (error) {
+                    console.error("Error fetching tramit or its procedures:", error);
                 }
-            });
-        } else {
-            fetchProceduresByTramitadorId(parseInt(id));
-        }
-    }, [idTramit, tramitadorProcedures]);
+            }
+
+            try {
+                const procedures = await fetchProceduresByTramitadorId(parseInt(id));
+                setProcedureTramitador(procedures ?? []);
+            } catch (error) {
+                console.error("Error fetching procedures by tramitador ID:", error);
+            }
+        };
+
+        fetchData();
+    }, [idTramit]);
 
     const handleOpenModal = () => {
         setOpenModal(true);
@@ -97,21 +110,21 @@ const useTramitCreate = () => {
         const procedureId = event.target.value as number;
         setselectedProcedure(procedureId);
 
-        const selectedProc = tramitadorProcedures.find(p => p.idProcedure === procedureId);
+        const selectedProc = procedureTramitador.find(p => p.idProcedure === procedureId);
 
         const steps = await fetchStepProceduresByProcedureId(procedureId);
 
         const mappedSteps: Step[] = steps?.map((step) => ({
-            idStepProcedure: step.idProcedure,
-            name: step?.nameStep || '',
-            requirements: step?.requirements || '',
+            idStepProcedure: step.idStepProcedure,
+            name: step?.nameStep ?? '',
+            requirements: step?.requirements ?? '',
             days: typeof step?.dayDuring === 'number' ? step.dayDuring : Number(step?.dayDuring) || 0,
-        })) || [];
+        })) ?? [];
 
         const procedureForm: ProcedureForm = {
-            id: selectedProc?.idProcedure || 0,
-            name: selectedProc?.name || '',
-            description: selectedProc?.description || '',
+            id: selectedProc?.idProcedure ?? 0,
+            name: selectedProc?.name ?? '',
+            description: selectedProc?.description ?? '',
             steps: mappedSteps
         };
 
@@ -140,18 +153,19 @@ const useTramitCreate = () => {
     };
 
     const handleSubmit = async () => {
+        let dayStepProcedure;
         try {
-            var days = 0;
+            let days = 0;
 
             const newTramit: Tramit = {
                 idTramit: parseInt(tramitId) || 0,
                 idTypeTramit: parseInt(selectedType),
                 idTramitador: parseInt(id),
                 name: name,
-                dayDuring: existingTramit?.dayDuring || 0,
+                dayDuring: existingTramit?.dayDuring ?? 0,
             };
 
-            var tramitNewCreate;
+            let tramitNewCreate;
 
             if (existingTramit) {
                 tramitNewCreate = await updateExistingTramit(newTramit.idTramit, newTramit);
@@ -164,12 +178,12 @@ const useTramitCreate = () => {
                     if(procedure.id){
                         const exampleTramitProcedure: TramitProcedure = {
                             idTramitProcedure: 0,
-                            idTramit: tramitNewCreate?.idTramit || 0,
-                            idProcedure: procedure.id|| 0
+                            idTramit: tramitNewCreate?.idTramit ?? 0,
+                            idProcedure: procedure.id ?? 0
                         };
 
                         await createNewTramitProcedure(exampleTramitProcedure);
-                        var dayStepProcedure = 0;
+                        dayStepProcedure = 0;
 
                         for (const step of procedure.steps) {
                             if (step.idStepProcedure) {
@@ -216,14 +230,14 @@ const useTramitCreate = () => {
                             dayDuring: 0,
                         };
 
-                        var dayStepProcedure = 0;
+                        dayStepProcedure = 0;
 
                         const procedureCreate = await createNewProcedure(newProcedure);
 
                         const exampleTramitProcedure: TramitProcedure = {
                             idTramitProcedure: 0,
-                            idTramit: tramitNewCreate?.idTramit || 0,
-                            idProcedure: procedureCreate?.idProcedure || 0
+                            idTramit: tramitNewCreate?.idTramit ?? 0,
+                            idProcedure: procedureCreate?.idProcedure ?? 0
                         };
 
                         await createNewTramitProcedure(exampleTramitProcedure);
@@ -232,7 +246,7 @@ const useTramitCreate = () => {
                             for (const step of procedure.steps) {
                                 const createStepProcedure: StepProcedure = {
                                     idStepProcedure: 0,
-                                    idProcedure: procedureCreate?.idProcedure || 0,
+                                    idProcedure: procedureCreate?.idProcedure ?? 0,
                                     nameStep: step.name,
                                     requirements: step.requirements,
                                     dayDuring: step.days
@@ -241,8 +255,8 @@ const useTramitCreate = () => {
                                 dayStepProcedure += step.days;
                                 days += step.days;
                             }
-                            await updateExistingProcedure((procedureCreate?.idProcedure || 0) , {
-                                idProcedure: procedureCreate?.idProcedure || 0,
+                            await updateExistingProcedure((procedureCreate?.idProcedure ?? 0) , {
+                                idProcedure: procedureCreate?.idProcedure ?? 0,
                                 name: procedureCreate?.name,
                                 description: procedureCreate?.description,
                                 idTramitador: parseInt(id),
@@ -250,13 +264,11 @@ const useTramitCreate = () => {
                             } as Procedure);
                         }
                     }
-                    await updateExistingTramit( (tramitNewCreate?.idTramit || 0), {
-                        idTramit: tramitNewCreate?.idTramit || 0,
-                        idTypeTramit: tramitNewCreate?.idTypeTramit,
-                        idTramitador: tramitNewCreate?.idTramitador,
-                        name: tramitNewCreate?.name,
+                    await updateExistingTramit( (tramitNewCreate?.idTramit ?? newTramit.idTramit), {
+                        ...newTramit,
+                        idTramit: tramitNewCreate?.idTramit ?? newTramit.idTramit,
                         dayDuring: days,
-                    } as Tramit);
+                    });
                 }
             }
             navigate(ROUTES.TRAMITS_CUSTOM(id));
@@ -275,7 +287,7 @@ const useTramitCreate = () => {
         openSelectModal,
         loading,
         selectedProcedure: selectedProcedure,
-        tramitadorProcedures,
+        procedureTramitador,
         isExistingProcedure,
         handleOpenModal,
         handleCloseModal,

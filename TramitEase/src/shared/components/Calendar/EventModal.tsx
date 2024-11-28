@@ -4,7 +4,7 @@ import { formatDate } from '@fullcalendar/core';
 import { EventModalProps } from '../../types/CalendarProps.ts';
 import CustomButton from '../buttons/CustomButton.tsx';
 
-const EventModal: React.FC<EventModalProps> = ({ open, event, onClose, redirectTo }) => {
+const EventModal: React.FC<EventModalProps> = ({ open, event, onClose, redirectTo, complete }) => {
     return (
         <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth PaperProps={{ style: { borderRadius: 5 } }}>
             <DialogTitle>Carpeta del Cliente</DialogTitle>
@@ -13,10 +13,22 @@ const EventModal: React.FC<EventModalProps> = ({ open, event, onClose, redirectT
                     <div>
                         <Typography variant="h6">{event.title}</Typography>
                         <Typography>
-                            <strong>Dia de Inicio:</strong> {formatDate(event.start!, { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' })}
+                            <strong>Dia de Inicio: </strong> {formatDate(event.start!, { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' })}
                         </Typography>
                         <Typography>
-                            <strong>Dia de FInalizacion o Dia estimado de finalizacion:</strong> {formatDate(event.end!, { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' })}
+                            <strong>
+                                {complete ? 'Día de Finalización: ' : 'Día Estimado de Finalización: '}
+                            </strong>
+                            {formatDate(event.end!, {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric',
+                                hour: 'numeric',
+                                minute: 'numeric',
+                            })}
+                        </Typography>
+                        <Typography>
+                            <strong>Estado de la carpeta del cliente: </strong>{complete? "Completado" : "En progreso"}
                         </Typography>
                     </div>
                 )}

@@ -4,7 +4,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import { ClientCardViewProps } from '../../types/CardProps.ts';
 import { useNavigate } from 'react-router-dom';
 
-const CardClientView: React.FC<ClientCardViewProps> = ({ name, ci, keyClient }) => {
+const CardClientView: React.FC<ClientCardViewProps> = ({ name, ci, keyClient, lastName }) => {
     const navigate = useNavigate();
 
     const handleCardClick = () => {
@@ -26,7 +26,7 @@ const CardClientView: React.FC<ClientCardViewProps> = ({ name, ci, keyClient }) 
             </Box>
             <CardContent>
                 <Typography variant="h5" color="#fffcfc">
-                    {name}
+                    {name} {lastName}
                 </Typography>
                 <Typography variant="body1" color="#fffcfc">
                     CI: {ci}

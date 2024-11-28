@@ -34,9 +34,11 @@ const useProgressClientLogic = (idClientFolder: string | number) => {
     const handleSaveComment = async (comment: string) => {
 
         if(newDataStep){
-            await updateExistingStepProcedureFolderClient(newDataStep.idStepProcedureFolderClient, {...newDataStep, commentsDelay: comment})
-            console.log('Comentario guardado:', newDataStep);
+            await updateExistingStepProcedureFolderClient(newDataStep.idStepProcedureFolderClient, {...newDataStep, comments: comment})
         }
+
+        fetchData()
+        fetchProcedureNames()
 
         setOpenModal(false);
     };
@@ -57,19 +59,20 @@ const useProgressClientLogic = (idClientFolder: string | number) => {
         }
     };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await fetchProcedureFolderClientsByClientFolderId(Number(idClientFolder || ''));
-                const sortedProceduresClient = data?.sort((a, b) =>
-                    a.idProcedureFolderClient - b.idProcedureFolderClient
-                );
-                setProceduresClient(sortedProceduresClient ?? []);
-            } catch (err) {
-                console.error('Error fetching data:', err);
-            }
-        };
+    const fetchData = async () => {
+        try {
+            const data = await fetchProcedureFolderClientsByClientFolderId(Number(idClientFolder || ''));
+            const sortedProceduresClient = data?.sort((a, b) =>
+                a.idProcedureFolderClient - b.idProcedureFolderClient
+            );
+            setProceduresClient(sortedProceduresClient ?? []);
 
+        } catch (err) {
+            console.error('Error fetching data:', err);
+        }
+    };
+
+    useEffect(() => {
         if (idClientFolder) {
             fetchData();
         }
@@ -98,81 +101,80 @@ const useProgressClientLogic = (idClientFolder: string | number) => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
 
-    useEffect(() => {
-        const fetchProcedureNames = async () => {
-            if (proceduresClient.length > 0) {
-                proceduresClient?.sort((a, b) => (a.idProcedureFolderClient ?? 0) - (b.idProcedureFolderClient ?? 0));
-
-                try {
-                    const details: ProcedureClient[] = await Promise.all(
-                        proceduresClient.map(async (procedureClient, index) => {
-                            const procedure = await fetchProcedureById(procedureClient.idProcedure);
-                            const estimatedDate = calculateEstimatedDate(
-                                procedureClient?.startDate ?? '',
-                                procedure?.dayDuring ?? 0
-                            );
+    const fetchProcedureNames = async () => {
+        if (proceduresClient.length > 0) {
+            proceduresClient?.sort((a, b) => (a.idProcedureFolderClient ?? 0) - (b.idProcedureFolderClient ?? 0));
+            try {
+                const details: ProcedureClient[] = await Promise.all(
+                    proceduresClient.map(async (procedureClient, index) => {
+                        const procedure = await fetchProcedureById(procedureClient.idProcedure);
+                        const estimatedDate = calculateEstimatedDate(
+                            procedureClient?.startDate ?? '',
+                            procedure?.dayDuring ?? 0
+                        );
 
 
-                            const stepsProcedu = await fetchStepProcedureFolderClientsByProcedureFolderClientId(
-                                procedureClient?.idProcedureFolderClient
-                            );
+                        const stepsProcedu = await fetchStepProcedureFolderClientsByProcedureFolderClientId(
+                            procedureClient?.idProcedureFolderClient
+                        );
 
-                            stepsProcedu?.sort((a, b) => (a.idStepProcedureFolderClient ?? 0) - (b.idStepProcedureFolderClient ?? 0));
+                        stepsProcedu?.sort((a, b) => (a.idStepProcedureFolderClient ?? 0) - (b.idStepProcedureFolderClient ?? 0));
 
-                            if(index == 0 && stepsProcedu){
-                                setStepProcedureFirst(stepsProcedu[0]);
-                            }
+                        if(index == 0 && stepsProcedu){
+                            setStepProcedureFirst(stepsProcedu[0]);
+                        }
 
-                            const detailsStep: ProcedureStepData[] = await Promise.all(
-                                (stepsProcedu ?? []).map(async (stepProc) => {
-                                    const procStep = await fetchStepProcedureById(stepProc.idStepProcedure);
+                        const detailsStep: ProcedureStepData[] = await Promise.all(
+                            (stepsProcedu ?? []).map(async (stepProc) => {
+                                const procStep = await fetchStepProcedureById(stepProc.idStepProcedure);
 
-                                    const estimatedDateStep = calculateEstimatedDate(
-                                        stepProc?.startDate ?? '',
-                                        procStep?.dayDuring ?? 0
-                                    );
-                                    return {
-                                        idStepProc: String(stepProc.idStepProcedureFolderClient),
-                                        idProcedure: String(stepProc.idProcedureFolderClient),
-                                        idStep: String(stepProc.idStepProcedure),
-                                        name: procStep?.nameStep,
-                                        requirements: procStep?.requirements,
-                                        startDate: stepProc?.startDate?.toString(),
-                                        endDate: stepProc?.endDate?.toString(),
-                                        estimate: estimatedDateStep,
-                                        dayDuring: procStep?.dayDuring,
-                                        isComplete: stepProc.isComplete,
-                                        commentsDelay: stepProc.commentsDelay,
-                                    };
-                                })
-                            );
-                            detailsStep.sort((a, b) => Number(a.idStep) - Number(b.idStep));
-                            setStepProcedures((prevMap) => {
-                                const newMap = new Map(prevMap);
-                                newMap.set(procedureClient.idProcedureFolderClient, detailsStep);
-                                return newMap;
-                            });
-                            return {
-                                id: procedureClient.idProcedureFolderClient,
-                                name: procedure?.name ?? '',
-                                description: procedure?.description ?? '',
-                                startDate: procedureClient?.startDate?.toString() ?? 'N/A',
-                                endDate: procedureClient.endDate?.toString() ?? 'N/A',
-                                estimatedDate: estimatedDate,
-                                durationDays: procedure?.dayDuring ?? 0,
-                                status: procedureClient?.isComplete ? 'Completado' : 'En progreso',
-                            };
-                        })
-                    );
-                    details.sort((a, b) => a.id - b.id);
-                    setProcedureNames(details.map((detail) => detail.name));
-                    setProcedureDetails(details);
-                } catch (err) {
-                    console.error('Error fetching procedure names:', err);
-                }
+                                const estimatedDateStep = calculateEstimatedDate(
+                                    stepProc?.startDate ?? '',
+                                    procStep?.dayDuring ?? 0
+                                );
+                                return {
+                                    idStepProc: String(stepProc.idStepProcedureFolderClient),
+                                    idProcedure: String(stepProc.idProcedureFolderClient),
+                                    idStep: String(stepProc.idStepProcedure),
+                                    name: procStep?.nameStep,
+                                    requirements: procStep?.requirements,
+                                    startDate: stepProc?.startDate?.toString(),
+                                    endDate: stepProc?.endDate?.toString(),
+                                    estimate: estimatedDateStep,
+                                    dayDuring: procStep?.dayDuring,
+                                    isComplete: stepProc.isComplete,
+                                    commentsDelay: stepProc.comments,
+                                };
+                            })
+                        );
+                        detailsStep.sort((a, b) => Number(a.idStep) - Number(b.idStep));
+                        setStepProcedures((prevMap) => {
+                            const newMap = new Map(prevMap);
+                            newMap.set(procedureClient.idProcedureFolderClient, detailsStep);
+                            return newMap;
+                        });
+                        return {
+                            id: procedureClient.idProcedureFolderClient,
+                            name: procedure?.name ?? '',
+                            description: procedure?.description ?? '',
+                            startDate: procedureClient?.startDate?.toString() ?? 'N/A',
+                            endDate: procedureClient.endDate?.toString() ?? 'N/A',
+                            estimatedDate: estimatedDate,
+                            durationDays: procedure?.dayDuring ?? 0,
+                            status: procedureClient?.isComplete ? 'Completado' : 'En progreso',
+                        };
+                    })
+                );
+                details.sort((a, b) => a.id - b.id);
+                setProcedureNames(details.map((detail) => detail.name));
+                setProcedureDetails(details);
+            } catch (err) {
+                console.error('Error fetching procedure names:', err);
             }
-        };
+        }
+    };
 
+    useEffect(() => {
         if (proceduresClient.length > 0) {
             fetchProcedureNames();
         }
@@ -181,7 +183,6 @@ const useProgressClientLogic = (idClientFolder: string | number) => {
     useEffect(() => {
         const setInitialSteps = () => {
             for (let i = 0; i < procedureDetails.length; i++) {
-                console.log(procedureDetails);
                 if(procedureDetails.length - 1 == i && procedureDetails[i].status === 'Completado'){
                     setActiveStep(i);
                 }
@@ -218,6 +219,7 @@ const useProgressClientLogic = (idClientFolder: string | number) => {
             const currentProcedureSteps = stepProcedures.get(procedureDetails[activeStep].id) ?? [];
             const stepIndex = currentProcedureSteps.findIndex(step => Number(step.idStepProc) === stepId);
             const currentStep = currentProcedureSteps[stepIndex];
+
             const newData: StepProcedureFolderClient = {
                 idStepProcedureFolderClient: Number(currentStep.idStepProc),
                 idProcedureFolderClient: Number(currentStep.idProcedure),
@@ -229,7 +231,9 @@ const useProgressClientLogic = (idClientFolder: string | number) => {
 
             setNewData(newData);
 
+
             await updateExistingStepProcedureFolderClient(Number(currentStep.idStepProc), newData);
+            console.log(newData, "new data updated");
 
             if((stepIndex + 1) < currentProcedureSteps.length) {
                 const currentSte = currentProcedureSteps[stepIndex + 1];
@@ -332,25 +336,19 @@ const useProgressClientLogic = (idClientFolder: string | number) => {
                     setActiveStepProcedure(0);
 
                 }
-
-                if(stepProcedureFirst){
-                    await updateExistingStepProcedureFolderClient((stepProcedureFirst?.idStepProcedureFolderClient) ?? 0,
-                        {
-                            ...stepProcedureFirst,
-                            startDate: new Date()
-                        }
-                    );
-                }
             }else {
                 handleNextProcedure();
-            }
-
-            if(newStatus){
-                setOpenModal(true);
             }
         } catch (err) {
             console.error('Error changing status:', err);
         }
+
+        if(newStatus){
+            setOpenModal(true);
+        }
+
+        fetchData()
+        fetchProcedureNames()
     };
 
     const handleCheckboxChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -367,13 +365,14 @@ const useProgressClientLogic = (idClientFolder: string | number) => {
                 await updateExistingProcedureFolderClient(proceduresClient[0].idProcedureFolderClient,
                     {...proceduresClient[0], startDate: new Date()});
 
-                if(stepProcedureFirst){
+                if(stepProcedureFirst && !stepProcedureFirst.startDate){
+                    stepProcedureFirst.startDate = new Date();
+
                     await updateExistingStepProcedureFolderClient((stepProcedureFirst?.idStepProcedureFolderClient) ?? 0,
-                        {
-                            ...stepProcedureFirst,
-                            startDate: new Date()
-                        }
+                        stepProcedureFirst
                     );
+                    fetchData()
+                    fetchProcedureNames()
                 }
             }
         }

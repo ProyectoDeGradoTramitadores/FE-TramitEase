@@ -3,7 +3,7 @@ import ComponentCalendar from '../../shared/components/Calendar/ComponentCalenda
 
 const CalendarPage: React.FC = () => {
     return (
-        <div style={{ backgroundColor: 'white', minHeight: '100vh', padding: '0 20px 0 0' }}>
+        <div style={{ backgroundColor: 'white', minHeight: '770px', minWidth:'1832px', padding: '0 20px 0 0' }}>
             <ComponentCalendar />
         </div>
     );

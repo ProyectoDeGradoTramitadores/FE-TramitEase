@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Tramitador } from '../../../entities/Tramitador.ts';
 
 const api = axios.create({
-    baseURL: 'http://localhost:5137/api/Tramitador'
+    baseURL: `${import.meta.env.VITE_BACKEND_URL}/Tramitador`
 });
 
 export const getTramitadores = async (): Promise<Tramitador[]> => {

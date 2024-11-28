@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Client } from '../../../entities/Client.ts';
 
 const api = axios.create({
-    baseURL: 'http://localhost:5137/api/Client'
+    baseURL: `${import.meta.env.VITE_BACKEND_URL}/Client`
 });
 
 export const getClients = async (): Promise<Client[]> => {
@@ -10,7 +10,7 @@ export const getClients = async (): Promise<Client[]> => {
     return response.data;
 };
 
-export const checkClientExists = async (id: string): Promise<boolean> => {
+export const checkClientExists = async (id: number): Promise<boolean> => {
     try {
         const response = await api.get(`/${id}`);
         return response.status === 200;
@@ -19,7 +19,7 @@ export const checkClientExists = async (id: string): Promise<boolean> => {
     }
 };
 
-export const getClientById = async (id: string): Promise<Client> => {
+export const getClientById = async (id: number): Promise<Client> => {
     const response = await api.get(`/${id}`);
     return response.data;
 };
@@ -29,14 +29,15 @@ export const getClientsByTramitadorId = async (tramitadorId: number): Promise<Cl
     return response.data;
 };
 
-export const createClient = async (client: Client): Promise<void> => {
-    await api.post('/', client);
+export const createClient = async (client: Client): Promise<Client> => {
+    const response = await api.post('/', client);
+    return response.data;
 };
 
-export const updateClient = async (id: string, client: Client): Promise<void> => {
+export const updateClient = async (id: number, client: Client): Promise<void> => {
     await api.put(`/${id}`, client);
 };
 
-export const deleteClient = async (id: string): Promise<void> => {
+export const deleteClient = async (id: number): Promise<void> => {
     await api.delete(`/${id}`);
 };

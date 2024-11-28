@@ -25,7 +25,7 @@ const ProcedureViewPage: React.FC = () => {
                 padding: '60px',
                 boxShadow: 1,
                 minWidth: '1719px',
-                minHeight: '660px'
+                minHeight: '690px'
             }}
         >
             {procedure ? (

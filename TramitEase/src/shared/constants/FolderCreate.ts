@@ -2,7 +2,7 @@ import { ClientFolder } from '../../entities/ClientFolder.ts';
 
 export let emptyFolder: ClientFolder = {
     idClientFolder: 0,
-    idClient: '',
+    idClient: 0,
     idTramit: 0,
     name: '',
     creationDate: null,
@@ -11,17 +11,15 @@ export let emptyFolder: ClientFolder = {
 
 export const setEmptyFolder = (folder: ClientFolder) => {
     if(folder.idClientFolder == 0){
-        const processedFolder: ClientFolder = {
+        emptyFolder = {
             idClient: folder.idClient,
             idTramit: folder.idTramit,
             name: folder.name,
-            creationDate: folder.creationDate,
+            creationDate: folder.creationDate? folder.creationDate : null,
             endDate: folder.endDate == '' ? null : folder.endDate
         };
-
-        emptyFolder = processedFolder;
     }else {
-        const processedFolder: ClientFolder = {
+        emptyFolder = {
             idClientFolder: folder.idClientFolder,
             idClient: folder.idClient,
             idTramit: folder.idTramit,
@@ -29,18 +27,17 @@ export const setEmptyFolder = (folder: ClientFolder) => {
             creationDate: folder.creationDate,
             endDate: folder.endDate == '' ? null : folder.endDate
         };
-        emptyFolder = processedFolder;
     }
 }
 
-export const setIdClient = (idClient: string) => {
+export const setIdClient = (idClient: number) => {
     emptyFolder.idClient = idClient;
 }
 
 export const clearEmptyFolder = () => {
     emptyFolder = {
         idClientFolder: 0,
-        idClient: '',
+        idClient: 0,
         idTramit: 0,
         name: '',
         creationDate: new Date().toISOString(),

@@ -1,19 +1,22 @@
 import { useState, useEffect } from 'react';
-import { DateSelectArg, EventApi, EventClickArg, EventInput } from '@fullcalendar/core';
-import { createEventId } from '../utils/event-utils-calendar.ts';
+import { EventApi, EventClickArg, EventInput } from '@fullcalendar/core';
 import { useClientFoldersByTramitadorId } from './useClientFoldersByTramitadorId.ts';
 import { useNavigate } from 'react-router-dom';
 import { IDS, ROUTES } from '../constants/routes.ts';
 import { useTramits } from './useTramits.ts';
+import { useClientFolders } from './useClientFolders.ts';
 
 export function useCalendarEvents(tramitadorId: number) {
     const { filteredClientFolders, loading, error } = useClientFoldersByTramitadorId(tramitadorId);
+    const { fetchClientFolderById } = useClientFolders();
+
     const { fetchTramitById } = useTramits();
     const navigate = useNavigate();
     const id = IDS().TRAMITADOR_ID;
 
     const [currentEvents, setCurrentEvents] = useState<EventInput[]>([]);
     const [showModal, setShowModal] = useState(false);
+    const [completeSelect, setCompleteSelete] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState<EventApi | null>(null);
 
     const calculateEstimatedDate = (startDate: string | Date, durationDays: number) => {
@@ -29,22 +32,22 @@ export function useCalendarEvents(tramitadorId: number) {
     useEffect(() => {
         const fetchAndUpdateEvents = async () => {
             if (!loading && filteredClientFolders.length > 0 && currentEvents.length <= 0) {
-                const updatedEvents = await Promise.all(
+                const updatedEvents : EventInput[] = await Promise.all(
                     filteredClientFolders.map(async folder => {
                         const tramit = await fetchTramitById(folder.idTramit);
                         const estimateDate = folder.creationDate && tramit?.dayDuring ?
                             calculateEstimatedDate(folder.creationDate, tramit.dayDuring) : undefined;
-
                         return {
                             id: folder.idClientFolder,
                             title: folder.name,
                             start: folder.creationDate,
-                            end: folder.endDate ?? estimateDate,
+                            end: folder.endDate? (folder?.creationDate &&
+                            new Date(folder?.creationDate).toISOString() === new Date(folder.endDate).toISOString() ?
+                                calculateEstimatedDate((folder.endDate), 1) : folder.endDate):  estimateDate,
                             backgroundColor: '#898989'
                         } as EventInput;
                     })
                 );
-
                 setCurrentEvents(updatedEvents);
             } else if (loading && currentEvents.length === 0) {
                 console.log('Loading events...');
@@ -54,33 +57,16 @@ export function useCalendarEvents(tramitadorId: number) {
         fetchAndUpdateEvents();
     }, [currentEvents, filteredClientFolders, loading]);
 
-
-    const handleDateSelect = (selectInfo: DateSelectArg) => {
-        const title = prompt('Please enter a new title for your event');
-        const calendarApi = selectInfo.view.calendar;
-        calendarApi.unselect();
-
-        if (title) {
-            calendarApi.addEvent({
-                id: createEventId(),
-                title,
-                start: selectInfo.startStr,
-                end: selectInfo.endStr,
-                allDay: selectInfo.allDay,
-                backgroundColor: '#848184'
-            });
-        }
-    };
-
     const handleOpenClientFolder = () => {
         if (selectedEvent) {
-            console.log(id);
             const routeClientFolder = ROUTES.CLIENT_FOLDER(id, selectedEvent.id);
             navigate(routeClientFolder);
         }
     };
 
-    const handleEventClick = (clickInfo: EventClickArg) => {
+    const handleEventClick = async (clickInfo: EventClickArg) => {
+        const clientfolder = await fetchClientFolderById(Number(clickInfo.event.id));
+        setCompleteSelete(!!clientfolder?.endDate);
         setShowModal(true);
         setSelectedEvent(clickInfo.event);
     };
@@ -88,6 +74,7 @@ export function useCalendarEvents(tramitadorId: number) {
     const handleCloseModal = () => {
         setShowModal(false);
         setSelectedEvent(null);
+        setCompleteSelete(false);
     };
 
     const handleEvents = (events: EventApi[]) => {
@@ -101,7 +88,7 @@ export function useCalendarEvents(tramitadorId: number) {
         handleOpenClientFolder,
         loading,
         error,
-        handleDateSelect,
+        completeSelect,
         handleEventClick,
         handleCloseModal,
         handleEvents

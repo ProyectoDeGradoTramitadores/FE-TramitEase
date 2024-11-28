@@ -34,7 +34,7 @@ const ProceduresViewPage: React.FC = () => {
 
     const handleCreateNewProcedure = () => {
         if (id) {
-            navigate(`/TramitEase/Tramitador/${id}/Custom/TramitsCustom/ProcedureCreateNew`);
+            navigate(`/Tramitador/${id}/Custom/TramitsCustom/ProcedureCreateNew`);
         }
     };
 

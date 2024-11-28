@@ -95,7 +95,7 @@ const ClientPage: React.FC = () => {
                     phoneNumber: formValues.phone ?? "",
                     email: formValues.email ?? "",
                 });
-                navigate(`/TramitEase/Tramitador/${tramitadornew?.idTramitador}/ClientsFolder`);
+                navigate(`/Tramitador/${tramitadornew?.idTramitador}/ClientsFolder`);
             }
         } catch (error) {
             console.error("Phone verification error:", error);
@@ -107,7 +107,7 @@ const ClientPage: React.FC = () => {
     };
 
     const navigateToLogIn = () => {
-        navigate('/TramitEase/login');
+        navigate('/login');
     };
 
     return (

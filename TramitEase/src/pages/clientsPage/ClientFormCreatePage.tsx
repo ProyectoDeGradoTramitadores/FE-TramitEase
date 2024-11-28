@@ -13,7 +13,7 @@ const ClientFormCreatePage: React.FC = () => {
     const navigate = useNavigate();
 
     const handleSaveClient = async () => {
-        const existingClient = await checkClientExistsAndFetch(emptyClient.idClient);
+        const existingClient = await checkClientExistsAndFetch(emptyClient.ciClient);
         if (id != null) {
             emptyClient.idTramitador = Number(id);
         }
@@ -22,7 +22,7 @@ const ClientFormCreatePage: React.FC = () => {
         } else {
             await createNewClient(emptyClient);
         }
-        navigate(`/TramitEase/Tramitador/${id}/clients`);
+        navigate(`/Tramitador/${id}/clients`);
     };
 
     return (

@@ -26,7 +26,7 @@ const ClientsFolderPage: React.FC = () => {
     const {sendMessage} = useSendWhatsAppMessage(filteredClientFolders);
 
     const navigateToCreateClientFolder = useNavigatePage(
-        `/TramitEase/Tramitador/${id}/CreateClientFolder/CreateClient`
+        `/Tramitador/${id}/CreateClientFolder/CreateClient`
     );
 
     useEffect(() => {

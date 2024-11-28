@@ -27,8 +27,8 @@ const FormularyCreateFolderPage: React.FC = () => {
     const handleSaveFolder = async () => {
         if (emptyFolder) {
             try {
+                emptyFolder.creationDate = null
                 const newClientFolder = await createNewClientFolder(emptyFolder);
-                console.log("step3", newClientFolder, emptyFolder);
 
                 const tramits = await fetchTramitProceduresByTramitId(emptyFolder.idTramit);
                 if( tramits != undefined ){
@@ -46,18 +46,17 @@ const FormularyCreateFolderPage: React.FC = () => {
                         const procedureCnt = await createNewProcedureFolderClient(newProcedureFolderClient);
                         const procedureSteps = await fetchStepProceduresByProcedureId(Number(procedure?.idProcedure ?? ''));
 
-                        if(procedureSteps != null){
-                            for (const [index, step] of procedureSteps.entries()) {
+                        if (procedureSteps != null) {
+                            for (const step of procedureSteps) {
                                 const newStepProcedureFolderClient: StepProcedureFolderClient = {
                                     idStepProcedureFolderClient: 0,
                                     idProcedureFolderClient: Number(procedureCnt?.idProcedureFolderClient ?? ''),
                                     idStepProcedure: step.idStepProcedure,
                                     isComplete: false,
-                                    commentsDelay: '',
+                                    comments: '',
                                     startDate: null,
                                     endDate: null,
                                 };
-                                console.log("step", newStepProcedureFolderClient);
                                 await createNewStepProcedureFolderClient(newStepProcedureFolderClient);
                             }
                         }
@@ -65,7 +64,7 @@ const FormularyCreateFolderPage: React.FC = () => {
                 }
 
                 clearEmptyFolder();
-                navigate(`/TramitEase/Tramitador/${id}/ClientsFolder`);
+                navigate(`/Tramitador/${id}/ClientsFolder`);
             } catch (error) {
                 console.error("Error creating folder and procedures:", error);
             }
@@ -78,7 +77,7 @@ const FormularyCreateFolderPage: React.FC = () => {
             sx={{
                 backgroundColor: 'white',
                 padding: '169px 50px',
-                width: '1739px',
+                width: '1754px',
                 height: '590px',
                 display: 'flex',
                 flexDirection: 'column',

@@ -12,10 +12,10 @@ const Menu: React.FC = () => {
     const handleMenuClick = (path: string) => {
         if (path === 'logout') {
             signOut(auth)
-                .then(() => navigate('/TramitEase/login'))
+                .then(() => navigate('/login'))
                 .catch((error) => console.error("Logout failed: ", error));
         } else {
-            navigate(`/TramitEase/Tramitador/${id}/${path}`);
+            navigate(`/Tramitador/${id}/${path}`);
         }
     };
 

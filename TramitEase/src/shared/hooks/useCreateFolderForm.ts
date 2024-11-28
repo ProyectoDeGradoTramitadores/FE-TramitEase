@@ -9,7 +9,7 @@ export const useCreateFolderForm = (initialClientId: string) => {
     useEffect(() => {
         if (folderData === null) {
             setFolderData(emptyFolder);
-            setIdClient(initialClientId);
+            setIdClient(Number(initialClientId));
         }else {
             setEmptyFolder(folderData);
         }

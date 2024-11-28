@@ -1,15 +1,7 @@
 import React, { useRef } from 'react';
-import { Document } from '../../../entities/Document';
-import { CardContainer, PlusSign } from './CardAddDocument.styles';
+import { CardContainer, Modal, ModalContent, PlusSign, ProgressBar } from './CardAddDocument.styles';
 import { CardAddDocumentProps } from '../../types/CardAddDocumentProps';
-import { uploadFile } from '../../services/firebase/uploadService';
-
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
-const VALID_FILE_TYPES = [
-    'application/pdf',
-    'application/msword',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-];
+import { useCardAddDocument } from '../../hooks/useCardAddDocument.ts';
 
 const CardAddDocument: React.FC<CardAddDocumentProps> = ({ onDocumentSelect, idStepProcedureFolderClient }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -18,49 +10,31 @@ const CardAddDocument: React.FC<CardAddDocumentProps> = ({ onDocumentSelect, idS
         fileInputRef.current?.click();
     };
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            if (file.size > MAX_FILE_SIZE) {
-                alert("El archivo es demasiado grande. El tamaño máximo permitido es de 5 MB.");
-                return;
-            }
-
-            if (!VALID_FILE_TYPES.includes(file.type)) {
-                alert("Por favor, selecciona un archivo PDF o DOC.");
-                return;
-            }
-
-            uploadFile(file).then((downloadURL) => {
-                const newDocument: Document = {
-                    idDocument: 0,
-                    idStepProcedureFolderClient: idStepProcedureFolderClient,
-                    fileName: file.name,
-                    filePath: downloadURL,
-                    mimeType: file.type,
-                };
-                console.log(newDocument);
-                if (onDocumentSelect) {
-                    onDocumentSelect(newDocument);
-                } else {
-                    console.error('onDocumentSelect no está definido.');
-                }
-            }).catch((error) => {
-                console.error("Error al subir el archivo:", error);
-            });
-        }
-    };
+    const { isUploading, uploadProgress, handleFileChange } =
+        useCardAddDocument(onDocumentSelect, idStepProcedureFolderClient);
 
     return (
-        <CardContainer onClick={handleClick}>
-            <PlusSign>+</PlusSign>
-            <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileChange}
-                style={{ display: 'none' }}
-            />
-        </CardContainer>
+        <>
+            {isUploading && (
+                <Modal>
+                    <ModalContent>
+                        <h3>Subiendo documento...</h3>
+                        <ProgressBar progress={uploadProgress} />
+                        <p>{uploadProgress}%</p>
+                    </ModalContent>
+                </Modal>
+            )}
+
+            <CardContainer onClick={handleClick}>
+                <PlusSign>+</PlusSign>
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    style={{ display: 'none' }}
+                />
+            </CardContainer>
+        </>
     );
 };
 

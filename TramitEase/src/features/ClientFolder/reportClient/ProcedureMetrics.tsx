@@ -34,9 +34,12 @@ const ProcedureMetrics: React.FC<MetricsProcedureProps> = ({ nameProcedure, step
                     />
                     <CardInfoClientFolder
                         nameFolder={nameProcedure}
-                        creationDate={steps[0].creationDate}
-                        endProcedure={endProcedure?.toString() ?? "N/A"}
-                        estimateDate={estimatedDate ? estimatedDate.toLocaleDateString() : "N/A"}
+                        creationDate={steps[0].creationDate != ""? steps[0].creationDate
+                            : "Todavia el procedimiento no se inicio"}
+                        endProcedure={endProcedure?.toString() ?? "Procedimiento en progreso"}
+                        estimateDate={estimatedDate && estimatedDate.toLocaleDateString() !=
+                        "Invalid Date"  ? estimatedDate.toLocaleDateString() :
+                            "El procedimiento todavia no se inicio"}
                         completeTramit={complete}
                         delayTramit={delayTramit}
                         daysDelay={daysDelay}
@@ -44,7 +47,6 @@ const ProcedureMetrics: React.FC<MetricsProcedureProps> = ({ nameProcedure, step
                     />
                 </Box>
             </Box>
-
             <TableProcedure steps={steps}/>
         </Box>
     );

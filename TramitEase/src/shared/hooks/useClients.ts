@@ -5,9 +5,9 @@ import {
     deleteClient,
     getClientById,
     getClients,
-    updateClient,
-    checkClientExists, getClientsByTramitadorId,
+    updateClient, getClientsByTramitadorId,
 } from '../services/client/clientService.ts';
+import { emptyClient } from '../constants/ClientCreate.ts';
 
 export const useClients = () => {
     const [clients, setClients] = useState<Client[]>([]);
@@ -50,7 +50,7 @@ export const useClients = () => {
         }
     };
 
-    const fetchClientById = async (id: string): Promise<Client | undefined> => {
+    const fetchClientById = async (id: number): Promise<Client | undefined> => {
         try {
             const client = await getClientById(id);
             return client;
@@ -66,10 +66,11 @@ export const useClients = () => {
 
     const checkClientExistsAndFetch = async (id: string): Promise<Client | null> => {
         try {
-            const exists = await checkClientExists(id);
+            const clients = await fetchClientsByTramitadorId(emptyClient.idTramitador);
+            const exists = clients?.find(client => client.ciClient === id);
+
             if (exists) {
-                const client = await getClientById(id);
-                return client;
+                return exists;
             }
         } catch (err) {
             if (err instanceof Error) {
@@ -81,11 +82,12 @@ export const useClients = () => {
         return null;
     };
 
-    const createNewClient = async (client: Client) => {
+    const createNewClient = async (client: Client): Promise<Client | null> => {
         try {
             const newClient = await createClient(client);
             if (newClient != null) {
                 setClients([...clients, newClient]);
+                return newClient;
             }
         } catch (err) {
             if (err instanceof Error) {
@@ -94,9 +96,10 @@ export const useClients = () => {
                 setError('An unknown error occurred');
             }
         }
+        return null;
     };
 
-    const updateExistingClient = async (id: string, client: Client) => {
+    const updateExistingClient = async (id: number, client: Client) => {
         try {
             await updateClient(id, client);
             setClients(clients.map(t => (t.idClient === id ? client : t)));
@@ -109,7 +112,7 @@ export const useClients = () => {
         }
     };
 
-    const deleteExistingClient = async (id: string) => {
+    const deleteExistingClient = async (id: number) => {
         try {
             await deleteClient(id);
             setClients(clients.filter(t => t.idClient !== id));

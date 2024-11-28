@@ -158,7 +158,7 @@ const ProcedureComponent = () => {
                                         />
                                         <CustomButton
                                             disabled={(stepProcedures.get(procedureDetails[activeStep].id)?.
-                                                length ?? 1 - 1) === activeStep}
+                                                length ?? 0) -1  === activeStepProcedure}
                                             onClick={handleNextProcedure}
                                             $textStyle={'bold'}
                                             $text={'Siguiente Paso'}

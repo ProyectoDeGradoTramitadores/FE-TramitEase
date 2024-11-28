@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Document } from '../../../entities/Document.ts';
 
 const api = axios.create({
-    baseURL: 'http://localhost:5137/api/Document'
+    baseURL: `${import.meta.env.VITE_BACKEND_URL}/Document`
 });
 
 export const getDocuments = async (): Promise<Document[]> => {

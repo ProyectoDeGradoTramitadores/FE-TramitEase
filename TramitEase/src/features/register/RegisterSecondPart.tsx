@@ -12,7 +12,8 @@ const RegisterSecondPart: React.FC<RegisterSecondPartProps> = ({
                                                                    handleVerifyPhone,
                                                                }) => {
     return (
-        <Grid item xs={6} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '20px' }}>
+        <Grid item xs={6}
+              style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '20px' }}>
             <Typography variant="h4" style={{ color: 'white' }}>TramitEase</Typography>
             <Typography variant="h2" style={{ fontWeight: 'bold', color: '#fa8a38' }}>
                 Registra tu Numero de Celular
@@ -49,7 +50,7 @@ const RegisterSecondPart: React.FC<RegisterSecondPartProps> = ({
                 carpetas próximas a vencer o vencidas.
             </Typography>
 
-            <Box display="flex" gap="140px" marginTop={4} justifyContent={"center"}>
+            <Box display="flex" gap="140px" marginTop={4} justifyContent={'center'}>
                 <StepGuide
                     number={1}
                     text="Escanea el siguiente código"
@@ -61,12 +62,16 @@ const RegisterSecondPart: React.FC<RegisterSecondPartProps> = ({
                     imageSrc={sendTwilio}
                 />
             </Box>
-            <Box gap={"30px"} mt={2} display="flex" justifyContent={"center"} flexDirection="column" alignItems="center">
+            <Box padding="14px" justifyContent={'center'} >
+                <div id="recaptcha-container"></div>
+            </Box>
+            <Box gap={'30px'} mt={2} display="flex" justifyContent={'center'} flexDirection="column"
+                 alignItems="center">
                 <Typography variant="h6" style={{ color: '#fa8a38', marginTop: '20px', fontWeight: 'bold' }}>
                     ¡Listo, ya estás registrado! Recuerda que, si no sigues estos pasos, no podrás recibir
                     notificaciones de tus carpetas por WhatsApp.
                 </Typography>
-                <Box mr={"123px"} display="flex" justifyContent="flex-end" width="100%">
+                <Box mr={'123px'} display="flex" justifyContent="flex-end" width="100%">
                     <CustomButton
                         size="xs"
                         color="primary"

@@ -4,16 +4,17 @@ import FormField from '../Fields/FormField.tsx';
 import { useCreateFolderForm } from '../../hooks/useCreateFolderForm.ts';
 import { useParams } from 'react-router-dom';
 import ProcedureStatusField from '../Fields/TramitStatusField.tsx';
+import { IDS } from '../../constants/routes.ts';
 
 const CreateFolderFormComponent: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const { idClient } = useParams<{ idClient: string }>();
+    const idClient = IDS().CLIENT_ID;
     const {
         handleInputChange,
         folderData,
         handleIdProcedureStatusChange,
         procedureId
-    } = useCreateFolderForm(idClient || '');
+    } = useCreateFolderForm(idClient ?? '');
 
     return (
         <Box
@@ -28,24 +29,24 @@ const CreateFolderFormComponent: React.FC = () => {
             }}
         >
             <FormField
-                label="Id folder del Cliente"
+                label="Id carpeta del Cliente"
                 isRequired
                 onChange={handleInputChange('idClientFolder')}
-                value={folderData?.idClientFolder?.toString() || ''}
+                value={folderData?.idClientFolder?.toString() ?? ''}
             />
             <FormField
-                label="CI Cliente"
+                label="ID Cliente"
                 isRequired
                 onChange={handleInputChange('idClient')}
-                value={folderData?.idClient || idClient}
+                value={folderData?.idClient ?? idClient}
             />
             <FormField
                 label="Nombre de la carpeta"
                 isRequired
                 onChange={handleInputChange('name')}
-                value={folderData?.name || ''}
+                value={folderData?.name ?? ''}
             />
-            <ProcedureStatusField tramitadorId={id} onChange={handleIdProcedureStatusChange} tramitId={procedureId || ''}/>
+            <ProcedureStatusField tramitadorId={id} onChange={handleIdProcedureStatusChange} tramitId={procedureId ?? ''}/>
         </Box>
     );
 };

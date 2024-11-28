@@ -27,7 +27,7 @@ const TramitsViewPage: React.FC = () => {
 
     const handleCreateNewTramit = () => {
         if (id) {
-            navigate(`/TramitEase/Tramitador/${id}/Custom/TramitsCustom/TramitCreateNew`);
+            navigate(`/Tramitador/${id}/Custom/TramitsCustom/TramitCreateNew`);
         }
     };
 

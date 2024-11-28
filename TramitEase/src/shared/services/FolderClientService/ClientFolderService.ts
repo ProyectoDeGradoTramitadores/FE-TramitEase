@@ -2,7 +2,7 @@ import axios from 'axios';
 import { ClientFolder } from '../../../entities/ClientFolder.ts';
 
 const api = axios.create({
-    baseURL: 'http://localhost:5137/api/ClientFolder'
+    baseURL: `${import.meta.env.VITE_BACKEND_URL}/ClientFolder`
 });
 
 export const getClientFolders = async (): Promise<ClientFolder[]> => {
@@ -10,7 +10,7 @@ export const getClientFolders = async (): Promise<ClientFolder[]> => {
     return response.data;
 };
 
-export const getClientFoldersByClientId = async (clientId: string): Promise<ClientFolder[]> => {
+export const getClientFoldersByClientId = async (clientId: number): Promise<ClientFolder[]> => {
     const response = await api.get(`/client/${clientId}`);
     return response.data;
 };

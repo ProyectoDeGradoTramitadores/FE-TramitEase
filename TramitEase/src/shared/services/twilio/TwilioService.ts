@@ -3,7 +3,7 @@ import { Message } from '../../../entities/Message';
 import { SendMessageResponse } from '../../../entities/SendMessageResponse';
 
 const api = axios.create({
-    baseURL: 'http://localhost:5137/api/Messages'
+    baseURL: `${import.meta.env.VITE_BACKEND_URL}/Messages`
 });
 
 export const sendWhatsAppMessage = async (request: Message): Promise<SendMessageResponse> => {

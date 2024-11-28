@@ -17,7 +17,6 @@ const TramitReports: React.FC<TramitReportsProps> = ({
                                                      }) => {
     const folderNames = Object.keys(porcentageClientFolder);
     const folderPercentages = Object.values(porcentageClientFolder);
-
     return (
         <Box gap="1532px">
             <Typography variant="h4" sx={{ color: 'black' }}>
@@ -33,7 +32,7 @@ const TramitReports: React.FC<TramitReportsProps> = ({
                     />
                     <ClientFolderStatusCard
                         name={"Porcentaje de las Carpetas de usuario terminadas"}
-                        valuePercent={porcentageTotal}
+                        valuePercent={porcentageTotal? porcentageTotal : 0 }
                     />
                 </Box>
 

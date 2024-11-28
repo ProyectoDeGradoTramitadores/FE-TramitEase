@@ -5,8 +5,8 @@ import {
     createUserWithEmailAndPassword,
     signOut,
     updateProfile,
+    deleteUser,
     sendPasswordResetEmail,
-    User,
     RecaptchaVerifier,
     signInWithPhoneNumber,
 } from "firebase/auth";
@@ -24,6 +24,7 @@ export const signInWithGoogle = async () => {
 export const signInWithEmail = async (email: string, password: string) => {
     try {
         const result = await signInWithEmailAndPassword(auth, email, password);
+        console.log(result, "user");
         return result.user;
     } catch (error) {
         console.error("Error during email sign-in:", error.message);
@@ -64,7 +65,7 @@ export const setupRecaptchaVerifier = (): RecaptchaVerifier => {
     const verifier = new RecaptchaVerifier(auth,
         'recaptcha-container',
         {
-            size: "invisible",
+            size: "normal",
             callback: (response: never) => {
                 console.log("Recaptcha verified successfully ", response);
             },
@@ -81,6 +82,21 @@ export const signInWithPhone = async (phoneNumber: string, recaptchaVerifier: Re
         return confirmationResult;
     } catch (error) {
         console.error("Error during phone sign-in:", error);
+        throw error;
+    }
+};
+
+export const deleteUserAccount = async () => {
+    try {
+        const user = auth.currentUser;
+        if (user) {
+            await deleteUser(user);
+            console.log("User account deleted successfully.");
+        } else {
+            throw new Error("No authenticated user found.");
+        }
+    } catch (error) {
+        console.error("Error deleting user account:", error);
         throw error;
     }
 };

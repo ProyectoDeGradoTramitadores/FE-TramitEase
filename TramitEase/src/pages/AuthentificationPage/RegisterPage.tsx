@@ -95,7 +95,7 @@ const RegisterPage: React.FC = () => {
                     phoneNumber: formValues.phone ?? "",
                     email: formValues.email ?? "",
                 });
-                navigate(`/TramitEase/Tramitador/${tramitadornew?.idTramitador}/ClientsFolder`);
+                navigate(`/Tramitador/${tramitadornew?.idTramitador}/ClientsFolder`);
             }
         } catch (error) {
             console.error("Phone verification error:", error);
@@ -107,12 +107,11 @@ const RegisterPage: React.FC = () => {
     };
 
     const navigateToLogIn = () => {
-        navigate('/TramitEase/login');
+        navigate('/login');
     };
 
     return (
-        <Grid container style={{ minHeight: '926px', backgroundColor: '#323232', minWidth: "1838px" }}>
-            <div id="recaptcha-container"></div>
+        <Grid container style={{ minHeight: '956px', backgroundColor: '#323232', minWidth: "1838px" }}>
             {isSecondPart ? (
                 <RegisterSecondPart
                     formValues={formValues}

@@ -2,7 +2,7 @@ export interface ActionMenuProps {
     anchorEl: null | HTMLElement;
     onClose: () => void;
     onDelete: () => void;
-    idTramit: string | number;
+    idTramit?: string | number;
     navigate: (path: string) => void;
 }
 

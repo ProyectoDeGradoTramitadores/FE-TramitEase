@@ -2,7 +2,7 @@ import axios from 'axios';
 import { TypeTramit } from '../../../entities/TypeTramit.ts';
 
 const api = axios.create({
-    baseURL: 'http://localhost:5137/api'
+    baseURL: import.meta.env.VITE_BACKEND_URL
 });
 
 export const getTypeTramits = async (): Promise<TypeTramit[]> => {

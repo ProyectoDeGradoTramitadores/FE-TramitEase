@@ -5,6 +5,10 @@ import '../../theme/theme-calendar.css';
 import EventModal from './EventModal.tsx';
 import { EventApi, EventInput } from '@fullcalendar/core';
 import { useCalendarEvents } from '../../hooks/useCalendarEvents.ts';
+import { Box, List, Typography } from '@mui/material';
+import SidebarEvent from './SidebarEvent.tsx';
+import React from 'react';
+import ComponentEmptyEvents from './ComponentEmptyEvents.tsx';
 
 export default function ComponentCalendar() {
     const { id } = useParams<{ id: string }>();
@@ -13,9 +17,9 @@ export default function ComponentCalendar() {
         currentEvents,
         showModal,
         selectedEvent,
+        completeSelect,
         loading,
         error,
-        handleDateSelect,
         handleEventClick,
         handleCloseModal,
         handleOpenClientFolder,
@@ -31,20 +35,26 @@ export default function ComponentCalendar() {
     }
 
     return (
-        <div className="demo-app">
-            <ComponentSidebar currentEvents={currentEvents as EventApi[]} />
-            {currentEvents.length > 0 && (
-                <Calendar
-                    key={tramitadorId}
-                    initialEvents={currentEvents.map(event => ({
-                        ...event
-                    })) as EventInput[]}
-                    handleDateSelect={handleDateSelect}
-                    handleEventClick={handleEventClick}
-                    handleEvents={handleEvents}
-                />
+        <div>
+            {currentEvents.length > 0 ? (
+                <div className="demo-app">
+                    <ComponentSidebar currentEvents={currentEvents as EventApi[]} />
+                    <Calendar
+                        key={tramitadorId}
+                        initialEvents={currentEvents.map(event => ({
+                            ...event,
+                        })) as EventInput[]}
+                        handleEventClick={handleEventClick}
+                        handleEvents={handleEvents}
+                    />
+                </div>
+            ) : (
+                <div className="demo-app">
+                    <ComponentEmptyEvents/>
+                </div>
             )}
             <EventModal
+                complete={completeSelect}
                 open={showModal}
                 event={selectedEvent}
                 onClose={handleCloseModal}

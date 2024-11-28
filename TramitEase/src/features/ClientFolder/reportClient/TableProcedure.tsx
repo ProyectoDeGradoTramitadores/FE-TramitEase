@@ -23,8 +23,10 @@ const TableProcedure: React.FC<TableProcedureProps> = ({ steps }) => {
                         {steps.map((step, index) => (
                             <TableRow key={index}>
                                 <TableCell>{step.nameStep}</TableCell>
-                                <TableCell>{step.creationDate}</TableCell>
-                                <TableCell>{step.estimateDate}</TableCell>
+                                <TableCell>{step.creationDate != "" ? step.creationDate :
+                                    "El paso todavia no se inicio"}</TableCell>
+                                <TableCell>{step.estimateDate != "Invalid Date"? step.estimateDate :
+                                    "El paso todavia no se inicio"}</TableCell>
                                 <TableCell>{step.endDate || 'Pendiente'}</TableCell>
                                 <TableCell>{step.completeStep ? 'Sí' : 'No'}</TableCell>
                                 <TableCell>{step.delayStep? 'Con Retraso' : 'A Tiempo'}</TableCell>

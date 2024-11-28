@@ -5,10 +5,10 @@ import {
     deleteClientFolder,
     getClientFolderById,
     getClientFolders,
+    getClientFoldersByClientId,
+    getClientFoldersByTramitId,
     updateClientFolder,
-    getClientFoldersByClientId, getClientFoldersByTramitId,
-}
-    from '../services/FolderClientService/ClientFolderService.ts';
+} from '../services/FolderClientService/ClientFolderService.ts';
 
 
 export const useClientFolders = () => {
@@ -49,10 +49,9 @@ export const useClientFolders = () => {
         return undefined;
     };
 
-    const fetchClientFoldersByClientId = async (clientId: string): Promise<ClientFolder[]> => {
+    const fetchClientFoldersByClientId = async (clientId: number): Promise<ClientFolder[]> => {
         try {
-            const clientFolders = await getClientFoldersByClientId(clientId);
-            return clientFolders;
+            return await getClientFoldersByClientId(clientId);
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);
@@ -65,8 +64,7 @@ export const useClientFolders = () => {
 
     const fetchClientFoldersByTramitId = async (TramitId: number): Promise<ClientFolder[]> => {
         try {
-            const clientFolders = await getClientFoldersByTramitId(TramitId);
-            return clientFolders;
+            return await getClientFoldersByTramitId(TramitId);
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);

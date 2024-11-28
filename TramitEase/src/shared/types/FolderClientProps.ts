@@ -2,6 +2,7 @@ import { ClientFolder } from '../../entities/ClientFolder.ts';
 
 export interface FolderClientViewComponentProps {
     folderName: string;
+    idClientFolder: number | undefined;
     onClick?: () => void;
 }
 

@@ -7,7 +7,7 @@ const ProtectedRoute: React.FC = () => {
 
     if (loading) return <div>Loading...</div>;
 
-    return isAuthenticated ? <Outlet /> : <Navigate to="/TramitEase/login" replace />;
+    return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default ProtectedRoute;

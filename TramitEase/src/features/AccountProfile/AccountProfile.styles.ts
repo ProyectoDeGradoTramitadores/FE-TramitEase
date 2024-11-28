@@ -3,10 +3,11 @@ import styled from 'styled-components';
 export const Container = styled.div`
     display: flex;
     align-items: center;
-    min-width: 1666px;
+    min-width: 1684px;
+    min-height: 790px;
     gap: 160px;
     background-color: #fafafa;
-    padding: 86px;
+    padding: 85px;
 `;
 
 export const ImageContainer = styled.div`
@@ -62,7 +63,7 @@ export const DetailsContainer = styled.div`
 
 export const Title = styled.h2`
     margin-bottom: 8px;
-    font-size: 3.5em;
+    font-size: 3.0em;
 `;
 
 export const ParagraphCustom = styled.p`

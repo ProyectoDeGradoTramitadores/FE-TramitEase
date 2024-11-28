@@ -15,8 +15,18 @@ const TramitForm: React.FC<TramitFormProps> = ({
     const id = IDS().TRAMITADOR_ID;
 
     React.useEffect(() => {
-        fetchTypeTramitsByTramitadorId(parseInt(id)).then(r => setTypeTramits(r));
+        const fetchData = async () => {
+            try {
+                const result = await fetchTypeTramitsByTramitadorId(parseInt(id));
+                setTypeTramits(result);
+            } catch (error) {
+                console.error('Error fetching Type Tramits:', error);
+            }
+        };
+
+        fetchData();
     }, [id]);
+
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'row', gap: '20px' }}>

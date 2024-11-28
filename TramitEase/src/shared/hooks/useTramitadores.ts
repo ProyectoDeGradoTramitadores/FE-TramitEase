@@ -29,7 +29,7 @@ export const useTramitadores = () => {
             }
         };
 
-        fetchTramitadores().then(r => console.log(r));
+        fetchTramitadores();
     }, []);
 
     const fetchTramitadorById = async (id: number): Promise<Tramitador | undefined> => {
@@ -66,6 +66,7 @@ export const useTramitadores = () => {
         try {
             await updateTramitador(id, tramitador);
             setTramitadores(tramitadores.map(t => (t.idTramitador === id ? tramitador : t)));
+            return tramitador;
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);

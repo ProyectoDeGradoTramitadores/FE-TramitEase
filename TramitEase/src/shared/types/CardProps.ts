@@ -3,8 +3,9 @@ export interface ClientCardProps {
 }
 
 export interface ClientCardViewProps {
-    keyClient: string;
+    keyClient: number;
     name: string;
+    lastName: string;
     ci: string;
 }
 

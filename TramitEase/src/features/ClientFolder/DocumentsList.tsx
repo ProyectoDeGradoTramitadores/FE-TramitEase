@@ -1,24 +1,28 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDocuments } from '../../shared/hooks/useDocuments.ts';
 import CardDocument from '../../shared/components/cards/CardDocument.tsx';
 import { ListContainer } from './DocumentsList.styles.ts';
 import { DocumentListProps } from '../../shared/types/CardAddDocumentProps.ts';
 import CardAddDocument from '../../shared/components/cards/CardAddDocument.tsx';
+import { Document } from '../../entities/Document.ts';
 
 const DocumentsList: React.FC<DocumentListProps> = ({ idStepProcedureClientFolder, onDocumentSelect }) => {
-    const { fetchDocumentsByStepProcedureId, documents } = useDocuments();
+    const { fetchDocumentsByStepProcedureId } = useDocuments();
+    const [documents, setDocuments] = useState<Document[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                await fetchDocumentsByStepProcedureId(idStepProcedureClientFolder);
+                const documentGet =
+                    await fetchDocumentsByStepProcedureId(idStepProcedureClientFolder);
+                setDocuments(documentGet ?? []);
             } catch (error) {
                 console.error('Error fetching documents:', error);
             }
         };
 
         void fetchData();
-    }, [idStepProcedureClientFolder]);
+    }, [idStepProcedureClientFolder, onDocumentSelect]);
 
     return (
         <ListContainer>

@@ -13,16 +13,18 @@ const CreateClientPage: React.FC = () => {
     const navigate = useNavigate();
 
     const handleSaveClient = async () => {
-        const existingClient = await checkClientExistsAndFetch(emptyClient.idClient);
+        const existingClient = await checkClientExistsAndFetch(emptyClient.ciClient);
         if (id != null) {
             emptyClient.idTramitador = Number(id);
         }
         if (existingClient) {
             await updateExistingClient(emptyClient.idClient, emptyClient);
+            navigate(`/Tramitador/${id}/CreateClientFolder/${emptyClient.idClient}/CreateFolder`);
+
         } else {
-            await createNewClient(emptyClient);
+            const client = await createNewClient(emptyClient);
+            navigate(`/Tramitador/${id}/CreateClientFolder/${client?.idClient}/CreateFolder`);
         }
-        navigate(`/TramitEase/Tramitador/${id}/CreateClientFolder/${emptyClient.idClient}/CreateFolder`);
     };
 
     return (
@@ -30,7 +32,7 @@ const CreateClientPage: React.FC = () => {
             sx={{
                 backgroundColor: 'white',
                 padding: '269px 50px',
-                width: '1820px',
+                width: '1739px',
                 display: 'flex',
                 flexDirection: 'column',
             }}

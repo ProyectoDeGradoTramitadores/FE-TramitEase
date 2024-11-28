@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { StepProcedure } from '../../entities/StepProcedure.ts';
-import { createStepProcedure,
+import {
+    createStepProcedure,
     deleteStepProcedure,
     getStepProcedureById,
     getStepProcedures,
+    getStepProceduresByProcedureId,
     updateStepProcedure,
-    getStepProceduresByProcedureId } from '../services/procedure/StepProcedureService.ts';
+} from '../services/procedure/StepProcedureService.ts';
 
 export const useStepProcedures = () => {
     const [stepProcedures, setStepProcedures] = useState<StepProcedure[]>([]);
@@ -33,8 +35,7 @@ export const useStepProcedures = () => {
 
     const fetchStepProcedureById = async (id: number): Promise<StepProcedure | undefined> => {
         try {
-            const stepProcedure = await getStepProcedureById(id);
-            return stepProcedure;
+            return await getStepProcedureById(id);
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);
@@ -47,8 +48,7 @@ export const useStepProcedures = () => {
 
     const fetchStepProceduresByProcedureId = async (procedureId: number): Promise<StepProcedure[] | undefined>  => {
         try {
-            const data = await getStepProceduresByProcedureId(procedureId);
-            return data;
+            return await getStepProceduresByProcedureId(procedureId);
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);

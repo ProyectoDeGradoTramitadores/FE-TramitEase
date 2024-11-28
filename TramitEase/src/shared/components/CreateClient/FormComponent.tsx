@@ -22,6 +22,7 @@ const FormComponent: React.FC = () => {
         handleMaritalStatusChange
     } = useClientForm();
 
+
     return (
         <Box
             sx={{
@@ -35,15 +36,15 @@ const FormComponent: React.FC = () => {
             }}
         >
             <FormField label="CI" isRequired onChange={handleClientIdChange} value={clientId} />
-            <FormField label="Nombre" isRequired={false} value={clientData?.name || ''} onChange={handleInputChange('name')} />
-            <FormField label="Segundo Nombre" isRequired={false} value={clientData?.secondName || ''} onChange={handleInputChange('secondName')} />
-            <FormField label="Primer Apellido" isRequired={false} value={clientData?.lastName || ''} onChange={handleInputChange('lastName')} />
-            <FormField label="Segundo Apellido" isRequired={false} value={clientData?.surname || ''} onChange={handleInputChange('surname')} />
-            <DatePickerCustom text="Fecha de Nacimiento" value={clientData?.birth || ''} onChange={handleDateChange} />
-            <FormField label="Email" isRequired={false} value={clientData?.email || ''} onChange={handleInputChange('email')} />
-            <FormField label="Numero de Celular" isRequired={false} value={clientData?.cellNumber || ''} onChange={handleInputChange('cellNumber')} />
-            <MaritalStatusField value={clientData?.maritalStatus || ''} onChange={handleMaritalStatusChange} />
-            <FormField label="Nacionalidad" isRequired={false} value={clientData?.nationality || ''} onChange={handleInputChange('nationality')} />
+            <FormField label="Nombre" isRequired={false} value={clientData?.name ?? ''} onChange={handleInputChange('name')} />
+            <FormField label="Segundo Nombre" isRequired={false} value={clientData?.secondName ?? ''} onChange={handleInputChange('secondName')} />
+            <FormField label="Primer Apellido" isRequired={false} value={clientData?.lastName ?? ''} onChange={handleInputChange('lastName')} />
+            <FormField label="Segundo Apellido" isRequired={false} value={clientData?.surname ?? ''} onChange={handleInputChange('surname')} />
+            <DatePickerCustom text="Fecha de Nacimiento" value={clientData?.birth ?? ''} onChange={handleDateChange} />
+            <FormField label="Email" isRequired={false} value={clientData?.email ?? ''} onChange={handleInputChange('email')} />
+            <FormField label="Numero de Celular" isRequired={false} value={clientData?.cellNumber ?? ''} onChange={handleInputChange('cellNumber')} />
+            <MaritalStatusField value={clientData?.maritalStatus ?? ''} onChange={handleMaritalStatusChange} />
+            <FormField label="Nacionalidad" isRequired={false} value={clientData?.nationality ?? ''} onChange={handleInputChange('nationality')} />
             {additionalFields.map((field) => (
                 <Box key={field.id} sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <FormField

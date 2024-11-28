@@ -10,7 +10,7 @@ const TitleBreadCrumbsTramitCreate: React.FC = () => {
 
     const breadcrumbs = [
         <LinkCustom key="1" text={"Procedimientos"} linkRef={ROUTES.TRAMITS_CUSTOM(id)} />,
-        <TypographyCustom key="2" text={"Guardado de Procedimiento"} />
+        <TypographyCustom key="2" text={"Creacion de Procedimiento"} />
     ];
 
     return (
