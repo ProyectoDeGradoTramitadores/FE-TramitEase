@@ -13,10 +13,10 @@ const ClientTimelineCard: React.FC<ClientTimelineCardProps> = ({ startDate, endD
                 </IconContainer>
                 <Box>
                     <Typography variant="body1">
-                        Día de iniciación: {startDate}
+                        Día de iniciación: {startDate? startDate : "Todavia el Tramite no se inicio"}
                     </Typography>
                     <Typography variant="body1">
-                        Estimado de día de finalización: {endDate}
+                        Día de finalización: {endDate ? endDate : "En progreso"}
                     </Typography>
                 </Box>
                 <RedLine />

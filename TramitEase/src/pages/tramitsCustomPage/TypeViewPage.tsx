@@ -6,11 +6,13 @@ import { useTypeTramits } from '../../shared/hooks/useTypeTramits.ts';
 import { TypeTramit } from '../../entities/TypeTramit.ts';
 import TramitTypeListComponent from '../../shared/components/TypeTramitsCustom/TramitTypeListComponent.tsx';
 import TypeTramitCreateView from '../../features/TypeTramit/TypeTramitCreateView.tsx';
+import SearchBar from '../../shared/components/Search/SearchBar.tsx';
 
 const TypeViewPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const { fetchTypeTramitsByTramitadorId, createNewTypeTramit } = useTypeTramits();
     const [typeTramits, setTypeTramits] = useState<TypeTramit[]>([]);
+    const [searchQuery, setSearchQuery] = useState<string>('');
     const [isCreating, setIsCreating] = useState<boolean>(false);
     const [newName, setNewName] = useState<string>('');
 
@@ -25,11 +27,19 @@ const TypeViewPage: React.FC = () => {
         loadTramits();
     }, [id]);
 
+    const filteredTypeTramits = typeTramits.filter(typeTramit =>
+        typeTramit.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const handleSearch = (query: string) => {
+        setSearchQuery(query);
+    };
+
     const handleCreateClick = () => setIsCreating(true);
 
     const handleSaveCreate = async () => {
         try {
-            const newTypeTramit: TypeTramit = { idTypeTramit: 0, idTramitador: parseInt(id || ''), name: newName };
+            const newTypeTramit: TypeTramit = { idTypeTramit: 0, idTramitador: parseInt(id ?? ''), name: newName };
             await createNewTypeTramit(newTypeTramit);
             setIsCreating(false);
             setNewName('');
@@ -59,7 +69,8 @@ const TypeViewPage: React.FC = () => {
             <Typography variant="h4" component="h1" gutterBottom style={{ color: 'black' }}>
                 Tipos de Trámites
             </Typography>
-            <TramitTypeListComponent typeTramits={typeTramits} refreshList={loadTramits} />
+            <SearchBar placeholder="Buscar tipo de trámite..." onSearch={handleSearch} />
+            <TramitTypeListComponent typeTramits={filteredTypeTramits} refreshList={loadTramits} />
             {isCreating && (
                 <TypeTramitCreateView
                     newName={newName}

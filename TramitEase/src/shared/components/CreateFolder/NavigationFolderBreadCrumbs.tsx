@@ -7,13 +7,13 @@ import { useParams } from 'react-router-dom';
 
 const NavigationFolderBreadCrumbs: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const ref = `/TramitEase/Tramitador/${id}/ClientsFolder`
-    const clientRef = `/TramitEase/Tramitador/${id}/CreateClientFolder/CreateClient`
+    const ref = `/Tramitador/${id}/ClientsFolder`
+    const clientRef = `/Tramitador/${id}/CreateClientFolder/CreateClient`
 
     const breadcrumbs = [
-        <LinkCustom key="1" text={"Clients Folder"} linkRef={ref} />,
-        <LinkCustom key="1" text={"Create Client"} linkRef={clientRef} />,
-        <TypographyCustom key="2" text={"Create Folder"} />
+        <LinkCustom key="1" text={"Carpetas del client"} linkRef={ref} />,
+        <LinkCustom key="1" text={"Crear un cliente"} linkRef={clientRef} />,
+        <TypographyCustom key="2" text={"Crear una carpeta"} />
     ];
 
     return (
@@ -24,7 +24,7 @@ const NavigationFolderBreadCrumbs: React.FC = () => {
                 component="h1"
                 sx={{ color: 'black', padding: '12px 0' }}
             >
-                Create Client Folder
+                Creacion de una carpeta del cliente
             </Typography>
         </Box>
     );

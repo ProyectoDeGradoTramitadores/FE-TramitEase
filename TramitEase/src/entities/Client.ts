@@ -1,5 +1,7 @@
 export interface Client {
-    idClient: string;
+    idClient: number;
+    ciClient: string;
+    idTramitador: number;
     name?: string | null;
     secondName?: string | null;
     lastName?: string | null;
@@ -9,5 +11,5 @@ export interface Client {
     cellNumber?: string | null;
     maritalStatus?: string | null;
     nationality?: string | null;
-    additionalInfo?: {[key: string]: any } | null;
+    additionalInfo?: string | null;
 }

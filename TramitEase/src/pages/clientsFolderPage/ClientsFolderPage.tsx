@@ -10,19 +10,33 @@ import CustomButton from '../../shared/components/buttons/CustomButton.tsx';
 import { useNavigatePage } from '../../shared/hooks/UseNavigatePage.ts';
 import { useClientFoldersByTramitadorId } from '../../shared/hooks/useClientFoldersByTramitadorId.ts';
 import { ROUTES } from '../../shared/constants/routes.ts';
+import SearchBar from '../../shared/components/Search/SearchBar.tsx';
+import { useEffect, useState } from 'react';
+import { Box, IconButton } from '@mui/material';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import { NotificationModal } from '../../features/notification/NotificationModal.tsx';
+import { useSendWhatsAppMessage } from '../../shared/hooks/useSendWhatsAppMessage.ts';
 
 const ClientsFolderPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const tramitId = parseInt(id || '');
-    const { filteredClientFolders, loading, error } = useClientFoldersByTramitadorId(tramitId);
+    const tramitId = parseInt(id ?? '');
+    const { filteredClientFolders, handleSearch, filteredFolders, loading, error } = useClientFoldersByTramitadorId(tramitId);
     const navigate = useNavigate();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const {sendMessage} = useSendWhatsAppMessage(filteredClientFolders);
 
     const navigateToCreateClientFolder = useNavigatePage(
-        `/TramitEase/Tramitador/${id}/CreateClientFolder/CreateClient`
+        `/Tramitador/${id}/CreateClientFolder/CreateClient`
     );
 
+    useEffect(() => {
+        if (filteredClientFolders.length > 0) {
+            sendMessage();
+        }
+    }, [filteredClientFolders]);
+
     const handleFolderClick = (folderId: number) => {
-        const routeCreateFolder = ROUTES.CLIENT_FOLDER((id || ''), folderId);
+        const routeCreateFolder = ROUTES.CLIENT_FOLDER((id ?? ''), folderId);
         navigate(routeCreateFolder);
     };
 
@@ -37,11 +51,21 @@ const ClientsFolderPage: React.FC = () => {
     return (
         filteredClientFolders.length > 0 ? (
             <PageContainerClientFolder>
-                <TitleTypography variant="h4" gutterBottom>
-                    Carpetas del Cliente
-                </TitleTypography>
+                <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                    <TitleTypography variant="h4" gutterBottom>
+                        Carpetas del Cliente
+                    </TitleTypography>
+                    <IconButton
+                        onClick={() => setIsModalOpen(true)}
+                        sx={{ backgroundColor: '#d3d3d3', color: '#555' }}
+                    >
+                        <NotificationsIcon />
+                    </IconButton>
+                </Box>
+                <NotificationModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
+                <SearchBar placeholder="Buscar carpeta..." onSearch={handleSearch} />
                 <FolderClientsViewComponent
-                    clientFolders={filteredClientFolders}
+                    clientFolders={filteredFolders}
                     onFolderClick={handleFolderClick}
                 />
                 <ButtonContainer>

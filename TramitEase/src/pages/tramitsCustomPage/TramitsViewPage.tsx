@@ -5,10 +5,12 @@ import TramitListComponent from '../../shared/components/TramitCustom/TramitList
 import { Tramit } from '../../entities/Tramit.ts';
 import { Typography } from '@mui/material';
 import CustomButton from '../../shared/components/buttons/CustomButton.tsx';
+import SearchBar from '../../shared/components/Search/SearchBar.tsx';
 
 const TramitsViewPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const { fetchTramitsByTramitadorId } = useTramits();
+    const [searchQuery, setSearchQuery] = useState('');
     const [tramits, setTramits] = useState<Tramit[]>([]);
     const navigate = useNavigate();
 
@@ -25,9 +27,18 @@ const TramitsViewPage: React.FC = () => {
 
     const handleCreateNewTramit = () => {
         if (id) {
-            navigate(`/TramitEase/Tramitador/${id}/Custom/TramitsCustom/TramitCreateNew`);
+            navigate(`/Tramitador/${id}/Custom/TramitsCustom/TramitCreateNew`);
         }
     };
+
+    const filteredTramits = tramits.filter(tramit =>
+        (tramit.name ?? "").toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const handleSearch = (query: string) => {
+        setSearchQuery(query); // Actualiza el estado de búsqueda
+    };
+
     return (
         <div
             style={{
@@ -43,7 +54,9 @@ const TramitsViewPage: React.FC = () => {
             <Typography variant="h4" component="h1" gutterBottom style={{ color: 'black' }}>
                 Trámites Creados
             </Typography>
-            <TramitListComponent tramits={tramits} />
+            <SearchBar placeholder="Buscar trámite..." onSearch={handleSearch} />
+
+            <TramitListComponent tramits={filteredTramits} />
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '100px' }}>
                 <CustomButton
                     color={"ternary"}

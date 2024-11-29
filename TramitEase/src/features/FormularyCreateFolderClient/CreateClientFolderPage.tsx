@@ -13,15 +13,13 @@ const CreateClientFolderPage: React.FC = () => {
     const navigate = useNavigate();
 
     const handleSaveClient = async () => {
-        const existingClient = await checkClientExistsAndFetch(emptyClient.idClient);
+        const existingClient = await checkClientExistsAndFetch((emptyClient?.idClient.toString()));
         if (existingClient) {
             await updateExistingClient(emptyClient.idClient, emptyClient);
-            console.log('Client updated:', emptyClient);
         } else {
             await createNewClient(emptyClient);
-            console.log('New client created:', emptyClient);
         }
-        navigate(`/TramitEase/Tramitador/${id}/CreateClientFolder/CreateFolder`);
+        navigate(`/Tramitador/${id}/CreateClientFolder/CreateFolder`);
     };
 
     return (

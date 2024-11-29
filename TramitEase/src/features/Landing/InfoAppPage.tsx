@@ -41,10 +41,10 @@ const InfoAppPage: React.FC = () => {
                 <StyledContainer>
                     <StyledNumber>01</StyledNumber>
                     <StyledText>
-                        creación de formularios, documentos o procedimientos
-                        y estos son reutilizables.
-                        Los formularios y/o documentos pueden pertenecer a una
-                        etapa dentro de un procedimiento.
+                        creación de plantillas de tramites
+                        reutilizables.
+                        Los tramites pueden usarse dentro de
+                        una carpeta de cliente.
                     </StyledText>
                 </StyledContainer>
                 <StyledContainer>

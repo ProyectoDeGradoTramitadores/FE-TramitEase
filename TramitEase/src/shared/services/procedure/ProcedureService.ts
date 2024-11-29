@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Procedure } from '../../../entities/Procedure.ts';
 
 const api = axios.create({
-    baseURL: 'http://localhost:5137/api/Procedure'
+    baseURL: `${import.meta.env.VITE_BACKEND_URL}/Procedure`
 });
 
 export const getProcedures = async (): Promise<Procedure[]> => {

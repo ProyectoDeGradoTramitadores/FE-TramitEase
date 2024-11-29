@@ -9,16 +9,17 @@ const FolderClientsViewComponent: React.FC<FolderClientsViewComponentProps> = ({
             sx={{
                 display: 'flex',
                 flexWrap: 'wrap',
-                gap: '90px',
+                gap: '60px',
                 overflow: 'hidden',
+                alignItems: 'center',
             }}
         >
             {clientFolders.map((folder) => (
                 <FolderClientViewComponent
                     key={folder.idClientFolder}
                     folderName={folder.name}
-                    onClick={() => onFolderClick(folder.idClientFolder || 0)}
-                />
+                    onClick={() => onFolderClick(folder.idClientFolder ?? 0)}
+                    idClientFolder={folder.idClientFolder} />
             ))}
         </Box>
     );

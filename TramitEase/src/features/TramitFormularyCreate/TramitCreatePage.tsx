@@ -27,7 +27,7 @@ const TramitCreatePage: React.FC = () => {
         openSelectModal,
         loading,
         selectedProcedure,
-        tramitadorProcedures,
+        procedureTramitador,
         setOpenSelectModal,
     } = useTramitCreate();
 
@@ -58,7 +58,7 @@ const TramitCreatePage: React.FC = () => {
                 loading={loading}
                 selectedProcedure={selectedProcedure}
                 setOpenSelectModal={setOpenSelectModal}
-                tramitadorProcedures={tramitadorProcedures}
+                tramitadorProcedures={procedureTramitador}
             />
             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <CustomButton

@@ -28,10 +28,10 @@ const InfoClientPage = () => {
                 const clientFolderResponse = await fetchClientFolderById(Number(idClientFolder));
                 setClientFolder(clientFolderResponse);
 
-                const clientResponse = await fetchClientById(clientFolderResponse?.idClient ?? '');
+                const clientResponse = await fetchClientById(clientFolderResponse?.idClient ?? 0);
                 setClient(clientResponse);
 
-                const tramitResponse = await fetchTramitById(Number(clientFolderResponse?.idTramit || ''));
+                const tramitResponse = await fetchTramitById(Number(clientFolderResponse?.idTramit ?? ''));
                 setTramit(tramitResponse);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -57,7 +57,7 @@ const InfoClientPage = () => {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '30px',
                         marginTop: '25px' }}>
                         <ProcedureDataCard name={(client?.name ?? '') + ' '+ (client?.lastName ?? '')}
-                                           CI={client?.idClient ?? ''}
+                                           CI={client?.ciClient ?? ''}
                                            celnumber={client?.cellNumber ?? ''}
                                            birth={client?.birth ?? ''} email={client?.email ?? ''}  />
                         <ClientTimelineCard

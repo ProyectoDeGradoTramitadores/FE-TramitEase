@@ -1,8 +1,8 @@
 export interface ClientFolder {
     idClientFolder?: number;
-    idClient: string;
+    idClient: number;
     idTramit: number;
     name: string;
-    creationDate: string;
+    creationDate?: string | null;
     endDate?: string | null;
 }

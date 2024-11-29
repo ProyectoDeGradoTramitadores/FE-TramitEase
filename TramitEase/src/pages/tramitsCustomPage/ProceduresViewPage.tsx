@@ -5,26 +5,36 @@ import CustomButton from '../../shared/components/buttons/CustomButton.tsx';
 import { useProcedures } from '../../shared/hooks/useProcedures.ts';
 import { Procedure } from '../../entities/Procedure.ts';
 import ProceduresListComponent from '../../shared/components/ProcedureCustom/ProceduresListComponent.tsx';
+import SearchBar from '../../shared/components/Search/SearchBar.tsx';
 
 const ProceduresViewPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { fetchProceduresByTramitadorId } = useProcedures();
+    const [searchQuery, setSearchQuery] = useState('');
     const [procedures, setprocedures] = useState<Procedure[]>([]);
 
     useEffect(() => {
         const loadTramits = async () => {
             if (id) {
                 const tramitList = await fetchProceduresByTramitadorId(parseInt(id));
-                setprocedures(tramitList || []);
+                setprocedures(tramitList ?? []);
             }
         };
         loadTramits();
     }, [id]);
 
+    const filteredProcedures = procedures.filter(procedure =>
+        procedure.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const handleSearch = (query: string) => {
+        setSearchQuery(query);
+    };
+
     const handleCreateNewProcedure = () => {
         if (id) {
-            navigate(`/TramitEase/Tramitador/${id}/Custom/TramitsCustom/ProcedureCreateNew`);
+            navigate(`/Tramitador/${id}/Custom/TramitsCustom/ProcedureCreateNew`);
         }
     };
 
@@ -43,7 +53,8 @@ const ProceduresViewPage: React.FC = () => {
             <Typography variant="h4" component="h1" gutterBottom style={{ color: 'black' }}>
                 Procedimientos de Trámites Creados
             </Typography>
-            <ProceduresListComponent procedures={procedures} />
+            <SearchBar placeholder="Buscar procedimiento..." onSearch={handleSearch} />
+            <ProceduresListComponent procedures={filteredProcedures} />
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '100px' }}>
                 <CustomButton
                     onClick={handleCreateNewProcedure}

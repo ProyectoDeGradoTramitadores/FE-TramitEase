@@ -7,11 +7,11 @@ import { useParams } from 'react-router-dom';
 
 const TItleBreadCrumbs: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const ref = `/TramitEase/Tramitador/${id}/ClientsFolder`
+    const ref = `/Tramitador/${id}/ClientsFolder`
 
     const breadcrumbs = [
-        <LinkCustom key="1" text={"Clients Folder"} linkRef={ref} />,
-        <TypographyCustom key="2" text={"Create Client"} />
+        <LinkCustom key="1" text={"Carpeta del cliente"} linkRef={ref} />,
+        <TypographyCustom key="2" text={"Crear Cliente"} />
     ];
 
     return (
@@ -22,7 +22,7 @@ const TItleBreadCrumbs: React.FC = () => {
                 component="h1"
                 sx={{ color: 'black', padding: '12px 0' }}
             >
-                Create Client
+                Crear Cliente
             </Typography>
         </Box>
     );

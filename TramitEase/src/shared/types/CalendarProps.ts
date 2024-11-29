@@ -1,4 +1,4 @@
-import { DateSelectArg, EventApi, EventClickArg, EventInput } from '@fullcalendar/core';
+import { EventApi, EventClickArg, EventInput } from '@fullcalendar/core';
 
 export interface SidebarEventProps {
     event: EventApi;
@@ -8,12 +8,12 @@ export interface EventModalProps {
     open: boolean;
     event: EventApi | null;
     onClose: () => void;
+    complete: boolean;
     redirectTo: () => void;
 }
 
 export interface CalendarProps {
     initialEvents: EventInput[];
-    handleDateSelect: (selectInfo: DateSelectArg) => void;
     handleEventClick: (clickInfo: EventClickArg) => void;
     handleEvents: (events: EventApi[]) => void;
 }

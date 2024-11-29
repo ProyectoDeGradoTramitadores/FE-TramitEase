@@ -1,22 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useClients } from './useClients.ts';
-import { emptyClient, IsClientExist, setAddtionalInfo, setEmptyClient } from '../constants/ClientCreate.ts';
+import {
+    cleanEmptyClient,
+    emptyClient,
+    IsClientExist,
+    setAddtionalInfo,
+    setEmptyClient,
+} from '../constants/ClientCreate.ts';
 import { Client } from '../../entities/Client.ts';
+import { IDS } from '../constants/routes.ts';
 
 export const useClientForm = () => {
     const [clientId, setClientId] = useState<string>('');
     const [clientData, setClientData] = useState<Client | null>(null);
-    const [additionalFields, setAdditionalFields] = useState<Array<{ id: number; label: string; value: string }>>([]);
-    const { checkClientExistsAndFetch } = useClients();
+    const [additionalFields, setAdditionalFields] = useState<{ id: number; label: string; value: string }[]>([]);
+    const { fetchClientsByTramitadorId, fetchClientById  } = useClients();
+    const idTramitador = IDS().TRAMITADOR_ID;
 
-    useEffect(() => {
-        if (clientData && clientData.additionalInfo) {
+    const processClientData = async () => {
+        if (clientData?.additionalInfo) {
             try {
                 const additionalInfoObj = JSON.parse(clientData.additionalInfo.toString());
+
                 const fields = Object.entries(additionalInfoObj).map(([key, value]) => ({
                     id: Date.now() + Math.random(),
-                    label: `name value: value`,
-                    value: `${key}: ${value}`
+                    label: `${key}: ${value}`,
+                    value: `${key}: ${value}`,
                 }));
                 setAdditionalFields(fields);
             } catch (error) {
@@ -28,25 +37,47 @@ export const useClientForm = () => {
 
         if (clientData != null) {
             setEmptyClient(clientData);
+        } else {
+            try {
+                const clientD = await fetchClientById(emptyClient.idClient);
+                setClientId(emptyClient.ciClient);
+                if(clientD){
+                    setClientData(clientD);
+                }
+            } catch (error) {
+                console.error("Error fetching client by ID:", error);
+            }
         }
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await processClientData();
+        };
+
+        fetchData();
     }, [clientData]);
 
     const handleClientIdChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        const id = event.target.value;
-        setClientId(id);
+        const ci = event.target.value;
+        setClientId(ci)
 
-        if (id) {
-            const client = await checkClientExistsAndFetch(id);
-            if (client) {
-                setClientData(client);
-                IsClientExist(true);
-                console.log(`Client with ID ${id} exists.`);
-            } else {
-                emptyClient.idClient = id;
-                IsClientExist(false);
-                setClientData(emptyClient);
-                console.log(`Client with ID ${id} does not exist.`);
-                setAdditionalFields([]);
+        if (ci) {
+            if(idTramitador){
+                const clients = await fetchClientsByTramitadorId(Number(idTramitador));
+                const client = clients?.find(client => client.ciClient === ci);
+
+                if (client && client?.idTramitador == Number(idTramitador)) {
+                    setClientData(client);
+                    IsClientExist(true);
+                } else {
+                    cleanEmptyClient()
+                    emptyClient.ciClient = ci;
+                    emptyClient.idTramitador = Number(idTramitador);
+                    IsClientExist(false);
+                    setClientData(emptyClient);
+                    setAdditionalFields([]);
+                }
             }
         } else {
             setClientData(null);
@@ -55,8 +86,8 @@ export const useClientForm = () => {
         }
     };
 
-    const updateEmptyClientAdditionalInfo = (fields: Array<{ id: number; label: string; value: string }>) => {
-        const additionalInfo: { [key: string]: any } = {};
+    const updateEmptyClientAdditionalInfo = (fields: { id: number; label: string; value: string }[]) => {
+        const additionalInfo: Record<string, unknown> = {};
         fields.forEach(field => {
             const [key, value] = field.value.split(": ");
             additionalInfo[key] = value;

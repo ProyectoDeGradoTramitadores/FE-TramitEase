@@ -2,7 +2,7 @@ import axios from 'axios';
 import { StepProcedure } from '../../../entities/StepProcedure.ts';
 
 const api = axios.create({
-    baseURL: 'http://localhost:5137/api/StepProcedure'
+    baseURL: `${import.meta.env.VITE_BACKEND_URL}/StepProcedure`
 });
 
 export const getStepProcedures = async (): Promise<StepProcedure[]> => {
@@ -26,6 +26,8 @@ export const createStepProcedure = async (stepProcedure: StepProcedure): Promise
 };
 
 export const updateStepProcedure = async (id: number, stepProcedure: StepProcedure): Promise<void> => {
+    console.log("step update: ", id, stepProcedure);
+
     await api.put(`/${id}`, stepProcedure);
 };
 

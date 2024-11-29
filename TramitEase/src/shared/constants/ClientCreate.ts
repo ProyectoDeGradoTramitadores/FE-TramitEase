@@ -1,7 +1,9 @@
 import { Client } from '../../entities/Client.ts';
 
-export var emptyClient: Client = {
-    idClient: 'clientId',
+export let emptyClient: Client = {
+    idClient: 0,
+    ciClient: 'clientId',
+    idTramitador: 0,
     name: '',
     secondName: '',
     lastName: '',
@@ -14,12 +16,12 @@ export var emptyClient: Client = {
     additionalInfo: {}
 };
 
-export var existClient: Boolean = false
+export let existClient = false
 
 export const setEmptyClient = (client: Client) => {
-    const processedClient: Client = {
+    emptyClient = {
         ...client,
-        name: client.name === ''? null : client.name,
+        name: client.name === '' ? null : client.name,
         secondName: client.secondName === '' ? null : client.secondName,
         lastName: client.lastName === '' ? null : client.lastName,
         surname: client.surname === '' ? null : client.surname,
@@ -30,10 +32,28 @@ export const setEmptyClient = (client: Client) => {
         nationality: client.nationality === '' ? null : client.nationality,
         additionalInfo: client.additionalInfo && Object.keys(client.additionalInfo).length === 0 ? null : client.additionalInfo
     };
-
-    emptyClient = processedClient;
 }
-export const setAddtionalInfo = (additionalInfo: { [p: string]: any }) => {
+
+export const cleanEmptyClient = () => {
+    emptyClient = {
+        idClient: 0,
+        ciClient: 'clientId',
+        idTramitador: 0,
+        name: '',
+        secondName: '',
+        lastName: '',
+        surname: '',
+        birth: '',
+        email: '',
+        cellNumber: '',
+        maritalStatus: '',
+        nationality: '',
+        additionalInfo: {}
+    };
+};
+
+
+export const setAddtionalInfo = (additionalInfo: Record<string, unknown>) => {
     if (emptyClient != null){
         emptyClient.additionalInfo = additionalInfo;
     }

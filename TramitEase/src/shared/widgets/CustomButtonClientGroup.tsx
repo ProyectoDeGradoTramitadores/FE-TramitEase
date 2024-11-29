@@ -38,7 +38,6 @@ const CustomButtonClientGroup: React.FC<CustomButtonGroupProps> = ({ idTramit })
                 anchorEl={anchorEl}
                 onClose={handleMenuClose}
                 onDelete={handleDelete}
-                idTramit={idTramit}
                 navigate={handleNavigate}
             />
             <ConfirmationModalClientFolder

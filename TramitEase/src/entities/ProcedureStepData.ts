@@ -9,4 +9,5 @@ export interface ProcedureStepData {
     estimate: string;
     dayDuring: number | undefined;
     isComplete: boolean;
+    commentsDelay?: string;
 }

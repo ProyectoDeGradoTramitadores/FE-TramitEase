@@ -9,7 +9,6 @@ import { EventContentArg } from '@fullcalendar/core';
 
 const Calendar: React.FC<CalendarProps> = ({
                                                initialEvents,
-                                               handleDateSelect,
                                                handleEventClick,
                                                handleEvents
                                            }) => {
@@ -46,7 +45,6 @@ const Calendar: React.FC<CalendarProps> = ({
             contentHeight="auto"
             aspectRatio={1}
             initialEvents={initialEvents}
-            select={handleDateSelect}
             eventContent={renderEventContent}
             eventClick={handleEventClick}
             eventsSet={handleEvents}

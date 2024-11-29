@@ -5,7 +5,7 @@ import { Procedure } from '../../entities/Procedure.ts';
 export interface FormFieldProps {
     label: string;
     isRequired: boolean;
-    value?: string;
+    value?: string | number;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 

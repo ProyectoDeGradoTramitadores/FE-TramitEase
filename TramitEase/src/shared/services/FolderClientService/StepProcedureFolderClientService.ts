@@ -2,7 +2,7 @@ import axios from 'axios';
 import { StepProcedureFolderClient } from '../../../entities/StepProcedureFolderClient.ts';
 
 const api = axios.create({
-    baseURL: 'http://localhost:5137/api/StepProcedureFolderClient'
+    baseURL: `${import.meta.env.VITE_BACKEND_URL}/StepProcedureFolderClient`
 });
 
 export const getStepProcedureFolderClientById = async (id: number): Promise<StepProcedureFolderClient> => {

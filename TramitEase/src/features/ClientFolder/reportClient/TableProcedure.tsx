@@ -1,14 +1,11 @@
 import React from 'react';
-import { Typography, Box, Table, TableBody, TableCell,
+import { Box, Table, TableBody, TableCell,
     TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { TableProcedureProps } from '../../../shared/types/MetricsClientFolderProps.ts';
 
 const TableProcedure: React.FC<TableProcedureProps> = ({ steps }) => {
     return (
         <Box mt={4}>
-            <Typography variant="h6" gutterBottom>
-                Reportes por Procedimiento
-            </Typography>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
@@ -26,8 +23,10 @@ const TableProcedure: React.FC<TableProcedureProps> = ({ steps }) => {
                         {steps.map((step, index) => (
                             <TableRow key={index}>
                                 <TableCell>{step.nameStep}</TableCell>
-                                <TableCell>{step.creationDate}</TableCell>
-                                <TableCell>{step.estimateDate}</TableCell>
+                                <TableCell>{step.creationDate != "" ? step.creationDate :
+                                    "El paso todavia no se inicio"}</TableCell>
+                                <TableCell>{step.estimateDate != "Invalid Date"? step.estimateDate :
+                                    "El paso todavia no se inicio"}</TableCell>
                                 <TableCell>{step.endDate || 'Pendiente'}</TableCell>
                                 <TableCell>{step.completeStep ? 'Sí' : 'No'}</TableCell>
                                 <TableCell>{step.delayStep? 'Con Retraso' : 'A Tiempo'}</TableCell>

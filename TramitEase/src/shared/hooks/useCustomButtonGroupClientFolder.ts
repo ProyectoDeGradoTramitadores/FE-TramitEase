@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { IDS, ROUTES } from '../constants/routes.ts';
 import { useProcedureFolderClients } from './useProcedureFolderClient.ts';
 import { useStepProcedureFolderClients } from './useStepProcedureFolderClients.ts';
+import { useDocuments } from './useDocuments.ts';
+import { deleteFile } from '../services/firebase/uploadService.ts';
 
 export const useCustomButtonGroupClientFolder = (idClientFolder: string | number) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -12,6 +14,7 @@ export const useCustomButtonGroupClientFolder = (idClientFolder: string | number
     const id = IDS().TRAMITADOR_ID
 
     const { deleteExistingClientFolder,fetchClientFolderById  } = useClientFolders();
+    const { deleteExistingDocument,fetchDocumentsByStepProcedureId } = useDocuments();
     const { deleteExistingProcedureFolderClient, fetchProcedureFolderClientsByClientFolderId } = useProcedureFolderClients();
     const { deleteExistingStepProcedureFolderClient, fetchStepProcedureFolderClientsByProcedureFolderClientId  } = useStepProcedureFolderClients();
 
@@ -49,9 +52,19 @@ export const useCustomButtonGroupClientFolder = (idClientFolder: string | number
                         Number(procedure.idProcedureFolderClient)
                     );
 
-                    stepsProceduresClientFolder?.map(async (stepProcedure) => {
-                        await deleteExistingStepProcedureFolderClient(stepProcedure.idStepProcedureFolderClient);
-                    });
+                    await Promise.all(
+                        stepsProceduresClientFolder?.map(async (stepProcedure) => {
+                            const documents = await fetchDocumentsByStepProcedureId(stepProcedure.idStepProcedureFolderClient);
+                            await Promise.all(
+                                (documents ?? []).map(async (document) => {
+                                    await deleteFile(document?.filePath ?? "");
+                                    await deleteExistingDocument(document.idDocument);
+                                })
+                            );
+
+                            await deleteExistingStepProcedureFolderClient(stepProcedure.idStepProcedureFolderClient);
+                        }) ?? []
+                    );
 
                     await deleteExistingProcedureFolderClient(procedure?.idProcedureFolderClient);
                 });

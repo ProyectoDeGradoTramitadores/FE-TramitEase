@@ -1,42 +1,40 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import WelcomePage from "../../features/Landing/WelcomePage.tsx";
 import IntroducePage from "../../features/Landing/IntroducePage.tsx";
 import LandingHeader from "../../features/Landing/LandingHeader.tsx";
 import InfoAppPage from "../../features/Landing/InfoAppPage.tsx";
+import { useNavigate } from 'react-router-dom';
 
 const LandingPage: React.FC = () => {
-    const [currentPage, setCurrentPage] = useState('welcome');
     const introduceRef = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
     const infoRef = useRef<HTMLDivElement>(null);
     const welcomeRef = useRef<HTMLDivElement>(null);
 
-    const handleAboutClick = () => {
-        setCurrentPage('introduce');
+    const handleLoginClick = () => {
+        navigate(`/login`);
+    };
 
+    const handleAboutClick = () => {
         if (introduceRef.current) {
-            console.log(currentPage);
             introduceRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     };
 
     const handleFeaturesClick = () => {
-        setCurrentPage('info');
-
         if (infoRef.current) {
             infoRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
     };
 
     const handleHomeClick = () => {
-        setCurrentPage('welcome');
-
         if (welcomeRef.current) {
             welcomeRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     };
 
     const headerStyle = {
-        position: 'sticky' as 'sticky',
+        position: 'sticky' as const,
         top: 0,
         zIndex: 100,
         width: '100%'
@@ -44,14 +42,14 @@ const LandingPage: React.FC = () => {
 
     const mainStyle = {
         flex: 1,
-        overflowY: 'auto' as 'auto'
+        overflowY: 'auto' as const
     };
 
     const containerStyle = {
         display: 'flex',
-        flexDirection: 'column' as 'column',
+        flexDirection: 'column' as const,
         height: '100vh',
-        overflow: 'hidden' as 'hidden'
+        overflow: 'hidden' as const
     };
 
     return (
@@ -61,6 +59,7 @@ const LandingPage: React.FC = () => {
                     onAboutClick={handleAboutClick}
                     onFeaturesClick={handleFeaturesClick}
                     onHomeClick={handleHomeClick}
+                    onLogin={handleLoginClick}
                 />
             </div>
             <main style={mainStyle}>

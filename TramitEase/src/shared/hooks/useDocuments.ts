@@ -90,6 +90,7 @@ export const useDocuments = () => {
         try {
             const documentsByStep = await getDocumentsByStepProcedureId(idStepProcedure);
             setDocuments(documentsByStep);
+            return documentsByStep;
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);

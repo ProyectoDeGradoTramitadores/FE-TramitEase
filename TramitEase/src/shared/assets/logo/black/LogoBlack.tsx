@@ -13,7 +13,7 @@ const LogoBlack: React.FC<CommonProps> = ({ size, onClick }) => {
             <defs>s
                 <linearGradient id="gradText1" x1="10%" y1="50%" x2="100%" y2="51%">
                     <stop offset="31%" style={{ stopColor: '#000000', stopOpacity: 1 }} />
-                    <stop offset="72%" style={{ stopColor: '#666666', stopOpacity: 1 }} />
+                    <stop offset="72%" style={{ stopColor: 'rgb(119,118,118)', stopOpacity: 1 }} />
                 </linearGradient>
 
                 <filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%">

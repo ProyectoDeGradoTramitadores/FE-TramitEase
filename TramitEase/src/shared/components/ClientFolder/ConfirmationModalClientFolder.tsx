@@ -1,5 +1,3 @@
-// src/features/customButtonGroup/components/ConfirmationModal.tsx
-
 import React from 'react';
 import {
     Dialog,

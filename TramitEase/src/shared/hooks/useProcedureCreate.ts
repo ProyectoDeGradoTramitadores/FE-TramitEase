@@ -19,32 +19,39 @@ const useProcedureCreate = () => {
     const { createNewProcedure, updateExistingProcedure, fetchProcedureById } = useProcedures();
 
     useEffect(() => {
-        if (idProcedure !== '' && idProcedure) {
-            fetchProcedureById(parseInt(idProcedure)).then(async (procedure) => {
+        const fetchProcedureData = async () => {
+            if (idProcedure !== '' && idProcedure) {
+                const procedure = await fetchProcedureById(parseInt(idProcedure));
                 if (procedure) {
-                    const steps = await fetchStepProceduresByProcedureId(procedure.idProcedure);
-                    const mappedSteps: Step[] = (steps || []).map((step) => ({
+                    const stepsResponse = await fetchStepProceduresByProcedureId(procedure.idProcedure);
+                    const steps = Array.isArray(stepsResponse) ? stepsResponse : [];
+
+                    const mappedSteps: Step[] = steps.map((step) => ({
                         idStepProcedure: step.idProcedure,
-                        name: step?.nameStep || '',
-                        requirements: step?.requirements || '',
+                        name: step?.nameStep ?? '',
+                        requirements: step?.requirements ?? '',
                         days: typeof step?.dayDuring === 'number' ? step.dayDuring : Number(step?.dayDuring) || 0,
                     }));
 
                     setProcedure({
+                        id: procedure.idProcedure,
                         name: procedure.name || '',
-                        description: procedure.description || '',
+                        description: procedure.description ?? '',
                         steps: mappedSteps
-                    })
+                    });
                 }
-            });
-        }else {
-            setProcedure({
-                name: '',
-                description: '',
-                steps: []
-            })
-        }
+            } else {
+                setProcedure({
+                    name: '',
+                    description: '',
+                    steps: []
+                });
+            }
+        };
+
+        fetchProcedureData();
     }, [idProcedure]);
+
 
     const handleAddProcedure = (procedure?: ProcedureForm) => {
         if (procedure) {
@@ -53,18 +60,19 @@ const useProcedureCreate = () => {
     };
 
     const handleSubmit = async () => {
+        let dayStepProcedure;
         try {
-            var days = 0;
+            let days = 0;
 
             if(procedure){
                 if (idProcedure !== '' && idProcedure) {
-                    var dayStepProcedure = 0;
+                    dayStepProcedure = 0;
 
                     for (const step of procedure.steps) {
                         if (step.idStepProcedure) {
                             const updateStepProc: StepProcedure = {
                                 idStepProcedure: step.idStepProcedure,
-                                idProcedure: procedure.id || 0,
+                                idProcedure: procedure.id ?? 0,
                                 nameStep: step.name,
                                 requirements: step.requirements,
                                 dayDuring: step.days
@@ -76,26 +84,27 @@ const useProcedureCreate = () => {
                         } else {
                             const newStepProcedure: StepProcedure = {
                                 idStepProcedure: 0,
-                                idProcedure: procedure.id || 0,
+                                idProcedure: procedure?.id ?? 0,
                                 nameStep: step.name,
                                 requirements: step.requirements,
                                 dayDuring: step.days
                             };
+
+                            console.log("entra aqui", newStepProcedure, procedure);
                             await createNewStepProcedure(newStepProcedure);
                             days += step.days;
                             dayStepProcedure += step.days;
                         }
 
                         const newProcedure: Procedure = {
-                            idProcedure: procedure.id || 0,
+                            idProcedure: procedure.id ?? 0,
                             name: procedure.name,
                             description: procedure.description,
                             idTramitador: parseInt(id),
                             dayDuring: dayStepProcedure,
                         };
 
-                        await updateExistingProcedure((procedure.id || 0), newProcedure);
-                        console.log("procedure update");
+                        await updateExistingProcedure((procedure.id ?? 0), newProcedure);
                     }
                 } else {
                     const newProcedure: Procedure = {
@@ -106,7 +115,7 @@ const useProcedureCreate = () => {
                         dayDuring: 0,
                     };
 
-                    var dayStepProcedure = 0;
+                    dayStepProcedure = 0;
 
                     const procedureCreate = await createNewProcedure(newProcedure);
 
@@ -114,7 +123,7 @@ const useProcedureCreate = () => {
                         for (const step of procedure.steps) {
                             const createStepProcedure: StepProcedure = {
                                 idStepProcedure: 0,
-                                idProcedure: procedureCreate?.idProcedure || 0,
+                                idProcedure: procedureCreate?.idProcedure ?? 0,
                                 nameStep: step.name,
                                 requirements: step.requirements,
                                 dayDuring: step.days
@@ -123,8 +132,8 @@ const useProcedureCreate = () => {
                             dayStepProcedure += step.days;
                             days += step.days;
                         }
-                        await updateExistingProcedure((procedureCreate?.idProcedure || 0) , {
-                            idProcedure: procedureCreate?.idProcedure || 0,
+                        await updateExistingProcedure((procedureCreate?.idProcedure ?? 0) , {
+                            idProcedure: procedureCreate?.idProcedure ?? 0,
                             name: procedureCreate?.name,
                             description: procedureCreate?.description,
                             idTramitador: parseInt(id),

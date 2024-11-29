@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Tramitador } from '../../../entities/Tramitador.ts';
 
 const api = axios.create({
-    baseURL: 'http://localhost:5137/api/Tramitador'
+    baseURL: `${import.meta.env.VITE_BACKEND_URL}/Tramitador`
 });
 
 export const getTramitadores = async (): Promise<Tramitador[]> => {
@@ -15,8 +15,9 @@ export const getTramitadorById = async (id: number): Promise<Tramitador> => {
     return response.data;
 };
 
-export const createTramitador = async (tramitador: Tramitador): Promise<void> => {
-    await api.post('/', tramitador);
+export const createTramitador = async (tramitador: Tramitador): Promise<Tramitador> => {
+    const response = await api.post('/', tramitador);
+    return response.data;
 };
 
 export const updateTramitador = async (id: number, tramitador: Tramitador): Promise<void> => {
