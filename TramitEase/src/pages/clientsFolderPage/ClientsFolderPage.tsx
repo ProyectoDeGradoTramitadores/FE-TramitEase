@@ -4,6 +4,7 @@ import {
     ButtonContainer,
     TitleTypography,
 } from './ClientsFolderPage.styles.ts';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import FolderClientsViewComponent from '../../shared/components/CreateFolder/FolderClientsVIewComponent.tsx';
 import ClientFolderEmptyPage from '../../features/ClientFolder/ClientFolderEmptyPage.tsx';
 import CustomButton from '../../shared/components/buttons/CustomButton.tsx';
@@ -16,6 +17,7 @@ import { Box, IconButton } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { NotificationModal } from '../../features/notification/NotificationModal.tsx';
 import { useSendWhatsAppMessage } from '../../shared/hooks/useSendWhatsAppMessage.ts';
+import HelpModal from '../../shared/components/ClientFolder/HelpModal.tsx';
 
 const ClientsFolderPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -23,6 +25,7 @@ const ClientsFolderPage: React.FC = () => {
     const { filteredClientFolders, handleSearch, filteredFolders, loading, error } = useClientFoldersByTramitadorId(tramitId);
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
     const {sendMessage} = useSendWhatsAppMessage(filteredClientFolders);
 
     const navigateToCreateClientFolder = useNavigatePage(
@@ -55,13 +58,22 @@ const ClientsFolderPage: React.FC = () => {
                     <TitleTypography variant="h4" gutterBottom>
                         Carpetas del Cliente
                     </TitleTypography>
-                    <IconButton
-                        onClick={() => setIsModalOpen(true)}
-                        sx={{ backgroundColor: '#d3d3d3', color: '#555' }}
-                    >
-                        <NotificationsIcon />
-                    </IconButton>
+                    <Box display="flex" gap={4}>
+                        <IconButton
+                            onClick={() => setIsHelpModalOpen(true)}
+                            sx={{ backgroundColor: '#e0e0e0', color: '#555' }}
+                        >
+                            <HelpOutlineIcon />
+                        </IconButton>
+                        <IconButton
+                            onClick={() => setIsModalOpen(true)}
+                            sx={{ backgroundColor: '#d3d3d3', color: '#555' }}
+                        >
+                            <NotificationsIcon />
+                        </IconButton>
+                    </Box>
                 </Box>
+                <HelpModal isOpen={isHelpModalOpen} onClose={() => setIsHelpModalOpen(false)} />
                 <NotificationModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
                 <SearchBar placeholder="Buscar carpeta..." onSearch={handleSearch} />
                 <FolderClientsViewComponent

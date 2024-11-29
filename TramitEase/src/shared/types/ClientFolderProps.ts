@@ -8,6 +8,11 @@ export interface ClientTimelineCardProps {
     endDate: string;
 }
 
+export interface HelpModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+}
+
 export interface ClientInfoCardProps {
     procedureName: string;
     duration: number;
