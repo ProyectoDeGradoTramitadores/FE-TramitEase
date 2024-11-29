@@ -23,7 +23,6 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../shared/services/firebase/firebaseService.ts';
 import { useTramitadores } from '../../shared/hooks/useTramitadores.ts';
 import ClientsPage from '../../pages/clientsPage/ClientsPage.tsx';
-import ClientPage from '../../pages/clientsPage/ClientPage.tsx';
 import ClientFormCreatePage from '../../pages/clientsPage/ClientFormCreatePage.tsx';
 import ClientViewPage from '../../pages/clientsPage/ClientViewPage.tsx';
 
@@ -89,11 +88,10 @@ const AppRoutes = () => (
                             </Route>
                             <Route path={"clients"}  element={ <ClientsPage/>}/>
                             <Route path="clients">
+                                <Route path={"editClient/:idClient"} element={<ClientFormCreatePage/>}/>
                                 <Route path={"CreateClient"} element={<ClientFormCreatePage/>}/>
                                 <Route path={":idClient/viewClient"} element={<ClientViewPage/>}/>
-                                <Route path={":idClient/client"}  element={<ClientPage/>}/>
                             </Route>
-
                             <Route path="ClientsFolder" element={<ClientsFolderPage />} />
                         </Route>
                     </Route>

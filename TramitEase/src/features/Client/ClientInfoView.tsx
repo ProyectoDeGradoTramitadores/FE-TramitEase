@@ -5,6 +5,7 @@ import { useClientInfoView } from '../../shared/hooks/useClientInfoView.ts';
 import ClientCard from '../../shared/components/clients/ClientCard.tsx';
 import AdditionalClientInfoCard from '../../shared/components/clients/AdditionalClientInfoCard.tsx';
 import ClientFoldersTable from '../../shared/components/clients/ClientFoldersTable.tsx';
+import CustomButtonClientViewGroup from '../../shared/components/clients/CustomButtonClientViewGroup.tsx';
 
 const ClientInfoView: React.FC = () => {
     const idClient = IDS().CLIENT_ID;
@@ -12,11 +13,13 @@ const ClientInfoView: React.FC = () => {
     const { client, clientFolders, additionalFields, gender, getAvatar } = useClientInfoView(Number(idClient));
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center',flexDirection: 'column',
-            alignItems: 'center', minHeight: '650px', minWidth: "1765px", padding: '20px' }}>
+        <div style={{
+            display: 'flex', justifyContent: 'center', flexDirection: 'column',
+            alignItems: 'center', minHeight: '650px', minWidth: "1765px", padding: '20px', gap: '20px'
+        }}>
             {client ? (
-                <div  style={{ display: 'flex', gap: '60px', flexDirection: 'column' }}>
-                    <div style={{ display: 'flex', gap: '80px', }}>
+                <div style={{ display: 'flex', gap: '60px', flexDirection: 'column' }}>
+                    <div style={{ display: 'flex', gap: '80px' }}>
                         <ClientCard client={client} getAvatar={getAvatar} gender={gender} />
                         {client.additionalInfo && (
                             <AdditionalClientInfoCard additionalFields={additionalFields} />
@@ -31,6 +34,9 @@ const ClientInfoView: React.FC = () => {
                     Loading client information...
                 </Typography>
             )}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+                <CustomButtonClientViewGroup idClient={Number(idClient)} />
+            </div>
         </div>
     );
 };

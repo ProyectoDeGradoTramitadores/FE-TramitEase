@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import FolderIcon from '@mui/icons-material/Folder';
-import { useTheme } from 'styled-components';
 import { FolderClientViewComponentProps } from '../../types/FolderClientProps.ts';
 import { useProcedureFolderClients } from '../../hooks/useProcedureFolderClient.ts';
 import { useStepProcedureFolderClients } from '../../hooks/useStepProcedureFolderClients.ts';
 import { useStepProcedures } from '../../hooks/useStepProcedures.ts';
+import { useTheme } from 'styled-components';
 
 const FolderClientViewComponent: React.FC<FolderClientViewComponentProps> = ({ folderName, onClick, idClientFolder }) => {
     const theme = useTheme();
@@ -28,6 +28,11 @@ const FolderClientViewComponent: React.FC<FolderClientViewComponentProps> = ({ f
             setFolderColorHower(theme.colors.secondary.hower);
             setFolderColorActive(theme.colors.secondary.action);
             setIconColor(theme.colors.ternary.default);
+        }else if(procedures?.[0]?.startDate && procedures?.[procedures.length - 1]?.endDate){
+            setFolderColor(theme.colors.primary.default);
+            setFolderColorHower(theme.colors.primary.hower);
+            setFolderColorActive(theme.colors.primary.action);
+            setIconColor(theme.colors.ternary.default)
         } else {
             setFolderColor(theme.colors.secondary.default);
             setIconColor(theme.colors.ternary.default);

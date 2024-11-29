@@ -4,6 +4,7 @@ export const ROUTES = {
     ROOT: '/',
     TRAMITADOR_ROOT: '/Tramitador',
     CLIENTS_FOLDER: (id: string | number) => `/Tramitador/${id}/ClientsFolder`,
+    CLIENTS: (idTramitador: string | number) => `/Tramitador/${idTramitador}/clients`,
     CLIENT_FOLDER: (id: string | number, idClientFolder: string | number) => `/Tramitador/${id}/ClientsFolder/ClientFolder/${idClientFolder}`,
     CALENDAR: (id: string | number) => `/Tramitador/${id}/Calendar`,
 

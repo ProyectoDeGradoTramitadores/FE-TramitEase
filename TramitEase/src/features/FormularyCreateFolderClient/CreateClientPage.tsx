@@ -20,7 +20,6 @@ const CreateClientPage: React.FC = () => {
         if (existingClient) {
             await updateExistingClient(emptyClient.idClient, emptyClient);
             navigate(`/Tramitador/${id}/CreateClientFolder/${emptyClient.idClient}/CreateFolder`);
-
         } else {
             const client = await createNewClient(emptyClient);
             navigate(`/Tramitador/${id}/CreateClientFolder/${client?.idClient}/CreateFolder`);

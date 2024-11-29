@@ -2,11 +2,13 @@ export interface ActionMenuProps {
     anchorEl: null | HTMLElement;
     onClose: () => void;
     onDelete: () => void;
+    onEdit?: () => void;
     idTramit?: string | number;
     navigate: (path: string) => void;
 }
 
 export interface ConfirmationModalProps {
+    existData?: boolean;
     open: boolean;
     onClose: () => void;
     onConfirm: () => void;
