@@ -60,9 +60,9 @@ const InfoAppPage: React.FC = () => {
             <StyledThirdItemContainer>
                 <StyledNumber>03</StyledNumber>
                 <StyledText>
-                    Escaneo y guardado de documentacion dentro de
+                    Guardado de documentacion dentro de
                     una carpeta de un cliente.
-                    Llenado de formularios/documentos en blanco.
+                    Seguimiento de los tiempos de las carpetas del cliente.
                 </StyledText>
             </StyledThirdItemContainer>
         </StyledDiv>

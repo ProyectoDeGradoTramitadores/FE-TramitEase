@@ -46,6 +46,8 @@ export const useClientInfoView = (idClient: number) => {
                     value: value,
                 }));
 
+                console.log(fetchedClient.additionalInfo, "dd", additionalInfoRaw, fields);
+
                 const genderField = fields.find((field) =>
                     field.label.toString().toLowerCase() === "genero"
                 );

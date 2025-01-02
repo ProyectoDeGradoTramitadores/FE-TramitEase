@@ -17,7 +17,7 @@ const PieChartComponent: React.FC<PieChartComponentProps> = ({ data, title }) =>
                         outerRadius: 100,
                     },
                 ]}
-                width={600}
+                width={900}
                 height={300}
             />
         </Card>

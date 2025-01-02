@@ -160,7 +160,7 @@ const IntroducePage: React.FC = () => {
                     </StyledOfferItem>
                     <StyledOfferItem>
                         <StyledOfferNumber color={numberColors[3]}>03</StyledOfferNumber>
-                        <StyledOfferText>Llenado de casillas en blanco de formularios escaneados</StyledOfferText>
+                        <StyledOfferText>Seguimiento y control en los procedimientos</StyledOfferText>
                     </StyledOfferItem>
                 </StyledOfferItemsContainer>
             </StyledOfferContainer>

@@ -94,7 +94,7 @@ const FolderClientViewComponent: React.FC<FolderClientViewComponentProps> = ({ f
                 backgroundColor: folderColor,
                 borderRadius: '1cm',
                 width: '300px',
-                height: '80px',
+                minHeight: '80px',
                 padding: '20px',
                 transition: 'background-color 0.3s ease',
                 '&:hover': {

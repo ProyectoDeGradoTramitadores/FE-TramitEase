@@ -11,6 +11,7 @@ const LandingPage: React.FC = () => {
     const infoRef = useRef<HTMLDivElement>(null);
     const welcomeRef = useRef<HTMLDivElement>(null);
 
+    console.log(`${import.meta.env.VITE_BACKEND_URL}/Document`)
     const handleLoginClick = () => {
         navigate(`/login`);
     };

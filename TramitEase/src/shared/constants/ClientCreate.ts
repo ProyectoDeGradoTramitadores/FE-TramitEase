@@ -2,7 +2,7 @@ import { Client } from '../../entities/Client.ts';
 
 export let emptyClient: Client = {
     idClient: 0,
-    ciClient: 'clientId',
+    ciClient: '',
     idTramitador: 0,
     name: '',
     secondName: '',

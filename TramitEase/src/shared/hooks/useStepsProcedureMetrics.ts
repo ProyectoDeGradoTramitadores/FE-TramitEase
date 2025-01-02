@@ -44,6 +44,7 @@ export const useStepsProcedureMetrics = (steps: TableProcedureProps, daysEstimat
         return stepList.reduce((_index, step) => {
             const endDate = new Date(step.endDate);
             if (endDate > new Date(estimatedDate)) {
+                console.log( endDate, new Date(estimatedDate),(total + Math.round((endDate.getTime() - estimatedDate.getTime()) / (1000 * 60 * 60 * 24))));
                 return total + Math.round((endDate.getTime() - estimatedDate.getTime()) / (1000 * 60 * 60 * 24));
             }
             return total;

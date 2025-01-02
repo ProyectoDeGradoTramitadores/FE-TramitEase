@@ -18,9 +18,11 @@ const ClientFormCreatePage: React.FC = () => {
             try {
                 if(idClient){
                     const clientFetch = await fetchClientById(Number(idClient));
-
                     emptyClient.ciClient = clientFetch?.ciClient ?? "";
                     emptyClient.idClient = clientFetch?.idClient ?? 0;
+                }else{
+                    emptyClient.ciClient = "";
+                    emptyClient.idClient = 0;
                 }
             } catch (error) {
                 console.error('Error fetching client data:', error);
